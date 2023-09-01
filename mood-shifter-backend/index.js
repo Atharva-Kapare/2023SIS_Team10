@@ -1,11 +1,11 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = 80
 const auth = require('./auth')
 var querystring = require('querystring')
 
 var client_id = 'bf93ef9d71614b5392aa6528ba81510a';
-var redirect_uri = 'http://localhost:3000';
+var redirect_uri = 'http://localhost';
 
 app.get('/login', function(req, res) {
 
