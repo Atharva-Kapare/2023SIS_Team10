@@ -1,0 +1,1 @@
+//this .js will be the component for the selecture for the ideal duration of the playlist inputed by the user

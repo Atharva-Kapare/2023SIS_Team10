@@ -1,0 +1,1 @@
+//this .js will be the component for a like button, indicating that the user feel this song is relevent to the mood

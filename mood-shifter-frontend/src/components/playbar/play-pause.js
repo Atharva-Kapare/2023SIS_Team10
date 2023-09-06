@@ -1,0 +1,1 @@
+//this .js will be the component for a button for play and pausing songs for the user
