@@ -1,0 +1,2 @@
+### Error while running npm start - Error: error:0308010C:digital envelope routines::unsupported
+replace the npm start script in the package.json file with  `"start": "react-scripts --openssl-legacy-provider start"`
