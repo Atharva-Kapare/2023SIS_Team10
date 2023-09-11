@@ -1,0 +1,20 @@
+version: '3.4'
+
+services:
+  backend:
+    image: moodshifterbackend
+    build:
+      context: mood-shifter-backend
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+
+  frontend:
+    image: moodshifterfrontend
+    build:
+      context: mood-shifter
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 8080:80
