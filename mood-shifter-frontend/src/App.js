@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import React from 'react';
+import CurrentSong from "./components/playbar/current-song.js";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           Learn React
         </a>
       </header>
+      <div><CurrentSong accessToken={accessToken}/></div>
     </div>
   );
 }
