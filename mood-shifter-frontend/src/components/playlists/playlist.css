@@ -1,0 +1,23 @@
+/*local variables*/
+:root{
+    --playlist-width: 100px;
+    --playlist-height: 100px;
+    --standard-padding: 10px;
+    --green: #60DC70;
+    --light-green: #ADF6B6;
+}
+
+.playlist-cover{
+    padding: var(--standard-padding);
+    background-image: linear-gradient(to bottom right, var(--green), var(--light-green));
+    width: var(--playlist-width);
+    height: var(--playlist-height);
+}
+
+.playlist-name{
+    padding: var(--standard-padding);
+    color: white;
+    width: var(--playlist-width);
+    height: var(--playlist-height);
+    text-align: center;
+}
