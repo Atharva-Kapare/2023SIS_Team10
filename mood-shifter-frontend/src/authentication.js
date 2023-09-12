@@ -8,7 +8,7 @@ export async function redirectToAuthCodeFlow(clientId) {
     params.append("client_id", clientId);
     params.append("response_type", "code");
     params.append("redirect_uri", "http://localhost:3000");
-    params.append("scope", "user-read-private user-read-email");
+    params.append("scope", "user-read-private user-read-email playlist-modify-private playlist-modify-public");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
 
@@ -62,11 +62,38 @@ export async function getAccessToken(clientId, code) {
 }
   
 async function fetchProfile(token) {
-    const result = await fetch("https://api.spotify.com/v1/me", {
-        method: "GET", headers: { Authorization: `Bearer ${token}` }
-    });
+    return fetchWebApi(token, "v1/me", "GET");
+}
 
-    return await result.json();
+async function fetchWebApi(token2, endpoint, method, body) {
+    const token = 'BQBFWBYozZ9-gGehMyoa9ks4J8PUJJxmfO-dw8KftJaJ15uaVgnccQdCNiqwPpnAFiXkmHhZ5auDRCGFSZh7SRPDOaHRrhNtZAqHoA2bST3WrQE8yIZ2V7nGAWXcj9BQuiZx2QfenJcNInlGF0EWkrm3GipC1VsHMxSJM3z2MPbcyWjv4-wrYesr6_fv_xZA2dRN8xceLdl9z90wmjVoBhiEaJSeBT9Vvup0CfSNYgZ44sPC0kqBOSJ991VzKshj6pKEQQ';
+    const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+    method,
+    body:JSON.stringify(body)
+    });
+    return await res.json();
+}
+
+async function createPlaylist(token, tracksUri){
+    const { id: user_id } = await fetchWebApi(token, 'v1/me', 'GET')
+    const name = "Mood Shifter playlist"
+    const description = "Playlist created by Mood Shifter"
+
+    const playlist = await fetchWebApi(token,
+        `v1/users/${user_id}/playlists`, 'POST', {
+        "name": name,
+        "description": description,
+        "public": false
+    })
+
+    await fetchWebApi(token,
+        `v1/playlists/${playlist.id}/tracks?uris=${tracksUri.join(',')}`,
+        'POST'
+    );
+    return playlist;
 }
   
 function populateUI(profile) {
@@ -107,6 +134,7 @@ function populateUI(profile) {
 export default {
     redirectToAuthCodeFlow,  
     getAccessToken, 
-    fetchProfile, 
+    fetchProfile,
+    createPlaylist,
     populateUI, 
 };
