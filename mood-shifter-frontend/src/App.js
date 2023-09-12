@@ -1,14 +1,21 @@
-import logo from './logo.svg';
 import './App.css';
+import GetTrack from './components/get_track'
 import React from 'react';
 
 function App() {
   return (
+   
     <div className="App">
+      
+      <div>
+      <GetTrack />
+      </div>
+
       <header className="App-header">
+      
         {/* <img src={logo} className="App-logo" alt="logo" /> */}
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Edidt <code>src/App.js</code> and save to reload.
         </p>
         <a
           className="App-link"
@@ -19,6 +26,7 @@ function App() {
           Learn React
         </a>
       </header>
+      
     </div>
   );
 }
