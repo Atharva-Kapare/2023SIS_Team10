@@ -27,8 +27,10 @@ if (!code) {
       localStorage.setItem("accessToken", accessToken);
     }
     const profile = await Authentication.fetchProfile(accessToken);
-      console.log(profile);
-      Authentication.populateUI(profile);
+    const likedSongs = await Authentication.getLikedSongs(accessToken);
+    console.log(profile);
+    console.log(likedSongs);
+    Authentication.populateUI(profile);
   };
 }
 

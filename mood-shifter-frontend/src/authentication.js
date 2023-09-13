@@ -8,7 +8,7 @@ export async function redirectToAuthCodeFlow(clientId) {
     params.append("client_id", clientId);
     params.append("response_type", "code");
     params.append("redirect_uri", "http://localhost:3000");
-    params.append("scope", "user-read-private user-read-email playlist-modify-private playlist-modify-public");
+    params.append("scope", "user-read-private user-read-email playlist-modify-private user-library-read");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
 
@@ -36,7 +36,6 @@ async function generateCodeChallenge(codeVerifier) {
   
 export async function getAccessToken(clientId, code) {
     const verifier = localStorage.getItem("verifier");
-
     const params = new URLSearchParams();
     params.append("client_id", clientId);
     params.append("grant_type", "authorization_code");
@@ -65,8 +64,8 @@ async function fetchProfile(token) {
     return fetchWebApi(token, "v1/me", "GET");
 }
 
-async function fetchWebApi(token2, endpoint, method, body) {
-    const token = 'BQBFWBYozZ9-gGehMyoa9ks4J8PUJJxmfO-dw8KftJaJ15uaVgnccQdCNiqwPpnAFiXkmHhZ5auDRCGFSZh7SRPDOaHRrhNtZAqHoA2bST3WrQE8yIZ2V7nGAWXcj9BQuiZx2QfenJcNInlGF0EWkrm3GipC1VsHMxSJM3z2MPbcyWjv4-wrYesr6_fv_xZA2dRN8xceLdl9z90wmjVoBhiEaJSeBT9Vvup0CfSNYgZ44sPC0kqBOSJ991VzKshj6pKEQQ';
+async function fetchWebApi(token, endpoint, method, body) {
+    //const token = 'BQAzSB1R-Gq7EMWKxgkytkubov3dxnS-f6EoTIA0gSkBlTYcNURL763MgfxJqXWCw4SFYHy38HitdT3HJNFmidQhMWozDzpUQ2YesRbEXRhKLh7X7MmZqH798DehkOaV8dYrN-AUjGgGvUptLK7miUb9FGVXorcyiJZ-pEqsHw7UipxXxaA5dsiHUPkexYC9IUE-MEZ7rIk-dA8ffgEf4ZHgvpy5vYx2x2JhPObMrxD36L5AhjXLY7CppOBaZ7ZigPwOYQ';
     const res = await fetch(`https://api.spotify.com/${endpoint}`, {
     headers: {
         Authorization: `Bearer ${token}`,
@@ -94,6 +93,11 @@ async function createPlaylist(token, tracksUri){
         'POST'
     );
     return playlist;
+}
+
+async function getLikedSongs(token){
+    const token3 = 'BQAzSB1R-Gq7EMWKxgkytkubov3dxnS-f6EoTIA0gSkBlTYcNURL763MgfxJqXWCw4SFYHy38HitdT3HJNFmidQhMWozDzpUQ2YesRbEXRhKLh7X7MmZqH798DehkOaV8dYrN-AUjGgGvUptLK7miUb9FGVXorcyiJZ-pEqsHw7UipxXxaA5dsiHUPkexYC9IUE-MEZ7rIk-dA8ffgEf4ZHgvpy5vYx2x2JhPObMrxD36L5AhjXLY7CppOBaZ7ZigPwOYQ';
+    return (await fetchWebApi(token3, 'v1/me/tracks', 'GET')).items;
 }
   
 function populateUI(profile) {
@@ -136,5 +140,6 @@ export default {
     getAccessToken, 
     fetchProfile,
     createPlaylist,
+    getLikedSongs,
     populateUI, 
 };
