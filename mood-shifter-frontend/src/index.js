@@ -8,6 +8,7 @@ import Authentication from './authentication';
 const clientId = "bf93ef9d71614b5392aa6528ba81510a";
 const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
+var accessToken;
 
 if (!code) {
   Authentication.redirectToAuthCodeFlow(clientId);
@@ -18,10 +19,16 @@ if (!code) {
       <App />
     </React.StrictMode>
   );
+
   window.onload = async function runAuth() {
-    const accessToken = await Authentication.getAccessToken(clientId, code);
+    accessToken = localStorage.getItem("accessToken");
+    if (!accessToken) {
+      accessToken = await Authentication.getAccessToken(clientId, code);
+      localStorage.setItem("accessToken", accessToken);
+    }
     const profile = await Authentication.fetchProfile(accessToken);
-    Authentication.populateUI(profile);
+      console.log(profile);
+      Authentication.populateUI(profile);
   };
 }
 
