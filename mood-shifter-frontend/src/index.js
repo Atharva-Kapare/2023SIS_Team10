@@ -5,12 +5,13 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import Authentication from './authentication';
 
-const clientId = "bf93ef9d71614b5392aa6528ba81510a";
+const clientId = "8165af06e3a44a32ac86aa3d998761cd";
 const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
 var accessToken;
 
 if (!code) {
+  localStorage.clear();
   Authentication.redirectToAuthCodeFlow(clientId);
 } else {
   const root = ReactDOM.createRoot(document.getElementById('root'));
