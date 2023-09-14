@@ -11,7 +11,6 @@ export async function redirectToAuthCodeFlow(clientId) {
     params.append("scope", "user-read-private user-read-email playlist-modify-private user-library-read");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
-
     document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
 
@@ -65,7 +64,6 @@ async function fetchProfile(token) {
 }
 
 async function fetchWebApi(token, endpoint, method, body) {
-    //const token = 'BQAzSB1R-Gq7EMWKxgkytkubov3dxnS-f6EoTIA0gSkBlTYcNURL763MgfxJqXWCw4SFYHy38HitdT3HJNFmidQhMWozDzpUQ2YesRbEXRhKLh7X7MmZqH798DehkOaV8dYrN-AUjGgGvUptLK7miUb9FGVXorcyiJZ-pEqsHw7UipxXxaA5dsiHUPkexYC9IUE-MEZ7rIk-dA8ffgEf4ZHgvpy5vYx2x2JhPObMrxD36L5AhjXLY7CppOBaZ7ZigPwOYQ';
     const res = await fetch(`https://api.spotify.com/${endpoint}`, {
     headers: {
         Authorization: `Bearer ${token}`,
@@ -96,8 +94,7 @@ async function createPlaylist(token, tracksUri){
 }
 
 async function getLikedSongs(token){
-    const token3 = 'BQAzSB1R-Gq7EMWKxgkytkubov3dxnS-f6EoTIA0gSkBlTYcNURL763MgfxJqXWCw4SFYHy38HitdT3HJNFmidQhMWozDzpUQ2YesRbEXRhKLh7X7MmZqH798DehkOaV8dYrN-AUjGgGvUptLK7miUb9FGVXorcyiJZ-pEqsHw7UipxXxaA5dsiHUPkexYC9IUE-MEZ7rIk-dA8ffgEf4ZHgvpy5vYx2x2JhPObMrxD36L5AhjXLY7CppOBaZ7ZigPwOYQ';
-    return (await fetchWebApi(token3, 'v1/me/tracks', 'GET')).items;
+    return (await fetchWebApi(token, 'v1/me/tracks', 'GET')).items;
 }
   
 function populateUI(profile) {
