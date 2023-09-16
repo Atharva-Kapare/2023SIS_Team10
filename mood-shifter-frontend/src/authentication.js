@@ -8,10 +8,9 @@ export async function redirectToAuthCodeFlow(clientId) {
     params.append("client_id", clientId);
     params.append("response_type", "code");
     params.append("redirect_uri", "http://localhost:3000");
-    params.append("scope", "user-read-private user-read-email");
+    params.append("scope", "user-read-private user-read-email playlist-modify-private user-library-read");
     params.append("code_challenge_method", "S256");
     params.append("code_challenge", challenge);
-
     document.location = `https://accounts.spotify.com/authorize?${params.toString()}`;
 }
 
@@ -36,7 +35,6 @@ async function generateCodeChallenge(codeVerifier) {
   
 export async function getAccessToken(clientId, code) {
     const verifier = localStorage.getItem("verifier");
-
     const params = new URLSearchParams();
     params.append("client_id", clientId);
     params.append("grant_type", "authorization_code");
@@ -62,11 +60,41 @@ export async function getAccessToken(clientId, code) {
 }
   
 async function fetchProfile(token) {
-    const result = await fetch("https://api.spotify.com/v1/me", {
-        method: "GET", headers: { Authorization: `Bearer ${token}` }
-    });
+    return fetchWebApi(token, "v1/me", "GET");
+}
 
-    return await result.json();
+async function fetchWebApi(token, endpoint, method, body) {
+    const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+    headers: {
+        Authorization: `Bearer ${token}`,
+    },
+    method,
+    body:JSON.stringify(body)
+    });
+    return await res.json();
+}
+
+async function createPlaylist(token, tracksUri){
+    const { id: user_id } = await fetchWebApi(token, 'v1/me', 'GET')
+    const name = "Mood Shifter playlist"
+    const description = "Playlist created by Mood Shifter"
+
+    const playlist = await fetchWebApi(token,
+        `v1/users/${user_id}/playlists`, 'POST', {
+        "name": name,
+        "description": description,
+        "public": false
+    })
+
+    await fetchWebApi(token,
+        `v1/playlists/${playlist.id}/tracks?uris=${tracksUri.join(',')}`,
+        'POST'
+    );
+    return playlist;
+}
+
+async function getLikedSongs(token){
+    return (await fetchWebApi(token, 'v1/me/tracks', 'GET')).items;
 }
   
 function populateUI(profile) {
@@ -107,6 +135,8 @@ function populateUI(profile) {
 export default {
     redirectToAuthCodeFlow,  
     getAccessToken, 
-    fetchProfile, 
+    fetchProfile,
+    createPlaylist,
+    getLikedSongs,
     populateUI, 
 };
