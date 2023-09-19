@@ -1,5 +1,6 @@
 import './App.css';
 import React from 'react';
+import PlaylistOptions from './components/playlist/playlist-options';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
               <li>Profile Image: <span id="imgUrl"></span></li>
           </ul>
           </section>
+          <PlaylistOptions></PlaylistOptions>
       </div>
       </header>
     </div>
