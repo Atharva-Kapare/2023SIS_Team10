@@ -1,0 +1,56 @@
+/* src/components/Playbar.css */
+.playbar {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+  background-color: #333;
+  color: #fff;
+  row-gap: 8px;
+}
+
+.playbar-info {
+  display: flex;
+  align-items: center;
+}
+
+.playbar-album-cover {
+  width: 60px;
+  height: 60px;
+}
+
+.playbar-song-title {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.playbar-song-artist {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.playbar-controls {
+  display: flex;
+  gap: 20px;
+}
+
+.playbar-control-button {
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.playbar-progress {
+  width: 60%;
+  height: 4px;
+  background-color: #888;
+  position: relative;
+}
+
+.playbar-progress-bar {
+  height: 100%;
+  background-color: #1db954;
+}
