@@ -1,10 +1,17 @@
 /*local variables*/
 :root{
-    --playlist-width: 100px;
-    --playlist-height: 100px;
+    --playlist-width: 110px;
+    --playlist-height: 110px;
+    --playlist-name-width: 120px;
+    --playlist-name-height:120px;
     --standard-padding: 10px;
+    --title-padding: 15px;
     --green: #60DC70;
     --light-green: #ADF6B6;
+    --title-width: 200px;
+    --title-height: 40px;
+    --standard-button-size: 50px;
+    --font-small: 20px;
 }
 
 .playlist-cover{
@@ -17,7 +24,22 @@
 .playlist-name{
     padding: var(--standard-padding);
     color: white;
-    width: var(--playlist-width);
-    height: var(--playlist-height);
+    width: var(--playlist-name-width);
+    height: var(--playlist-name-height);
     text-align: center;
+    font-size: var(--font-small);
+}
+
+.playlist-page-title{
+    padding: var(--title-padding);
+    color: white;
+    width: var(--title-width);
+    height: var(--title-height);
+    text-align: left;    
+}
+
+.add-playlist-button{
+    width: var(--standard-button-size);
+    height: var(--standard-button-size);
+    padding: var(--standard-padding);
 }
