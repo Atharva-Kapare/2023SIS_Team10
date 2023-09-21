@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import Login from './components/login/login';
 import Authentication from './authentication';
 import Navbar from './components/navbar';
+import {NavigationContainer} from '@react-navigation/native';
 
 const clientId = "8165af06e3a44a32ac86aa3d998761cd";
 const params = new URLSearchParams(window.location.search);
@@ -15,7 +16,13 @@ var accessToken;
 var root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Login />
+    <NavigationContainer>
+      {/* <Stack.Navigator> */}
+        {/* <Stack.Screen> */}
+          <Login />
+        {/* </Stack.Screen> */}
+      {/* </Stack.Navigator> */}
+    </NavigationContainer>
   </React.StrictMode>
 );
 
