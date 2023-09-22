@@ -17,4 +17,8 @@ function GettingStarted() {
     );
 }
 
+function GetStarted() {
+    console.log("Get Started Begun!")
+}
+
 export default GettingStarted;
