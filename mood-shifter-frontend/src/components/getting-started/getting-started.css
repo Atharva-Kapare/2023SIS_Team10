@@ -40,6 +40,7 @@
     display: flex;
     align-items: center;
     flex-direction: column;
+    justify-content: center;
 }
 
 .content-spacer {
@@ -50,12 +51,21 @@
     height: 200px;
 }
 
-.call-to-action-text {
+.heading {
     color: #ffffff;
     font-size: 25px;
     margin: 0px;
     padding: 0 0 20px 0;
-    font-family: Arial;;
+    font-family: Arial;
+}
+
+.call-to-action-text {
+    color: #ffffff;
+    font-size: 15px;
+    margin: 0px;
+    padding: 0 10px 20px 10px;
+    font-family: Arial;
+    text-align: center;
 }
 
 .sign-in-button-style {

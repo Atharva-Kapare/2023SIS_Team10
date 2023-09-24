@@ -4,7 +4,10 @@ import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import reportWebVitals from './reportWebVitals';
 import Login from './components/login/login';
-import GettingStarted from './components/getting-started/getting-started';
+import GettingStartedScreen from './components/getting-started/getting-started';
+import SelectMoodScreen from './components/getting-started/select-mood';
+import TagSongsScreen from './components/getting-started/tag-songs';
+import CongratulationsScreen from './components/getting-started/congratulations';
 import Authentication from './authentication';
 import Navbar from './components/navbar';
 import {NavigationContainer} from '@react-navigation/native';
@@ -15,18 +18,6 @@ const clientId = "8165af06e3a44a32ac86aa3d998761cd";
 const params = new URLSearchParams(window.location.search);
 const code = params.get("code");
 var accessToken;
-
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
-    </View>
-  );
-}
 
 const Stack = createNativeStackNavigator();
 
@@ -40,31 +31,29 @@ root.render(
       component={Login}
       options={{ title: 'Overview' }}
     />
-        <Stack.Screen name="GettingStarted" component={GettingStarted} />
+        <Stack.Screen name="GettingStartedScreen" component={GettingStartedScreen} />
+        <Stack.Screen name="SelectMoodScreen" component={SelectMoodScreen} />
+        <Stack.Screen name="TagSongsScreen" component={TagSongsScreen} />
+        <Stack.Screen name="CongratulationsScreen" component={CongratulationsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   </React.StrictMode>
 );
 
-function AuthCheck({ navigation }) {
+async function AuthCheck() {
   if (!code) {
-      localStorage.clear();
-      Authentication.redirectToAuthCodeFlow(clientId);
-      } else {
-      window.onload = async function runAuth() {
-          accessToken = localStorage.getItem("accessToken");
-          if (!accessToken) {
-              accessToken = await Authentication.getAccessToken(clientId, code);
-              localStorage.setItem("accessToken", accessToken);
-          }
-          const profile = await Authentication.fetchProfile(accessToken);
-          const likedSongs = await Authentication.getLikedSongs(accessToken);
-          console.log(profile);
-          console.log(likedSongs);
-          Authentication.populateUI(profile);
-          navigation.navigate('GettingStarted')
-        
-      };
+    localStorage.clear();
+    Authentication.redirectToAuthCodeFlow(clientId);
+  } else {
+    window.onload = async function runAuth() {
+      accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+          accessToken = await Authentication.getAccessToken(clientId, code);
+          localStorage.setItem("accessToken", accessToken);
+      }
+      const profile = await Authentication.fetchProfile(accessToken);
+      Authentication.populateUI(profile);
+    };
   }
 }
 
