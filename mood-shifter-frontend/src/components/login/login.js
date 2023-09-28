@@ -36,29 +36,30 @@ function Login({ navigation }) {
                 <p className="call-to-action-text">Listen to your mood</p>
                 <button 
                     className="sign-in-button-style" 
-                    onClick={ () => {
-                        const result = new Promise(() => {
-                            const startedStatus = localStorage.getItem("startedStatus");
-                            if(startedStatus) {
-                                return true;
-                            } else {
-                                AuthCheck();
-                                return false;
+                    onClick={ async () => {
+                        let code, startedStatus
+                        const statusCheck = new Promise(() => {
+                            code = AuthCheck();
+                            startedStatus = localStorage.getItem("startedStatus");
+                            
+                            if(code) {
+                                if(startedStatus) {
+                                    console.log("true")
+                                    return true;
+                                }
                             }
                             
+                            return false;
                         });
+                        
+                        navigation.navigate('GettingStartedScreen');
+                        
 
-                        if(result) {
-                            navigation.navigate('GettingStartedScreen');
-                        } else {
-                            navigation.navigate('PlaylistScreen');
-                        }
                     }}
                 >
                     Sign in with Spotify
                 </button>
             </div>
-            
             <img src={spotifyLogo} alt="Spotify Logo" className="spotify-logo-style"></img>
         </div>
     );

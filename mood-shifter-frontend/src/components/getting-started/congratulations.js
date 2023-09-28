@@ -4,11 +4,10 @@ import './getting-started.css';
 function SelectMoodScreen( { navigation } ) {
     return (
         <div className="login">
-            <h1 className="heading">Select Mood Screen</h1>
-            <button onClick={() => navigation.navigate('TagSongsScreen')}></button>
+            <h1 className="heading">Congratulations</h1>
+            <button className="sign-in-button-style" onClick={() => navigation.navigate('PlaylistScreen')}>Continue</button>
         </div>
     );
 }
-
 
 export default SelectMoodScreen;

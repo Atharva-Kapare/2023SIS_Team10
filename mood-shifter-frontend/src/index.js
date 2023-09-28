@@ -35,6 +35,7 @@ root.render(
         <Stack.Screen name="SelectMoodScreen" component={SelectMoodScreen} />
         <Stack.Screen name="TagSongsScreen" component={TagSongsScreen} />
         <Stack.Screen name="CongratulationsScreen" component={CongratulationsScreen} />
+        <Stack.Screen name="PlaylistScreen" component={Navbar} />
       </Stack.Navigator>
     </NavigationContainer>
   </React.StrictMode>
@@ -45,15 +46,24 @@ async function AuthCheck() {
     localStorage.clear();
     Authentication.redirectToAuthCodeFlow(clientId);
   } else {
-    window.onload = async function runAuth() {
+    async function runAuth() {
       accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
           accessToken = await Authentication.getAccessToken(clientId, code);
           localStorage.setItem("accessToken", accessToken);
+          console.log(accessToken);
       }
       const profile = await Authentication.fetchProfile(accessToken);
       Authentication.populateUI(profile);
+      
     };
+    runAuth()
+  }
+
+  if(!code) {
+    return false;
+  } else {
+    return true;
   }
 }
 

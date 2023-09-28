@@ -5,7 +5,7 @@ function SelectMoodScreen( { navigation } ) {
     return (
         <div className="login">
             <h1 className="heading">Select Mood Screen</h1>
-            <button onClick={() => navigation.navigate('TagSongsScreen')}></button>
+            <button className="sign-in-button-style" onClick={() => navigation.navigate('TagSongsScreen')}>Continue</button>
         </div>
     );
 }
