@@ -55,7 +55,7 @@ export async function getAccessToken(clientId, code) {
     }
 
     const { access_token } = await result.json();
-    
+    console.log(result)
     return access_token;
 }
   
