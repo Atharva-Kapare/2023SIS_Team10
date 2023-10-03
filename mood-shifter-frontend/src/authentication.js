@@ -96,6 +96,12 @@ async function createPlaylist(token, tracksUri){
 async function getLikedSongs(token){
     return (await fetchWebApi(token, 'v1/me/tracks', 'GET')).items;
 }
+
+async function getRecommendations(token, tracksUri){
+    return (await fetchWebApi(token,
+      `v1/recommendations?limit=5&seed_tracks=${tracksUri.join(',')}`, 'GET'
+    )).tracks;
+}
   
 function populateUI(profile) {
     if(document.getElementById("displayName") != null) {
@@ -138,5 +144,6 @@ export default {
     fetchProfile,
     createPlaylist,
     getLikedSongs,
+    getRecommendations,
     populateUI, 
 };
