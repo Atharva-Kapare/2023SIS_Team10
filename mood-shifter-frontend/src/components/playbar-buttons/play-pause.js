@@ -42,9 +42,9 @@ class PlayButton extends Component {
     return (
       <>
         {!playing && (
-          <i class="fa fa-play-circle-o" onClick={this.startAudio}></i>
+          <i class="fa fa-play playbar-control-button" onClick={this.startAudio}></i>
         )}
-        {playing && <i class="fa fa-pause-circle-o" onClick={this.pauseAudio}></i>}
+        {playing && <i class="fa fa-pause playbar-control-button" onClick={this.pauseAudio}></i>}
 
         <audio
           src={url}
