@@ -5,9 +5,9 @@
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  background-color: #333;
+  background-color: #121212;
   color: #fff;
-  row-gap: 8px;
+  row-gap: 20px;
 }
 
 .playbar-info {
@@ -16,23 +16,25 @@
 }
 
 .playbar-album-cover {
-  width: 60px;
-  height: 60px;
+  width: 331px;
+  height: 331px;
 }
 
 .playbar-song-title {
-  font-size: 1.2rem;
+  font-size:25px;
   margin: 0;
 }
 
 .playbar-song-artist {
-  font-size: 1rem;
+  font-size: 18px;
   margin: 0;
 }
 
 .playbar-controls {
   display: flex;
-  gap: 20px;
+  flex-direction: row;
+  justify-content: space-between;
+  width:60%
 }
 
 .playbar-control-button {
@@ -41,10 +43,33 @@
   color: #fff;
   font-size: 1.5rem;
   cursor: pointer;
+  width: 55px;
+  height: 55px;
+}
+.playbar-duration {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* width: 60% */
+  width: 100%;
+
+}
+.playbar-progress-container {
+display: flex;
+flex-direction: column;
+column-gap: 8px;
+align-items: center;
+width: 100%
 }
 
+.playbar-progress-text {
+  font-size: 16px;
+  margin-top: 8px;
+}
 .playbar-progress {
-  width: 60%;
+  /* width: 60%; */
+  width: 100%;
+
   height: 4px;
   background-color: #888;
   position: relative;

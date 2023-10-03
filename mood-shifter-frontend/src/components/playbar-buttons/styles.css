@@ -10,11 +10,3 @@
   justify-content: space-evenly;
   height: 100vh;
 }
-
-.btn {
-  cursor: pointer;
-  background-repeat: no-repeat;
-  opacity: 0.85;
-  width: 100px;
-  height: 100px;
-}

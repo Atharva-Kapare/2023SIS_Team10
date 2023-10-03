@@ -14,13 +14,24 @@ const Playbar = ({ song }) => {
           <p className="playbar-song-artist">{song.artist}</p>
         </div>
       </div>
+
+<div className='playbar-progress-container'>
+
+        <div className='playbar-progress'>
+
+        <div className="playbar-progress-bar" style={{ width: `${song.progress}%` }}></div>
+        </div>
+        <div className='playbar-duration'>
+
+        <div className="playbar-progress-text">1:00</div>
+        <div className="playbar-progress-text">3:42</div>
+        </div>
+</div>
+
       <div className="playbar-controls">
         <PreviousButton className="playbar-control-button">Previous</PreviousButton>
         <PlayButton  className="playbar-control-button" url="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></PlayButton>
         <NextButton className="playbar-control-button">Next</NextButton>
-      </div>
-      <div className="playbar-progress">
-        <div className="playbar-progress-bar" style={{ width: `${song.progress}%` }}></div>
       </div>
     </div>
   );
