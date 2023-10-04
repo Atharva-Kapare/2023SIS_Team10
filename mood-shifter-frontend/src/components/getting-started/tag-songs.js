@@ -80,6 +80,8 @@ function TagSongsScreen( { navigation } ) {
                     }
                 }}
             >Continue</button>
+            <button className="sign-in-button-style" onClick={() => navigation.navigate('MyPlaylist')}>My Playlists</button>
+
         </div>
     );
 }
