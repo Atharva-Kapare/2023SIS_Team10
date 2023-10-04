@@ -51,11 +51,9 @@ async function AuthCheck() {
       if (!accessToken) {
           accessToken = await Authentication.getAccessToken(clientId, code);
           localStorage.setItem("accessToken", accessToken);
-          console.log(accessToken);
       }
       const profile = await Authentication.fetchProfile(accessToken);
       Authentication.populateUI(profile);
-      
     };
     runAuth()
   }
