@@ -1,6 +1,7 @@
 .login {
     background-color:rgb(7, 7, 7);
-    min-height: 100vh;
+    min-height: 110vh;
+    height: 110%;
     width: 100%;
     display: flex;
     align-items: center;
@@ -277,4 +278,18 @@
 
 .finish-button-style:hover {
     background-color: #808080
+}
+
+.mood-text-style {
+    text-align: center;
+    font-size: 25px;
+    background-color: #59a560;
+    width: 200px;
+    border-radius: 5px;
+}
+
+.iconic-banner {
+    display: flex;
+    justify-content: center;
+    padding: 10px 0 20px 0;
 }

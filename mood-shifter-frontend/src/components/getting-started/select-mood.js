@@ -17,20 +17,20 @@ function SelectMoodScreen( { navigation } ) {
             <div className='mood-div'>
                 <h3 className="section-header">Suggested</h3>
                 <div className='mood-row'>
-                    <button className='mood-button-style' onClick={changeSelected('Happy')}>Happy</button>
-                    <button className='mood-button-style' onClick={changeSelected('Sleepy')}>Sleepy</button>
-                    <button className='mood-button-style' onClick={changeSelected('Stressed')}>Stressed</button>
+                    <button className='mood-button-style' onClick={() => changeSelected('Happy')}>Happy</button>
+                    <button className='mood-button-style' onClick={() => changeSelected('Sleepy')}>Sleepy</button>
+                    <button className='mood-button-style' onClick={() => changeSelected('Stressed')}>Stressed</button>
                 </div>
                 <div className='mood-row'>
-                    <button className='mood-button-style' onClick={changeSelected('Tired')}>Tired</button>
-                    <button className='mood-button-style' onClick={changeSelected('Annoyed')}>Annoyed</button>
-                    <button className='mood-button-style' onClick={changeSelected('Sad')}>Sad</button>
+                    <button className='mood-button-style' onClick={() => changeSelected('Tired')}>Tired</button>
+                    <button className='mood-button-style' onClick={() => changeSelected('Annoyed')}>Annoyed</button>
+                    <button className='mood-button-style' onClick={() => changeSelected('Sad')}>Sad</button>
                 </div>
                 <div className='mood-row'>
-                    <button className='mood-button-style' onClick={changeSelected('Jealous')}>Jealous</button>
-                    <button className='mood-button-style' onClick={changeSelected('Enthusiast')}>Enthusiastic</button>
-                    <button className='mood-button-style' onClick={changeSelected('Anxious')}>Anxious</button>
-                    <button className='mood-button-style' onClick={changeSelected('Surprised')}>Surprised</button>
+                    <button className='mood-button-style' onClick={() => changeSelected('Jealous')}>Jealous</button>
+                    <button className='mood-button-style' onClick={() => changeSelected('Enthusiast')}>Enthusiastic</button>
+                    <button className='mood-button-style' onClick={() => changeSelected('Anxious')}>Anxious</button>
+                    <button className='mood-button-style' onClick={() => changeSelected('Surprised')}>Surprised</button>
                 </div>
             </div>
             {/* Mood List */}

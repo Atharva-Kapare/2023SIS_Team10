@@ -5,12 +5,16 @@ import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
 
 let tagCount = localStorage.getItem('tagCount') || 0;
 
-function TagSongsScreen( { navigation } ) {
+function TagSongsScreen( { route, navigation } ) {
+    const { selectedMood } = route.params;
     return (
         <div className="login">
             <div className="header-div">
                 <h4 className="text-style step-text">Step 2</h4>
                 <h1 className="text-style">Tag 3 Songs</h1>
+                <div className="iconic-banner">
+                    <h1 className="text-style mood-text-style">{selectedMood}</h1>
+                </div>
                 <h3 className="text-style sub-text">Search for 3 songs that align with the chosen mood</h3>
             </div>
 
@@ -90,7 +94,6 @@ function checkTagged() {
     if(tagCount >= 3) {
         return true;
     }
-    
     return false;
 }
 
