@@ -1,11 +1,19 @@
-const express = require('express')
-const app = express()
+// const express = require('express')
+// const app = express
+import express from 'express';
 const port = 3001
-const auth = require('./auth')
-var querystring = require('querystring')
+// const auth = require('./auth')
+// var querystring = require('querystring')
+
+import { firebase_app } from './firebase_init.js';
+import { database } from './firebase_init.js';
+
+import { doc, setDoc } from "firebase/firestore";
 
 var client_id = 'bf93ef9d71614b5392aa6528ba81510a';
 var redirect_uri = 'http://localhost:3000';
+
+const app = express();
 
 app.get('/login', function(req, res) {
 
@@ -26,6 +34,14 @@ app.get('/login', function(req, res) {
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
+})
+
+app.get('/test', (req, res) => {
+  const resp = setDoc(doc(database, "cities", "LA"), {
+    name: "Los Angeles",
+    state: "CA",
+    country: "USA"
+  });
 })
 
 app.post('/genre', (req, res) => {
