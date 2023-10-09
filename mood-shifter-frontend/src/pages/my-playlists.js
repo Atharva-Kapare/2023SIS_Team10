@@ -4,56 +4,43 @@ import PlaylistName from '../components/playlists/playlist-name';
 import PlaylistPageTitle from '../components/playlists/playlist-page-title';
 import AddPlaylistButton from '../components/playlists/add-playlist-button';
 
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 
 import '../App.css';
 import '../components/playlists/playlist.css';
 
-
-const Item = styled(Paper)(({ theme }) => ({
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-    ...theme.typography.body2,
-    padding: theme.spacing(4),
-    textAlign: 'center',
-    color: theme.palette.text.secondary,
-  }));
-
 function MyPlaylist(){
     return ( 
-    <div className="App-header">
-        <div>
-                {/* <div> <PlaylistPageTitle/></div>
-                <div> <AddPlaylistButton/></div> */}
+        <div className="App-header">
+            <div>
                 <div>
-                    <Box sx={{ flexGrow: 4}}>
-                        <Grid container rowSpacing={4}  columnSpacing={1} columns={8} >
-                        <Grid item xs={4}>
-                                <PlaylistPageTitle/>
+                    <Box>
+                        <Grid container rowSpacing={{ xs: 2, sm: 3, md: 4 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
+                            <Grid item xs={1} sm={5} md={10}>
+                            <PlaylistPageTitle/>
                             </Grid>
-                            <Grid item xs={4}>
-                                <AddPlaylistButton/>
+                            <Grid item xs={1} sm={1} md={2}>
+                                <Button> <AddPlaylistButton/> </Button>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={1} sm={2} md={3}>
                                 <PlaylistCover/> <PlaylistName/>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={1} sm={2} md={3}>
                                 <PlaylistCover/> <PlaylistName/>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={1} sm={2} md={3}>
                                 <PlaylistCover/> <PlaylistName/>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item xs={1} sm={2} md={3}>
                                 <PlaylistCover/> <PlaylistName/>
                             </Grid>
                         </Grid>
-                    </Box>
+                    </Box>       
+                </div>
             </div>
-        </div>
-    </div> 
-    
+        </div> 
     );
 }
 

@@ -8,6 +8,7 @@
     --light-green: #ADF6B6;
     --standard-button-size: 50px;
     --font-small: 20px;
+    --font-medium: 30px;
 }
 
 .playlist-cover{
@@ -18,7 +19,8 @@
 }
 
 .playlist-name{
-    padding: var(--standard-padding);
+    padding-top: var(--standard-padding);
+    padding-bottom: var(--standard-padding);
     color: white;
     text-align: left;
     font-size: var(--font-small);
@@ -29,11 +31,12 @@
     padding-top: var(--title-padding);
     padding-right: var(--title-padding);
     color: white;
-    text-align: left;    
+    text-align: left;  
+    font-size: var(--font-medium);  
 }
 
 .add-playlist-button{
     width: var(--standard-button-size);
     height: var(--standard-button-size);
-    margin: var(--title-padding);
+    margin: 20%; 
 }
