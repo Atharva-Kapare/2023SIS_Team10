@@ -13,6 +13,8 @@ import Navbar from './components/navbar';
 import {NavigationContainer} from '@react-navigation/native';
 import { Button, View, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import SongPlayer from './components/song-player/song-player';
+import songPlayerScreen from './components/song-player/song-player';
 
 const clientId = "8165af06e3a44a32ac86aa3d998761cd";
 const params = new URLSearchParams(window.location.search);
@@ -35,7 +37,7 @@ root.render(
         <Stack.Screen name="SelectMoodScreen" component={SelectMoodScreen} />
         <Stack.Screen name="TagSongsScreen" component={TagSongsScreen} />
         <Stack.Screen name="CongratulationsScreen" component={CongratulationsScreen} />
-        <Stack.Screen name="PlaylistScreen" component={Navbar} />
+        <Stack.Screen name="PlaylistScreen" component={songPlayerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   </React.StrictMode>

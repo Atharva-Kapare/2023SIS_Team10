@@ -19,7 +19,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         {/* Unsure if this is necessary \/ \/ \/ */}
-        <Playbar song={song} /> 
+        {/* <Playbar song={song} />  */}
         <div>
           <h1>Display your Spotify profile data</h1>
           <section id="profile">
@@ -36,7 +36,7 @@ function App() {
           <PlaylistOptions></PlaylistOptions>
         </div>
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
-        <Playbar song={song} />
+        {/* <Playbar song={song} /> */}
       </header>
     </div>
   );

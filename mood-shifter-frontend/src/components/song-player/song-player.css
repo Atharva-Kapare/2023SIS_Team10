@@ -1,4 +1,3 @@
-/* src/components/Playbar.css */
 .playbar {
   display: flex;
   justify-content: space-between;
@@ -13,6 +12,12 @@
 .playbar-info {
   display: flex;
   align-items: center;
+}
+
+.playbar-song-info{
+  display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .playbar-album-cover {
@@ -50,8 +55,8 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  /* width: 60% */
-  width: 100%;
+  width: 60%
+  /* width: 100%; */
 
 }
 .playbar-progress-container {
@@ -67,8 +72,8 @@ width: 100%
   margin-top: 8px;
 }
 .playbar-progress {
-  /* width: 60%; */
-  width: 100%;
+  width: 60%;
+  /* width: 100%; */
 
   height: 4px;
   background-color: #888;
@@ -79,3 +84,16 @@ width: 100%
   height: 100%;
   background-color: #1db954;
 }
+
+/* * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+} */
+
+/* .main {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  height: 100vh;
+} */
