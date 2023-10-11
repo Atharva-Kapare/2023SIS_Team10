@@ -1,1 +1,0 @@
-//this .js will be the component will show how long a song is and how much has been completed and how much of the song is less with a bar line indicator
