@@ -9,6 +9,7 @@ function SelectMoodScreen( { navigation } ) {
                 <p className="text-style congrats-text-style">We are collating your song choices and generating a personalised experience to provide you with the best playlist mixes.</p>
                 <button className="sign-in-button-style" onClick={() => navigation.navigate('PlaylistScreen')}>Tag More Moods</button>
                 <button className="finish-button-style" onClick={() => navigation.navigate('PlaylistScreen')}>Finish</button>
+                <button className="sign-in-button-style" onClick={() => navigation.navigate('MyPlaylist')}>My Playlists</button>
             </div>
         </div>
     );
