@@ -16,7 +16,7 @@ function TagSongsScreen( { route, navigation } ) {
                 <div className="iconic-banner">
                     <h1 className="text-style mood-text-style">{selectedMood}</h1>
                 </div>
-                <h3 className="text-style sub-text">Search for 3 songs that align with the chosen mood</h3>
+                <h3 className="text-style sub-text">Search for 3 songs that align with the mood '{selectedMood}'.</h3>
             </div>
 
             {/* Search Bar */}
@@ -33,45 +33,56 @@ function TagSongsScreen( { route, navigation } ) {
                     <h3 className="section-header">0/3</h3>
                 </div>
             </div>
-            <div className='song-div'>
+            <div className="song-div">
                 <h3 className="section-header">Suggested</h3>
+            </div>
+            
+            <div className='song-div'>
+                <li>
 
-                <div className='song-item'>
-                    <div className='song-wrapper'>
-                        <img className='song-img' alt="" src={SongCoverIcon}></img>
-                        <div className='song-item-title-div'>
-                            <h2 className='text-style song-text-title'>Song Title</h2>
-                            <h3 className='text-style song-text-subtitle'>Artist</h3>
+                    <div className='song-item'>
+                        <div className='song-wrapper'>
+                            <img className='song-img' alt="" src={SongCoverIcon}></img>
+                            <div className='song-item-title-div'>
+                                <h2 className='text-style song-text-title'>Song Title</h2>
+                                <h3 className='text-style song-text-subtitle'>Artist</h3>
+                            </div>
+                        </div>
+                        <div className='song-wrapper'>
+                            <button className="song-button" onClick={() => {selectSong()}}>
+                                <p className='song-add-button'>+</p>
+                            </button>
                         </div>
                     </div>
-                    <div className='song-wrapper'>
-                        <p className='song-add-button'>+</p>
-                    </div>
-                </div>
-                <div className='song-item'>
-                    <div className='song-wrapper'>
-                        <img className='song-img' alt="" src={SongCoverIcon}></img>
-                        <div className='song-item-title-div'>
-                            <h2 className='text-style song-text-title'>Song Title</h2>
-                            <h3 className='text-style song-text-subtitle'>Artist</h3>
+                    <div className='song-item'>
+                        <div className='song-wrapper'>
+                            <img className='song-img' alt="" src={SongCoverIcon}></img>
+                            <div className='song-item-title-div'>
+                                <h2 className='text-style song-text-title'>Song Title</h2>
+                                <h3 className='text-style song-text-subtitle'>Artist</h3>
+                            </div>
+                        </div>
+                        <div className='song-wrapper'>
+                            <button className="song-button" onClick={() => {selectSong()}}>
+                                <p className='song-add-button'>+</p>
+                            </button>
                         </div>
                     </div>
-                    <div className='song-wrapper'>
-                        <p className='song-add-button'>+</p>
-                    </div>
-                </div>
-                <div className='song-item'>
-                    <div className='song-wrapper'>
-                        <img className='song-img' alt="" src={SongCoverIcon}></img>
-                        <div className='song-item-title-div'>
-                            <h2 className='text-style song-text-title'>Song Title</h2>
-                            <h3 className='text-style song-text-subtitle'>Artist</h3>
+                    <div className='song-item'>
+                        <div className='song-wrapper'>
+                            <img className='song-img' alt="" src={SongCoverIcon}></img>
+                            <div className='song-item-title-div'>
+                                <h2 className='text-style song-text-title'>Song Title</h2>
+                                <h3 className='text-style song-text-subtitle'>Artist</h3>
+                            </div>
+                        </div>
+                        <div className='song-wrapper'>
+                            <button className="song-button" onClick={() => {selectSong()}}>
+                                <p className='song-add-button'>+</p>
+                            </button>
                         </div>
                     </div>
-                    <div className='song-wrapper'>
-                        <p className='song-add-button'>+</p>
-                    </div>
-                </div>
+                </li>
             </div>
             {/* Song List */}
 
@@ -104,6 +115,10 @@ async function fetchSongs() {
     Authentication.fetchWebApi(`v1/search?q=${searchTerm}&type=track&limit=5`, 'GET').then((e) => {
         console.log(e);
     });
+}
+
+function selectSong() {
+    console.log("Hit");
 }
 
 export default TagSongsScreen;
