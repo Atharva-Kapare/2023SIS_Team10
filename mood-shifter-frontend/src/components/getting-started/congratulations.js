@@ -7,6 +7,7 @@ function SelectMoodScreen( { navigation } ) {
             <h1 className="heading">Congratulations</h1>
             <button className="sign-in-button-style" onClick={() => navigation.navigate('PlaylistScreen')}>Continue</button>
             <button className="sign-in-button-style" onClick={() => navigation.navigate('MyPlaylist')}>My Playlists</button>
+            <button className="sign-in-button-style" onClick={() => navigation.navigate('SongList')}>My Song List</button>
         </div>
     );
 }

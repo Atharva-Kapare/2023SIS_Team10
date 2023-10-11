@@ -11,6 +11,7 @@ import CongratulationsScreen from './components/getting-started/congratulations'
 import Authentication from './authentication';
 import Navbar from './components/navbar';
 import MyPlaylist from './pages/my-playlists';
+import SongList from './pages/song-list';
 import {NavigationContainer} from '@react-navigation/native';
 import { Button, View, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -38,6 +39,7 @@ root.render(
         <Stack.Screen name="CongratulationsScreen" component={CongratulationsScreen} />
         <Stack.Screen name="PlaylistScreen" component={Navbar} />
         <Stack.Screen name="MyPlaylist" component={MyPlaylist} />
+        <Stack.Screen name="SongList" component={SongList} />
       </Stack.Navigator>
     </NavigationContainer>
   </React.StrictMode>
