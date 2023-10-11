@@ -1,10 +1,10 @@
 //this .js will be the component for two buttons, one to skip a song and one to rewind a song
 import React, { Component } from "react";
-import "./styles.css";
+import "../song-player.css";
 
 const NextButton = () => {return (
   <>
-    <i class="fa fa-forward"></i>
+    <i className="fa fa-forward"></i>
   </>
 );
 }

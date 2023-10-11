@@ -4,7 +4,7 @@ import "./styles.css";
 
 const PreviousButton = () => {return (
   <>
-    <i class="fa fa-backward"></i>
+    <i className="fa fa-backward"></i>
   </>
 );
 }
