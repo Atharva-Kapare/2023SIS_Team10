@@ -60,6 +60,7 @@ export async function getAccessToken(clientId, code) {
 }
   
 async function fetchProfile() {
+
     return fetchWebApi("v1/me", "GET");
 }
 
@@ -149,4 +150,5 @@ export default {
     getRecommendedSongs,
     getSong,
     populateUI, 
+    fetchWebApi
 };
