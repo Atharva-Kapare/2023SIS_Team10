@@ -193,6 +193,7 @@
     justify-content: space-between;
     width: 90%;
     max-width: 450px;
+    max-height: 300px;
     margin: 10px 0px 30px 0px;
 }
 

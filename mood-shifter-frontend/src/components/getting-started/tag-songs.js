@@ -12,7 +12,23 @@ function TagSongsScreen( { route, navigation } ) {
     const { selectedMood } = route.params;
     const [ searchTerm, setSearch ] = useState("");
     const [ searchResults, setSearchResults ] = useState([]);
-    console.log(searchResults);
+    const [ addedSongs, setAddedSongs ] = useState([]);
+    
+    function addSong(song) {
+        // TODO
+        // setAddedSongs(song => {
+        //     return {
+        //         cover: song.cover,
+        //         title: song.name,
+        //         uri: song.uri,
+        //         artist: song.artist
+        //     }
+        // })
+    }
+
+    function removeSong(song) {
+
+    }
 
     useEffect(() => {
         if(!searchTerm) return setSearchResults([]);
@@ -21,7 +37,6 @@ function TagSongsScreen( { route, navigation } ) {
 
         if(cancel) return 
         Authentication.fetchWebApi(`v1/search?q=${searchTerm}&type=track&limit=10`, 'GET').then(res => {
-            console.log(res)
             setSearchResults(res.tracks.items.map(song => {
                 const smallestAlbumImage = song.album.images.reduce(
                     (smallest, image) => {
@@ -65,19 +80,36 @@ function TagSongsScreen( { route, navigation } ) {
                     <h3 className="section-header">0/3</h3>
                 </div>
             </div>
+
+            {/* Added Song List */}
+            <div className='song-div' style={{ overflowY: "scroll" }}>
+                <li>
+                    {addedSongs.map(song => (
+                        <div  style={{ cursor: "pointer" }} onClick={() => removeSong(song)}>
+                            <Song 
+                                track={song}
+                                key={song.uri}
+                            />
+                        </div>
+                    ))}
+                </li>
+            </div>
+            {/* Added Song List */}
+
             <div className="song-div">
                 <h3 className="section-header">Suggested</h3>
             </div>
             
-            <div className='song-div'>
+            <div className='song-div' style={{ overflowY: "scroll" }}>
                 <li>
-                    {searchResults.map(song => {
-                        <Song 
-                            songCoverIcon={song.cover}
-                            songTitle={song.title}
-                            songArtist={song.artist}
-                        />
-                    })}
+                    {searchResults.map(song => (
+                        <div  style={{ cursor: "pointer" }} onClick={() => addSong(song)}>
+                            <Song 
+                                track={song}
+                                key={song.uri}
+                            />
+                        </div>
+                    ))}
                 </li>
             </div>
             {/* Song List */}
@@ -104,10 +136,6 @@ function checkTagged() {
         return true;
     }
     return false;
-}
-
-function selectSong() {
-    console.log("Hit");
 }
 
 export default TagSongsScreen;
