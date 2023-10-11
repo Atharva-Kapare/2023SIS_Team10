@@ -59,7 +59,8 @@ export async function getAccessToken(clientId, code) {
     return access_token;
 }
   
-async function fetchProfile(token) {
+async function fetchProfile() {
+
     return fetchWebApi("v1/me", "GET");
 }
 
@@ -74,8 +75,8 @@ async function fetchWebApi(endpoint, method, body) {
     return await res.json();
 }
 
-async function createPlaylist(token, tracksUri){
-    const { id: user_id } = await fetchWebApi( 'v1/me', 'GET')
+async function createPlaylist(tracksUri) {
+    const { id: user_id } = await fetchWebApi('v1/me', 'GET')
     const name = "Mood Shifter playlist"
     const description = "Playlist created by Mood Shifter"
 
@@ -93,8 +94,16 @@ async function createPlaylist(token, tracksUri){
     return playlist;
 }
 
-async function getLikedSongs(){
-    return (await fetchWebApi('v1/me/tracks', 'GET')).items;
+async function getLikedSongs() {
+    return (await fetchWebApi('v1/me/tracks?limit=5', 'GET')).items;
+}
+
+async function getRecommendedSongs(trackIDs) {
+    return (await fetchWebApi(`v1/recommendations?limit=5&seed_tracks=${trackIDs.join(',')}`, 'GET')).tracks;
+}
+
+async function getSong(trackID) {
+    return (await fetchWebApi(`v1/tracks/${trackID}`, 'GET'));
 }
   
 function populateUI(profile) {
@@ -138,6 +147,8 @@ export default {
     fetchProfile,
     createPlaylist,
     getLikedSongs,
+    getRecommendedSongs,
+    getSong,
     populateUI, 
     fetchWebApi
 };

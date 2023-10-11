@@ -96,6 +96,7 @@ function TagSongsScreen( { route, navigation } ) {
                     }
                 }}
             >Continue</button>
+
         </div>
     );
 }
