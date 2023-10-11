@@ -2,6 +2,7 @@ import React from 'react';
 import './getting-started.css';
 import SearchIcon from '../../assets/icons/search-icon.png'
 import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
+import Authentication from '../../authentication'
 
 let tagCount = localStorage.getItem('tagCount') || 0;
 
@@ -21,7 +22,7 @@ function TagSongsScreen( { route, navigation } ) {
             {/* Search Bar */}
             <div className='search-bar-div'>
                 <img className="search-icon-style" src={SearchIcon} alt=""></img>
-                <input className="search-bar-style" placeholder="search..."></input>
+                <input className="search-bar-style" name="searchbar" id="searchbar" placeholder="search..." onKeyUp={() => fetchSongs()}></input>
             </div>
             {/* Search Bar */}
             
@@ -95,6 +96,14 @@ function checkTagged() {
         return true;
     }
     return false;
+}
+
+async function fetchSongs() {
+    let searchTerm = document.getElementById('searchbar').value 
+    searchTerm = searchTerm.toLowerCase(); 
+    Authentication.fetchWebApi(`v1/search?q=${searchTerm}&type=track&limit=5`, 'GET').then((e) => {
+        console.log(e);
+    });
 }
 
 export default TagSongsScreen;

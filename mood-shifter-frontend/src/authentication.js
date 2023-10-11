@@ -60,13 +60,13 @@ export async function getAccessToken(clientId, code) {
 }
   
 async function fetchProfile(token) {
-    return fetchWebApi(token, "v1/me", "GET");
+    return fetchWebApi("v1/me", "GET");
 }
 
-async function fetchWebApi(token, endpoint, method, body) {
+async function fetchWebApi(endpoint, method, body) {
     const res = await fetch(`https://api.spotify.com/${endpoint}`, {
     headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
     method,
     body:JSON.stringify(body)
@@ -75,26 +75,26 @@ async function fetchWebApi(token, endpoint, method, body) {
 }
 
 async function createPlaylist(token, tracksUri){
-    const { id: user_id } = await fetchWebApi(token, 'v1/me', 'GET')
+    const { id: user_id } = await fetchWebApi( 'v1/me', 'GET')
     const name = "Mood Shifter playlist"
     const description = "Playlist created by Mood Shifter"
 
-    const playlist = await fetchWebApi(token,
+    const playlist = await fetchWebApi(
         `v1/users/${user_id}/playlists`, 'POST', {
         "name": name,
         "description": description,
         "public": false
     })
 
-    await fetchWebApi(token,
+    await fetchWebApi(
         `v1/playlists/${playlist.id}/tracks?uris=${tracksUri.join(',')}`,
         'POST'
     );
     return playlist;
 }
 
-async function getLikedSongs(token){
-    return (await fetchWebApi(token, 'v1/me/tracks', 'GET')).items;
+async function getLikedSongs(){
+    return (await fetchWebApi('v1/me/tracks', 'GET')).items;
 }
   
 function populateUI(profile) {
@@ -139,4 +139,5 @@ export default {
     createPlaylist,
     getLikedSongs,
     populateUI, 
+    fetchWebApi
 };
