@@ -1,0 +1,42 @@
+/*local variables*/
+:root{
+    --playlist-width: 110px;
+    --playlist-height: 110px;
+    --standard-padding: 10px;
+    --title-padding: 25px;
+    --green: #60DC70;
+    --light-green: #ADF6B6;
+    --standard-button-size: 50px;
+    --font-small: 20px;
+    --font-medium: 30px;
+}
+
+.playlist-cover{
+    padding: var(--standard-padding);
+    background-image: linear-gradient(to bottom right, var(--green), var(--light-green));
+    width: var(--playlist-width);
+    height: var(--playlist-height);
+}
+
+.playlist-name{
+    padding-top: var(--standard-padding);
+    padding-bottom: var(--standard-padding);
+    color: white;
+    text-align: left;
+    font-size: var(--font-small);
+}
+
+.playlist-page-title{
+    padding-bottom: var(--title-padding);
+    padding-top: var(--title-padding);
+    padding-right: var(--title-padding);
+    color: white;
+    text-align: left;  
+    font-size: var(--font-medium);  
+}
+
+.add-playlist-button{
+    width: var(--standard-button-size);
+    height: var(--standard-button-size);
+    margin: 20%; 
+}
