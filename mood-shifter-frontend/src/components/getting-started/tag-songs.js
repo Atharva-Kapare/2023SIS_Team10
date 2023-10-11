@@ -1,13 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './getting-started.css';
 import SearchIcon from '../../assets/icons/search-icon.png'
 import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
 import Authentication from '../../authentication'
+import Song from './song'
 
 let tagCount = localStorage.getItem('tagCount') || 0;
+let songList = [];
 
 function TagSongsScreen( { route, navigation } ) {
     const { selectedMood } = route.params;
+    const [ searchTerm, setSearch ] = useState("");
+    const [ searchResults, setSearchResults ] = useState([]);
+    console.log(searchResults);
+
+    useEffect(() => {
+        if(!searchTerm) return setSearchResults([]);
+
+        let cancel = false;
+
+        if(cancel) return 
+        Authentication.fetchWebApi(`v1/search?q=${searchTerm}&type=track&limit=10`, 'GET').then(res => {
+            console.log(res)
+            setSearchResults(res.tracks.items.map(song => {
+                const smallestAlbumImage = song.album.images.reduce(
+                    (smallest, image) => {
+                        if(image.height < smallest.height) return image;
+                        return smallest;
+                    }, song.album.images[0]
+                )
+                return {
+                    cover: smallestAlbumImage.url,
+                    title: song.name,
+                    uri: song.uri,
+                    artist: song.artists[0].name
+                }
+            }));
+        });
+
+        return () => cancel = true;
+    }, [searchTerm])
     return (
         <div className="login">
             <div className="header-div">
@@ -22,7 +54,7 @@ function TagSongsScreen( { route, navigation } ) {
             {/* Search Bar */}
             <div className='search-bar-div'>
                 <img className="search-icon-style" src={SearchIcon} alt=""></img>
-                <input className="search-bar-style" name="searchbar" id="searchbar" placeholder="search..." onKeyUp={() => fetchSongs()}></input>
+                <input className="search-bar-style" name="searchbar" id="searchbar" placeholder="search..." onKeyUp={(e) => setSearch(e.target.value)}></input>
             </div>
             {/* Search Bar */}
             
@@ -39,49 +71,13 @@ function TagSongsScreen( { route, navigation } ) {
             
             <div className='song-div'>
                 <li>
-
-                    <div className='song-item'>
-                        <div className='song-wrapper'>
-                            <img className='song-img' alt="" src={SongCoverIcon}></img>
-                            <div className='song-item-title-div'>
-                                <h2 className='text-style song-text-title'>Song Title</h2>
-                                <h3 className='text-style song-text-subtitle'>Artist</h3>
-                            </div>
-                        </div>
-                        <div className='song-wrapper'>
-                            <button className="song-button" onClick={() => {selectSong()}}>
-                                <p className='song-add-button'>+</p>
-                            </button>
-                        </div>
-                    </div>
-                    <div className='song-item'>
-                        <div className='song-wrapper'>
-                            <img className='song-img' alt="" src={SongCoverIcon}></img>
-                            <div className='song-item-title-div'>
-                                <h2 className='text-style song-text-title'>Song Title</h2>
-                                <h3 className='text-style song-text-subtitle'>Artist</h3>
-                            </div>
-                        </div>
-                        <div className='song-wrapper'>
-                            <button className="song-button" onClick={() => {selectSong()}}>
-                                <p className='song-add-button'>+</p>
-                            </button>
-                        </div>
-                    </div>
-                    <div className='song-item'>
-                        <div className='song-wrapper'>
-                            <img className='song-img' alt="" src={SongCoverIcon}></img>
-                            <div className='song-item-title-div'>
-                                <h2 className='text-style song-text-title'>Song Title</h2>
-                                <h3 className='text-style song-text-subtitle'>Artist</h3>
-                            </div>
-                        </div>
-                        <div className='song-wrapper'>
-                            <button className="song-button" onClick={() => {selectSong()}}>
-                                <p className='song-add-button'>+</p>
-                            </button>
-                        </div>
-                    </div>
+                    {searchResults.map(song => {
+                        <Song 
+                            songCoverIcon={song.cover}
+                            songTitle={song.title}
+                            songArtist={song.artist}
+                        />
+                    })}
                 </li>
             </div>
             {/* Song List */}
@@ -108,14 +104,6 @@ function checkTagged() {
         return true;
     }
     return false;
-}
-
-async function fetchSongs() {
-    let searchTerm = document.getElementById('searchbar').value 
-    searchTerm = searchTerm.toLowerCase(); 
-    Authentication.fetchWebApi(`v1/search?q=${searchTerm}&type=track&limit=5`, 'GET').then((e) => {
-        console.log(e);
-    });
 }
 
 function selectSong() {
