@@ -12,49 +12,42 @@ import Button from '@mui/material/Button';
 import '../App.css';
 import '../components/playlists/playlist.css';
 
-let hasRun = false; 
-
 function MyPlaylist(){
-
-    if(!hasRun){
-        settingPlaylist();
-    }
-
+    let gradient = generate();
     //mood
-    const [getMoodPlaylists, setMoodPlaylists] = useState([]);
+    const [getMoodPlaylists, setMoodPlaylists] = useState([
+        {
+            color: gradient,
+            name: 'Playlist 1',
+            id: '001'
+        },
+        {
+            color: gradient,
+            name: 'Playlist 2',
+            id: '002'
+        },
+        {
+            color: gradient,
+            name: 'Playlist 3',
+            id: '003'
+        }]);
 
     //moodshift
-    const [getMoodshiftPlaylists, setMoodshiftPlaylists] = useState([]);
+    // const [getMoodshiftPlaylists, setMoodshiftPlaylists] = useState([]);
 
-    function settingPlaylist() {
-        hasRun = true;
+    // useEffect(() => {
 
-        let gradient = generate();
-    
-        console.log(gradient);
+    //     setMoodPlaylists(this.tempList.forEach(playlist => {
+    //         return {
+    //             id: playlist.id,
+    //             name: playlist.name,
+    //             color: playlist.color,
+    //         }
+    //     }))
 
-        setMoodPlaylists(() => {
-            return [
-                {
-                    color: gradient,
-                    name: 'Playlist 1',
-                    id: '001'
-                },
-                {
-                    color: gradient,
-                    name: 'Playlist 2',
-                    id: '002'
-                },
-                {
-                    color: gradient,
-                    name: 'Playlist 3',
-                    id: '003'
-                }
-            ]
-        })
+    //     console.log("getMoodPlaylists: ", getMoodPlaylists);
 
-        console.log(getMoodPlaylists);
-    }
+    // }, [getMoodPlaylists])
 
 /*      const getMoodPlaylists =[{
         color: gradient,
@@ -77,12 +70,13 @@ function MyPlaylist(){
                                 <Button> <AddPlaylistButton/> </Button>
                             </Grid>
                             <Grid item xs={1} sm={2} md={3}>
-                                <PlaylistCover/> <PlaylistName/>
+                                {/* <PlaylistCover/> <PlaylistName/> */}
                             </Grid>
                             
                             {getMoodPlaylists.map(playlistItem => (
                                 <Grid item xs={1} sm={2} md={3}>
                                     <Playlist 
+                                        key={playlistItem.id}
                                         color={playlistItem.coverColor}
                                         name={playlistItem.name}
                                     />
