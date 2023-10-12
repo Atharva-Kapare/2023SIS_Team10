@@ -3,8 +3,10 @@ import React from 'react';
 
 import './playlist.css';
 
-function PlaylistCover(){
-    return <div className="playlist-cover"></div>
+function PlaylistCover( {coverColor} ){
+    return <div className="playlist-cover" style={{background: {coverColor}}}>
+
+           </div>
 }
 
 export default PlaylistCover;
