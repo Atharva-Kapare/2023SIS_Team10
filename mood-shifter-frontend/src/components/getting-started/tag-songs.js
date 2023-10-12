@@ -6,7 +6,6 @@ import Authentication from '../../authentication'
 import Song from './song'
 
 let tagCount = localStorage.getItem('tagCount') || 0;
-let songList = [];
 
 function TagSongsScreen( { route, navigation } ) {
     const { selectedMood } = route.params;
@@ -14,19 +13,39 @@ function TagSongsScreen( { route, navigation } ) {
     const [ searchResults, setSearchResults ] = useState([]);
     const [ addedSongs, setAddedSongs ] = useState([]);
     
-    function addSong(song) {
-        // TODO
-        // setAddedSongs(song => {
-        //     return {
-        //         cover: song.cover,
-        //         title: song.name,
-        //         uri: song.uri,
-        //         artist: song.artist
-        //     }
-        // })
+    const addSong = (song) => {
+        
+        let exists = false;
+        addedSongs.forEach(item => {
+            if(song.uri === item.uri) {
+                exists = true;
+            }
+        })
+
+        if(!exists) setAddedSongs([
+            ...addedSongs,
+            { 
+                cover: song.cover, 
+                title: song.title, 
+                uri: song.uri, 
+                artist: song.artist 
+            }
+        ])
+
+        console.log(addedSongs);
+    
     }
 
     function removeSong(song) {
+
+        let tempList = [];
+        addedSongs.forEach(item => {
+            if(item !== song) {
+                tempList.push(item);
+            }
+        })
+        setAddedSongs(tempList);
+        console.log(addedSongs);
 
     }
 
@@ -55,6 +74,7 @@ function TagSongsScreen( { route, navigation } ) {
 
         return () => cancel = true;
     }, [searchTerm])
+
     return (
         <div className="login">
             <div className="header-div">
@@ -82,10 +102,10 @@ function TagSongsScreen( { route, navigation } ) {
             </div>
 
             {/* Added Song List */}
-            <div className='song-div' style={{ overflowY: "scroll" }}>
+            <div className='song-div' style={{ overflowY: "scroll", minHeight: "100px"}}>
                 <li>
                     {addedSongs.map(song => (
-                        <div  style={{ cursor: "pointer" }} onClick={() => removeSong(song)}>
+                        <div  style={{ cursor: "pointer"}} onClick={() => removeSong(song)}>
                             <Song 
                                 track={song}
                                 key={song.uri}
@@ -100,7 +120,7 @@ function TagSongsScreen( { route, navigation } ) {
                 <h3 className="section-header">Suggested</h3>
             </div>
             
-            <div className='song-div' style={{ overflowY: "scroll" }}>
+            <div className='song-div' style={{ overflowY: "scroll"}}>
                 <li>
                     {searchResults.map(song => (
                         <div  style={{ cursor: "pointer" }} onClick={() => addSong(song)}>
