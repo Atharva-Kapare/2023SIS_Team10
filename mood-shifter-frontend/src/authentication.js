@@ -59,14 +59,14 @@ export async function getAccessToken(clientId, code) {
     return access_token;
 }
   
-async function fetchProfile(token) {
-    return fetchWebApi(token, "v1/me", "GET");
+async function fetchProfile() {
+    return fetchWebApi("v1/me", "GET");
 }
 
-async function fetchWebApi(token, endpoint, method, body) {
+async function fetchWebApi(endpoint, method, body) {
     const res = await fetch(`https://api.spotify.com/${endpoint}`, {
     headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
     },
     method,
     body:JSON.stringify(body)
@@ -74,27 +74,35 @@ async function fetchWebApi(token, endpoint, method, body) {
     return await res.json();
 }
 
-async function createPlaylist(token, tracksUri){
-    const { id: user_id } = await fetchWebApi(token, 'v1/me', 'GET')
+async function createPlaylist(tracksUri) {
+    const { id: user_id } = await fetchWebApi('v1/me', 'GET')
     const name = "Mood Shifter playlist"
     const description = "Playlist created by Mood Shifter"
 
-    const playlist = await fetchWebApi(token,
+    const playlist = await fetchWebApi(
         `v1/users/${user_id}/playlists`, 'POST', {
         "name": name,
         "description": description,
         "public": false
     })
 
-    await fetchWebApi(token,
+    await fetchWebApi(
         `v1/playlists/${playlist.id}/tracks?uris=${tracksUri.join(',')}`,
         'POST'
     );
     return playlist;
 }
 
-async function getLikedSongs(token){
-    return (await fetchWebApi(token, 'v1/me/tracks', 'GET')).items;
+async function getLikedSongs() {
+    return (await fetchWebApi('v1/me/tracks?limit=5', 'GET')).items;
+}
+
+async function getRecommendedSongs(trackIDs) {
+    return (await fetchWebApi(`v1/recommendations?limit=5&seed_tracks=${trackIDs.join(',')}`, 'GET')).tracks;
+}
+
+async function getSong(trackID) {
+    return (await fetchWebApi(`v1/tracks/${trackID}`, 'GET'));
 }
   
 function populateUI(profile) {
@@ -138,5 +146,7 @@ export default {
     fetchProfile,
     createPlaylist,
     getLikedSongs,
+    getRecommendedSongs,
+    getSong,
     populateUI, 
 };
