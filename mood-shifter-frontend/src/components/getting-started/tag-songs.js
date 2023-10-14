@@ -6,6 +6,7 @@ import Authentication from '../../authentication'
 import Song from './song'
 
 let tagCount = localStorage.getItem('tagCount') || 0;
+let songsAdded = 0;
 
 function TagSongsScreen( { route, navigation } ) {
     const { selectedMood } = route.params;
@@ -22,15 +23,18 @@ function TagSongsScreen( { route, navigation } ) {
             }
         })
 
-        if(!exists) setAddedSongs([
-            ...addedSongs,
-            { 
-                cover: song.cover, 
-                title: song.title, 
-                uri: song.uri, 
-                artist: song.artist 
-            }
-        ])
+        if(!exists) {
+            setAddedSongs([
+                ...addedSongs,
+                { 
+                    cover: song.cover, 
+                    title: song.title, 
+                    uri: song.uri, 
+                    artist: song.artist 
+                }
+            ])
+            ++songsAdded;
+        }
 
         console.log(addedSongs);
     
@@ -44,6 +48,7 @@ function TagSongsScreen( { route, navigation } ) {
                 tempList.push(item);
             }
         })
+        --songsAdded;
         setAddedSongs(tempList);
         console.log(addedSongs);
 
@@ -83,7 +88,7 @@ function TagSongsScreen( { route, navigation } ) {
                 <div className="iconic-banner">
                     <h1 className="text-style mood-text-style">{selectedMood}</h1>
                 </div>
-                <h3 className="text-style sub-text">Search for 3 songs that align with the mood '{selectedMood}'.</h3>
+                <h3 className="text-style sub-text">Search for 3 or more songs that align with the mood '{selectedMood}'. The more songs you tag the better the results!</h3>
             </div>
 
             {/* Search Bar */}
@@ -97,12 +102,12 @@ function TagSongsScreen( { route, navigation } ) {
             <div className='song-div'>
                 <div className="section-div">
                     <h3 className="section-header">Added</h3>
-                    <h3 className="section-header">0/3</h3>
+                    <h3 className="section-header">Selected: {songsAdded}</h3>
                 </div>
             </div>
 
             {/* Added Song List */}
-            <div className='song-div' style={{ overflowY: "scroll", minHeight: "100px"}}>
+            <div className='song-div' style={{ overflowY: "scroll", minHeight: "200px"}}>
                 <li>
                     {addedSongs.map(song => (
                         <div  style={{ cursor: "pointer"}} onClick={() => removeSong(song)}>
@@ -136,11 +141,16 @@ function TagSongsScreen( { route, navigation } ) {
 
             <button className="sign-in-button-style" 
                 onClick={() => {
-                    const selectFinish = checkTagged();
-                    if(selectFinish) {
-                        navigation.navigate('CongratulationsScreen')
-                    } else {
-                        navigation.navigate('SelectMoodScreen')
+                    if(songsAdded < 3) {
+                        alert("Make sure you select at least 3 songs before continuing!");
+                        return false;
+                    }  else {
+                        const selectFinish = checkTagged();
+                        if(selectFinish) {
+                            navigation.navigate('CongratulationsScreen')
+                        } else {
+                            navigation.navigate('SelectMoodScreen')
+                        }
                     }
                 }}
             >Continue</button>
