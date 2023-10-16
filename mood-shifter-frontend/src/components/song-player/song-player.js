@@ -1,105 +1,117 @@
-import React, { useState, useRef, useEffect } from 'react';
-import PreviousButton from './playbar-buttons/previous';
-import PlayButton from './playbar-buttons/play-pause';
-import NextButton from './playbar-buttons/next';
-import ProgressBar from './playbar-buttons/progress-bar';
-import SongDetails from './playbar-buttons/song-details';
-import './song-player.css';
+import React, { useState, useRef, useEffect } from "react";
+import PreviousButton from "./playbar-buttons/previous";
+import PlayButton from "./playbar-buttons/play-pause";
+import NextButton from "./playbar-buttons/next";
+import ProgressBar from "./playbar-buttons/progress-bar";
+import SongDetails from "./playbar-buttons/song-details";
+import Authentication from "../../authentication";
+import "./song-player.css";
+import SpotifyPlayer from "react-spotify-web-playback";
 
 function SongPlayerScreen({ navigation }) {
-  const [url, setUrl] = useState('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(0);
 
-  const song = {
-    title: 'Bloop',
-    artist: 'Bleep',
-    albumCover: 'https://via.placeholder.com/60x60',
-  };
+  let [uris, setUris] = useState([""]);
+  let [track, setTrack] = useState(undefined);
+  let [currentSongId, setCurrentSongId] = useState('');
+  const likedSongs = Authentication.getLikedSongs();
+  const accessToken = localStorage.getItem("accessToken");
 
-  const audioEl = useRef(null);
+  let [songs, setSongs] = useState([
+    {
+      title: "Bloop",
+      artists: "Bleep",
+      albumCover: "https://via.placeholder.com/60x60",
+      duration: 60,
+      uri: "",
+    },
+  ]);
 
-  
   useEffect(() => {
-    if (audioEl.current) {
-      audioEl.current.addEventListener('loadedmetadata', () => {
-        setDuration(audioEl.current.duration);
-      });
-      audioEl.current.addEventListener('timeupdate', () => {
-        setCurrentTime(audioEl.current.currentTime);
-      });
-    }
+    likedSongs.then((res) => {
+      console.log(
+        "Component initialized",
+        res,
+        res[0].track.duration_ms / 1000,
+        accessToken
+      );
+      if (res[0]) {
+        songs = [];
+        const uriList = [];
+        res.forEach((song,index) =>
+        {
+          if(index === 0){
+            setTrack({
+              name: song.track.name,
+              image: song.track.album.images[0],
+              artists: song.track.artists,
+            });
+          }
+          songs.push({
+            title: song.track.name,
+            artist: song.track.artists[0].name,
+            albumCover: song.track.album.images[0].url,
+            duration: song.track.duration_ms / 1000,
+            uri: song.track.uri,
+          })
+        }
+        );
+        songs.map((song) => uriList.push(song.uri));
+        setUris(uriList);
+        setSongs(songs);
+      }
+    });
+    setCurrentSongId(songs[0].id)
+    console.log("LEEN TRACK", track);
+   
   }, []);
 
-  const handleSeek = (seekTime) => {
-    if (audioEl.current) {
-      // Pause the audio
-      audioEl.current.pause();
-  
-      // Add a brief delay (e.g., 100 milliseconds) before seeking and resuming playback
-      setTimeout(() => {
-        audioEl.current.currentTime = seekTime; // Set the new playback time
-        audioEl.current.play(); // Resume playback
-      }, 100); // Adjust the delay duration as needed
-    }
-  };
-  
-  function onPreviousSong() {
-    // Implement previous song logic here
+  function onTrackChange(previousTracks, nextTracks) {
+    
   }
 
-  function onNextSong() {
-    // Implement next song logic here
+  function onPause() {
+    //s
   }
 
-  function onPauseOrPlay() {
-    if (isPlaying) {
-      pauseAudio();
-    } else {
-      playAudio();
-    }
-    setIsPlaying(!isPlaying);
+  function onPlay() {
+//
   }
 
-  function playAudio() {
-    if (audioEl.current) {
-      audioEl.current.play();
-    }
-  }
-
-  function pauseAudio() {
-    if (audioEl.current) {
-      audioEl.current.pause();
-    }
+  function onVolumeChange(volume) {
+//
   }
 
   return (
     <div className="playbar">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
-      <SongDetails song={song}></SongDetails>
-      <ProgressBar progress={currentTime} songLength={duration} onSeek={handleSeek}></ProgressBar>
-      <div className="playbar-controls">
-        <PreviousButton
-          className="playbar-control-button"
-          onClick={onPreviousSong}
-        >
-          Previous
-        </PreviousButton>
-        <PlayButton
-          isPlaying={isPlaying}
-          onClick={onPauseOrPlay}
-          className="playbar-control-button"
-        >
-        </PlayButton>
-        <audio
-          src={url}
-          ref={audioEl}
-        >
-          Your browser does not support the audio element.
-        </audio>
-        <NextButton className="playbar-control-button" onClick={onNextSong}></NextButton>
-      </div>
+      <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+      ></link>
+      <SongDetails track={track}></SongDetails>
+      <SpotifyPlayer
+        token={accessToken}
+        uris={uris}
+        callback={(state) => {
+          console.log('LEEN STATE', state);
+          if (state.isPlaying) {
+            console.log("LEEN is playing", state.isPlaying);
+            onPlay()
+          } else {
+            console.log("LEEN not playing");
+            onPause()
+          }
+          if (state.track) {
+            console.log("LEEN track", state.track, state.previousTracks, state.nextTracks);
+            setTrack(state.track);
+            onTrackChange(state.previousTracks, state.nextTracks)
+          }
+          if(state.volume){
+            console.log("LEEN Volume change", state.volume);
+            onVolumeChange(state.volume);
+            // only seems to trigger if song is paused
+          }
+        }}
+      ></SpotifyPlayer>
     </div>
   );
 }

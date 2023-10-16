@@ -1,23 +1,100 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './getting-started.css';
 import SearchIcon from '../../assets/icons/search-icon.png'
 import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
+import Authentication from '../../authentication'
+import Song from './song'
 
 let tagCount = localStorage.getItem('tagCount') || 0;
+let songsAdded = 0;
 
-function TagSongsScreen( { navigation } ) {
+function TagSongsScreen( { route, navigation } ) {
+    const { selectedMood } = route.params;
+    const [ searchTerm, setSearch ] = useState("");
+    const [ searchResults, setSearchResults ] = useState([]);
+    const [ addedSongs, setAddedSongs ] = useState([]);
+    
+    const addSong = (song) => {
+        
+        let exists = false;
+        addedSongs.forEach(item => {
+            if(song.uri === item.uri) {
+                exists = true;
+            }
+        })
+
+        if(!exists) {
+            setAddedSongs([
+                ...addedSongs,
+                { 
+                    cover: song.cover, 
+                    title: song.title, 
+                    uri: song.uri, 
+                    artist: song.artist 
+                }
+            ])
+            ++songsAdded;
+        }
+
+        console.log(addedSongs);
+    
+    }
+
+    function removeSong(song) {
+
+        let tempList = [];
+        addedSongs.forEach(item => {
+            if(item !== song) {
+                tempList.push(item);
+            }
+        })
+        --songsAdded;
+        setAddedSongs(tempList);
+        console.log(addedSongs);
+
+    }
+
+    useEffect(() => {
+        if(!searchTerm) return setSearchResults([]);
+
+        let cancel = false;
+
+        if(cancel) return 
+        Authentication.fetchWebApi(`v1/search?q=${searchTerm}&type=track&limit=10`, 'GET').then(res => {
+            setSearchResults(res.tracks.items.map(song => {
+                const smallestAlbumImage = song.album.images.reduce(
+                    (smallest, image) => {
+                        if(image.height < smallest.height) return image;
+                        return smallest;
+                    }, song.album.images[0]
+                )
+                return {
+                    cover: smallestAlbumImage.url,
+                    title: song.name,
+                    uri: song.uri,
+                    artist: song.artists[0].name
+                }
+            }));
+        });
+
+        return () => cancel = true;
+    }, [searchTerm])
+
     return (
         <div className="login">
             <div className="header-div">
                 <h4 className="text-style step-text">Step 2</h4>
                 <h1 className="text-style">Tag 3 Songs</h1>
-                <h3 className="text-style sub-text">Search for 3 songs that align with the chosen mood</h3>
+                <div className="iconic-banner">
+                    <h1 className="text-style mood-text-style">{selectedMood}</h1>
+                </div>
+                <h3 className="text-style sub-text">Search for 3 or more songs that align with the mood '{selectedMood}'. The more songs you tag the better the results!</h3>
             </div>
 
             {/* Search Bar */}
             <div className='search-bar-div'>
                 <img className="search-icon-style" src={SearchIcon} alt=""></img>
-                <input className="search-bar-style" placeholder="search..."></input>
+                <input className="search-bar-style" name="searchbar" id="searchbar" placeholder="search..." onKeyUp={(e) => setSearch(e.target.value)}></input>
             </div>
             {/* Search Bar */}
             
@@ -25,58 +102,55 @@ function TagSongsScreen( { navigation } ) {
             <div className='song-div'>
                 <div className="section-div">
                     <h3 className="section-header">Added</h3>
-                    <h3 className="section-header">0/3</h3>
+                    <h3 className="section-header">Selected: {songsAdded}</h3>
                 </div>
             </div>
-            <div className='song-div'>
-                <h3 className="section-header">Suggested</h3>
 
-                <div className='song-item'>
-                    <div className='song-wrapper'>
-                        <img className='song-img' alt="" src={SongCoverIcon}></img>
-                        <div className='song-item-title-div'>
-                            <h2 className='text-style song-text-title'>Song Title</h2>
-                            <h3 className='text-style song-text-subtitle'>Artist</h3>
+            {/* Added Song List */}
+            <div className='song-div' style={{ overflowY: "scroll", minHeight: "200px"}}>
+                <li>
+                    {addedSongs.map(song => (
+                        <div  style={{ cursor: "pointer"}} onClick={() => removeSong(song)}>
+                            <Song 
+                                track={song}
+                                key={song.uri}
+                            />
                         </div>
-                    </div>
-                    <div className='song-wrapper'>
-                        <p className='song-add-button'>+</p>
-                    </div>
-                </div>
-                <div className='song-item'>
-                    <div className='song-wrapper'>
-                        <img className='song-img' alt="" src={SongCoverIcon}></img>
-                        <div className='song-item-title-div'>
-                            <h2 className='text-style song-text-title'>Song Title</h2>
-                            <h3 className='text-style song-text-subtitle'>Artist</h3>
+                    ))}
+                </li>
+            </div>
+            {/* Added Song List */}
+
+            <div className="song-div">
+                <h3 className="section-header">Suggested</h3>
+            </div>
+            
+            <div className='song-div' style={{ overflowY: "scroll"}}>
+                <li>
+                    {searchResults.map(song => (
+                        <div  style={{ cursor: "pointer" }} onClick={() => addSong(song)}>
+                            <Song 
+                                track={song}
+                                key={song.uri}
+                            />
                         </div>
-                    </div>
-                    <div className='song-wrapper'>
-                        <p className='song-add-button'>+</p>
-                    </div>
-                </div>
-                <div className='song-item'>
-                    <div className='song-wrapper'>
-                        <img className='song-img' alt="" src={SongCoverIcon}></img>
-                        <div className='song-item-title-div'>
-                            <h2 className='text-style song-text-title'>Song Title</h2>
-                            <h3 className='text-style song-text-subtitle'>Artist</h3>
-                        </div>
-                    </div>
-                    <div className='song-wrapper'>
-                        <p className='song-add-button'>+</p>
-                    </div>
-                </div>
+                    ))}
+                </li>
             </div>
             {/* Song List */}
 
             <button className="sign-in-button-style" 
                 onClick={() => {
-                    const selectFinish = checkTagged();
-                    if(selectFinish) {
-                        navigation.navigate('CongratulationsScreen')
-                    } else {
-                        navigation.navigate('SelectMoodScreen')
+                    if(songsAdded < 3) {
+                        alert("Make sure you select at least 3 songs before continuing!");
+                        return false;
+                    }  else {
+                        const selectFinish = checkTagged();
+                        if(selectFinish) {
+                            navigation.navigate('CongratulationsScreen')
+                        } else {
+                            navigation.navigate('SelectMoodScreen')
+                        }
                     }
                 }}
             >Continue</button>
@@ -91,7 +165,6 @@ function checkTagged() {
     if(tagCount >= 3) {
         return true;
     }
-    
     return false;
 }
 
