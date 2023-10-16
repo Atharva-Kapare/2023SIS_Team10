@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import PlaylistCover from '../components/playlists/playlist-cover';
-import PlaylistName from '../components/playlists/playlist-name';
 import PlaylistPageTitle from '../components/playlists/playlist-page-title';
 import AddPlaylistButton from '../components/playlists/add-playlist-button';
 import Playlist from '../components/playlists/playlist';
@@ -13,8 +11,6 @@ import '../App.css';
 import '../components/playlists/playlist.css';
 
 function MyPlaylist(){
-    let gradient = generate();
-
     //mood
 
     const [getMoodPlaylists, setMoodPlaylists] = useState([]);
@@ -39,7 +35,7 @@ function MyPlaylist(){
             '4cx8mRVCvqGM5XiktQedCJ', '5RE3w3M9g5vsotdIVtLONq', '2WObGIQXhjveq6yuXvf6VQ', 
             '7j7zqRfvpOtZHNXgXeMgnr', '3pVVQsP6XAVtFyXvQvYUxd', '09TlxralXOGX35LUutvw7I', 
             '3V9BNT8f4LgPeQqwFfRaTF', '6LZSGrLbddt9KwFbjC8SXz', '3xd4GVGAuzJGdVZLEKvWea', 
-            '7C6OeOzOEA0jW8E6uuVgqs', '3hzelPptWzx0OrSDTyIuuy']
+            '7C6OeOzOEA0jW8E6uuVgqs', '3hzelPptWzx0OrSDTyIuuy'], 
         ]);
     }, [getMoodPlaylists])
     
@@ -71,6 +67,7 @@ function MyPlaylist(){
 
     return ( 
         <div className="App-header">
+
             <div>
                 <div>
                     <Box>
@@ -78,23 +75,18 @@ function MyPlaylist(){
                             <Grid item xs={1} sm={5} md={10}>
                             <PlaylistPageTitle/>
                             </Grid>
-                            {/* <Grid item xs={1} sm={1} md={2}>
+                            <Grid item xs={1} sm={1} md={2}>
                                 <Button> <AddPlaylistButton/> </Button>
                             </Grid>
-                            <Grid item xs={1} sm={2} md={3}>
-                                <PlaylistCover/> <PlaylistName/>
-                            </Grid> */}
                             
-                            {getMoodPlaylists.map(playlistItem => (
+                            {getMoodPlaylists.map(item => (
                                 <div>
-                                    {/* <Grid item xs={1} sm={2} md={3}> */}
+                                    <Grid item xs={1} sm={2} md={3}>
                                         <Playlist 
-                                            key={playlistItem.id}
-                                            color={playlistItem.coverColor}
-                                            name={playlistItem.name}
+                                            key={item}
+                                            playlist={item} 
                                         />
-                                        <div>{playlistItem.id}</div>
-                                    {/* </Grid> */}
+                                    </Grid>
                                 </div>
                             ))}
 
@@ -104,29 +96,6 @@ function MyPlaylist(){
             </div>
         </div> 
     );
-}
-
-
-function generate() {
-
-    var hexValues = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e"];
-    
-    function populate(a) {
-      for ( var i = 0; i < 6; i++ ) {
-        var x = Math.round( Math.random() * 14 );
-        var y = hexValues[x];
-        a += y;
-      }
-      return a;
-    }
-    
-    var newColor1 = populate('#');
-    var newColor2 = populate('#');
-    var angle = Math.round( Math.random() * 360 );
-    
-    var gradient = "linear-gradient(" + angle + "deg, " + newColor1 + ", " + newColor2 + ")";
-
-    return gradient;
 }
 
 export default MyPlaylist;
