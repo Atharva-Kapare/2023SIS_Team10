@@ -20,6 +20,7 @@
     "react-native-screens": "^3.25.0",
     "react-native-web": "^0.19.9",
     "react-scripts": "^5.0.1",
+    "react-spotify-web-playback": "^0.14.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
