@@ -14,6 +14,18 @@ var client_id = 'bf93ef9d71614b5392aa6528ba81510a';
 var redirect_uri = 'http://localhost:3000';
 
 const app = express();
+app.use(express.json());
+
+async function fetchWebApi(token, endpoint, method, body) {
+  const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+  headers: {
+      Authorization: `Bearer ${token}`,
+  },
+  method,
+  body:JSON.stringify(body)
+  });
+  return await res.json();
+}
 
 app.get('/login', function(req, res) {
 
@@ -40,7 +52,6 @@ app.get('/gettingStarted', (req, res) => {
   res.send('Getting Started Works!')
 })
 
-
 app.get('/test', (req, res) => {
   const resp = setDoc(doc(database, "cities", "LA"), {
     name: "Los Angeles",
@@ -49,16 +60,32 @@ app.get('/test', (req, res) => {
   });
 })
 
-app.post('/genre', (req, res) => {
-  res.send(req.body.song +  ' ' + req.body.genre)
+/* Fields:
+    accessToken - String
+*/
+app.get('/api/getLikedSongs', (req, res) => {
+  fetchWebApi(req.body.accessToken, `v1/me/tracks?limit=5`, 'GET').then((spotifyRes) => {res.send(spotifyRes.items);});
 })
 
-app.post('/volume', (req, res) => {
-  res.send(req.body.song +  ' ' + req.body.volume)
+/* Fields:
+    accessToken - String
+    trackIDs - String Array (max 5 values)
+*/
+app.get('/api/getRecommendedSongs', (req, res) => {
+  fetchWebApi(req.body.accessToken, `v1/recommendations?limit=5&seed_tracks=${req.body.trackIDs.join(',')}`, 'GET').then((spotifyRes) => {res.send(spotifyRes.tracks);});
 })
 
-app.post('/like', (req, res) => {
-  res.send(req.body.song)
+/* Fields:
+    accessToken - String
+    trackID - String
+*/
+app.get('/api/getSong', (req, res) => {
+  fetchWebApi(req.body.accessToken, `v1/tracks/${req.body.trackID}`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
+})
+
+app.get('/api/createPlaylist', (req, res) => {
+  console.log(req.body.accessToken);
+  res.send(req.body.accessToken);
 })
 
 app.listen(port, () => {
