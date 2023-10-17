@@ -1,7 +1,7 @@
 // const express = require('express')
 // const app = express
 import express from 'express';
-const port = 3001
+const port = 80
 // const auth = require('./auth')
 // var querystring = require('querystring')
 
@@ -9,6 +9,7 @@ import { firebase_app } from './firebase_init.js';
 import { database } from './firebase_init.js';
 
 import { doc, setDoc } from "firebase/firestore";
+import axios from 'axios';
 
 var client_id = 'bf93ef9d71614b5392aa6528ba81510a';
 var redirect_uri = 'http://localhost:3000';
