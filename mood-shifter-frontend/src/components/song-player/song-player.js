@@ -7,6 +7,7 @@ import SongDetails from "./playbar-buttons/song-details";
 import Authentication from "../../authentication";
 import "./song-player.css";
 import SpotifyPlayer from "react-spotify-web-playback";
+import Footer from "../footer"
 
 function SongPlayerScreen({ navigation }) {
 
@@ -112,6 +113,7 @@ function SongPlayerScreen({ navigation }) {
           }
         }}
       ></SpotifyPlayer>
+      <Footer></Footer>
     </div>
   );
 }

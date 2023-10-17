@@ -4,7 +4,7 @@ import PlaylistName from '../components/playlists/playlist-name';
 import PlaylistPageTitle from '../components/playlists/playlist-page-title';
 import AddPlaylistButton from '../components/playlists/add-playlist-button';
 import Playlist from '../components/playlists/playlist';
-
+import Footer from '../components/footer'
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -13,9 +13,6 @@ import '../App.css';
 import '../components/playlists/playlist.css';
 
 function MyPlaylist(){
-    let gradient = generate();
-
-    //mood
 
     const [getMoodPlaylists, setMoodPlaylists] = useState([]);
 
@@ -71,37 +68,33 @@ function MyPlaylist(){
 
     return ( 
         <div className="App-header">
-            <div>
-                <div>
-                    <Box>
-                        <Grid container rowSpacing={{ xs: 2, sm: 3, md: 4 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
-                            <Grid item xs={1} sm={5} md={10}>
-                            <PlaylistPageTitle/>
-                            </Grid>
-                            {/* <Grid item xs={1} sm={1} md={2}>
-                                <Button> <AddPlaylistButton/> </Button>
-                            </Grid>
-                            <Grid item xs={1} sm={2} md={3}>
-                                <PlaylistCover/> <PlaylistName/>
-                            </Grid> */}
-                            
-                            {getMoodPlaylists.map(playlistItem => (
-                                <div>
-                                    {/* <Grid item xs={1} sm={2} md={3}> */}
-                                        <Playlist 
-                                            key={playlistItem.id}
-                                            color={playlistItem.coverColor}
-                                            name={playlistItem.name}
-                                        />
-                                        <div>{playlistItem.id}</div>
-                                    {/* </Grid> */}
-                                </div>
-                            ))}
-
-                        </Grid>
-                    </Box>       
-                </div>
-            </div>
+            <Box>
+                <Grid container rowSpacing={{ xs: 2, sm: 3, md: 4 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
+                    <Grid item xs={1} sm={5} md={10}>
+                    <PlaylistPageTitle/>
+                    </Grid>
+                    {/* <Grid item xs={1} sm={1} md={2}>
+                        <Button> <AddPlaylistButton/> </Button>
+                    </Grid>
+                    <Grid item xs={1} sm={2} md={3}>
+                        <PlaylistCover/> <PlaylistName/>
+                    </Grid> */}
+                    
+                    {getMoodPlaylists.map(playlistItem => (
+                        <div>
+                            {/* <Grid item xs={1} sm={2} md={3}> */}
+                                <Playlist 
+                                    key={playlistItem.id}
+                                    // color={playlistItem.coverColor}
+                                    // name={playlistItem.name}
+                                />
+                                <div>{playlistItem.id}</div>
+                            {/* </Grid> */}
+                        </div>
+                    ))}
+                </Grid>
+            </Box>
+            <Footer></Footer>   
         </div> 
     );
 }

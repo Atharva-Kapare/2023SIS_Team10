@@ -10,12 +10,12 @@ import PlaylistName from './playlist-name';
 function Playlist(color, name){
     return (
         <div> 
-            <PlaylistCover
+            {/* <PlaylistCover
                 coverColor = {color}
             />
             <PlaylistName
                 name = {name}
-            />
+            /> */}
         </div>
     );
 }
