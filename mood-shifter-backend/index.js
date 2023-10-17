@@ -40,7 +40,6 @@ app.get('/gettingStarted', (req, res) => {
   res.send('Getting Started Works!')
 })
 
-
 app.get('/test', (req, res) => {
   const resp = setDoc(doc(database, "cities", "LA"), {
     name: "Los Angeles",
