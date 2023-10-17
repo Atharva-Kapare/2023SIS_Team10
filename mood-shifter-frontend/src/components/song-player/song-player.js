@@ -15,6 +15,8 @@ function SongPlayerScreen({ navigation }) {
   let [currentSongId, setCurrentSongId] = useState('');
   const likedSongs = Authentication.getLikedSongs();
   const accessToken = localStorage.getItem("accessToken");
+  let [previousState, setPreviousState] = useState();
+  let [currentIndex, setCurrentIndex] = useState(0);
 
   let [songs, setSongs] = useState([
     {
@@ -44,6 +46,7 @@ function SongPlayerScreen({ navigation }) {
               name: song.track.name,
               image: song.track.album.images[0],
               artists: song.track.artists,
+              id: song.track.id
             });
           }
           songs.push({
@@ -52,7 +55,7 @@ function SongPlayerScreen({ navigation }) {
             albumCover: song.track.album.images[0].url,
             duration: song.track.duration_ms / 1000,
             uri: song.track.uri,
-          })
+          });
         }
         );
         songs.map((song) => uriList.push(song.uri));
@@ -60,13 +63,21 @@ function SongPlayerScreen({ navigation }) {
         setSongs(songs);
       }
     });
-    setCurrentSongId(songs[0].id)
+    setCurrentSongId(songs[0].id);
     console.log("LEEN TRACK", track);
    
   }, []);
 
   function onTrackChange(previousTracks, nextTracks) {
-    
+    if(currentIndex<previousTracks.length){
+      console.log('LEEN next song');
+    }
+    else if(currentIndex>previousTracks.length){
+      console.log('LEEN previous song');
+    }
+    else if (currentIndex === previousTracks.length){
+      console.log('LEEN same song');
+    }
   }
 
   function onPause() {
@@ -92,18 +103,22 @@ function SongPlayerScreen({ navigation }) {
         token={accessToken}
         uris={uris}
         callback={(state) => {
-          console.log('LEEN STATE', state);
           if (state.isPlaying) {
-            console.log("LEEN is playing", state.isPlaying);
-            onPlay()
+            // console.log('LEEN STATE', state, index);
+            // console.log("LEEN is playing", state.isPlaying);
+            onPlay();
           } else {
-            console.log("LEEN not playing");
-            onPause()
+            // console.log("LEEN not playing");
+            onPause();
           }
-          if (state.track) {
-            console.log("LEEN track", state.track, state.previousTracks, state.nextTracks);
+          if (state.track.id !== track.id) {
+            const indexOfTrack = state.previousTracks.length;
+            console.log("LEEN track", state.track, state.previousTracks, indexOfTrack, state.nextTracks);
+            
             setTrack(state.track);
-            onTrackChange(state.previousTracks, state.nextTracks)
+            onTrackChange(state.previousTracks, state.nextTracks);
+            setCurrentIndex(indexOfTrack);
+            console.log("LEEN index", indexOfTrack);
           }
           if(state.volume){
             console.log("LEEN Volume change", state.volume);
