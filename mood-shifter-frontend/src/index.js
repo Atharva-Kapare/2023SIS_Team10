@@ -9,13 +9,14 @@ import SelectMoodScreen from './components/getting-started/select-mood';
 import TagSongsScreen from './components/getting-started/tag-songs';
 import CongratulationsScreen from './components/getting-started/congratulations';
 import Authentication from './authentication';
-import Navbar from './components/navbar';
 import MyPlaylist from './pages/my-playlists';
 import {NavigationContainer} from '@react-navigation/native';
 import { Button, View, Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import songPlayerScreen from './components/song-player/song-player';
 import GetTrackScreen from './pages/gettrackscreen.js';
+import SettingsScreen from './pages/settings';
+import Footer from './components/footer';
 
 const clientId = "8165af06e3a44a32ac86aa3d998761cd";
 const params = new URLSearchParams(window.location.search);
@@ -41,6 +42,9 @@ root.render(
         <Stack.Screen name="MyPlaylist" component={MyPlaylist} />
         <Stack.Screen name="GetTrackScreen" component={GetTrackScreen} />
         <Stack.Screen name="PlaylistScreen" component={songPlayerScreen} />
+        <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+        <Stack.Screen name="Footer" component={Footer} />
+        
       </Stack.Navigator>
     </NavigationContainer>
   </React.StrictMode>

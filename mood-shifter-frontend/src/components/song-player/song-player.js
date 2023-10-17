@@ -29,12 +29,12 @@ function SongPlayerScreen({ navigation }) {
 
   useEffect(() => {
     likedSongs.then((res) => {
-      console.log(
-        "Component initialized",
-        res,
-        res[0].track.duration_ms / 1000,
-        accessToken
-      );
+      // console.log(
+      //   "Component initialized",
+      //   res,
+      //   res[0].track.duration_ms / 1000,
+      //   accessToken
+      // );
       if (res[0]) {
         songs = [];
         const uriList = [];
@@ -113,7 +113,7 @@ function SongPlayerScreen({ navigation }) {
           }
         }}
       ></SpotifyPlayer>
-      <Footer></Footer>
+      <Footer navigation={navigation}></Footer>
     </div>
   );
 }

@@ -12,13 +12,19 @@ import Button from '@mui/material/Button';
 import '../App.css';
 import '../components/playlists/playlist.css';
 
-function MyPlaylist(){
+function MyPlaylist({navigation}){
 
     const [getMoodPlaylists, setMoodPlaylists] = useState([]);
+    const [loading, setLoading] = useState(false); 
 
     console.log(getMoodPlaylists);
 
     useEffect(() => {
+        setData();
+    }, [])
+
+    const setData = () => {
+        setLoading(true);
         setMoodPlaylists([
             ['0zSDG1EI7SGhM62M5iBiGI', '1FrNSgJjVV0uvg7bMy4HgY', '3OwsQhfC9eJdOlD3IO74l4', 
             '1BdNfvLu7gKdiPThI4Hhwc', '19jTLBrvDBjMqNqb7iZK17', '6m2Ju7nCvHNjQ7dSTEqg8h', 
@@ -38,8 +44,8 @@ function MyPlaylist(){
             '3V9BNT8f4LgPeQqwFfRaTF', '6LZSGrLbddt9KwFbjC8SXz', '3xd4GVGAuzJGdVZLEKvWea', 
             '7C6OeOzOEA0jW8E6uuVgqs', '3hzelPptWzx0OrSDTyIuuy']
         ]);
-    }, [getMoodPlaylists])
-    
+        setLoading(false);
+    }
 
     //moodshift
     // const [getMoodshiftPlaylists, setMoodshiftPlaylists] = useState([]);
@@ -94,7 +100,7 @@ function MyPlaylist(){
                     ))}
                 </Grid>
             </Box>
-            <Footer></Footer>   
+            <Footer navigation={navigation}></Footer>   
         </div> 
     );
 }
