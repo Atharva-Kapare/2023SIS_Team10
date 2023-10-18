@@ -38,9 +38,8 @@ root.render(
         <Stack.Screen name="SelectMoodScreen" component={SelectMoodScreen} />
         <Stack.Screen name="TagSongsScreen" component={TagSongsScreen} />
         <Stack.Screen name="CongratulationsScreen" component={CongratulationsScreen} />
-        <Stack.Screen name="Navbar" component={Navbar} />
         <Stack.Screen name="MyPlaylist" component={MyPlaylist} />
-        <Stack.Screen name="GetTrackScreen" component={GetTrackScreen} />
+        {/* <Stack.Screen name="GetTrackScreen" component={GetTrackScreen} /> */}
         <Stack.Screen name="PlaylistScreen" component={songPlayerScreen} />
       </Stack.Navigator>
     </NavigationContainer>
