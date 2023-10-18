@@ -13,68 +13,76 @@ import '../components/playlists/playlist.css';
 function MyPlaylist(){
     
     let i = 0;
-
     //mood
-    const [getMoodPlaylists, setMoodPlaylists] = useState([]);
-
-    console.log(getMoodPlaylists);
-
-    useEffect(() => {
-        setMoodPlaylists([
-            [ "Happy",'0zSDG1EI7SGhM62M5iBiGI', '1FrNSgJjVV0uvg7bMy4HgY', '3OwsQhfC9eJdOlD3IO74l4', 
-            '1BdNfvLu7gKdiPThI4Hhwc', '19jTLBrvDBjMqNqb7iZK17', '6m2Ju7nCvHNjQ7dSTEqg8h', 
-            '7bo1dKJ6cl3JTYhuavcwWm', '6fNhZRFEkBfgW39W3wKARJ', '42qNWdLKCI41S4uzfamhFM', 
-            '6ce17pZwsMcYNab5IaC5MQ', '06cn5ZdNWO2maJ0HrxXqXK', '4ItmLaoV2YCCx0MKKQOTNT', 
-            '2XLDi0EEvJKe06OBxfsVEh', '6DaEaZczQdmL0yGydmFWMt', '2psNLeLqcvXL6VIFn146cM', 
-            '3nhYDcvWFZk97jm2bCcANA', '2D6IbtbMrzc9LpVWPSWAk1', '2P7nMEix8hB9DpZgWt7A6Y', 
-            '1SqMUyn5xMwVRfVzR9DSRs', '4j8HnSXVLfvrbNSQtF14Xf', '0Pex3CycGQdy13cjFF76xA', 
-            '1A7qPfbcyRVEdcZiwTFhZI', '33QyoRmhHKADVNXnn4VgvY', '02oAUzv4M0ItuTDy2RT3IT', 
-            '3G6hD9B2ZHOsgf4WfNu7X1', '0rRjGruFonCGOt0S5zAJNQ', '3fmQqUTD5QGkkNsXZdCMns', 
-            '0EPK3XVvgbe8q0KrS7nEiY', '2WzK3sBkdRm0VvfSKJjXCu', '3ETFRdtKVhljs65WQNyECh', 
-            '1ujlPDuUcDs8t3MLBxf21x', '05QTU0jumc79qqlpAzMEbw', '1KYThtnV4Tv3XcoLxywWsP', 
-            '5vBTQELDPlPgg6q0mK8cxv', '6CGMZijOAZvTXG21T8t6R0', '3SxiAdI8dP9AaaEz1Z24mn', 
-            '2BH3j05ZXWr5PR30sW079d', '5Ro8cPLumZRfhhfVxBG5hJ', '216QQlJgvMuozfjd7OzTXx', 
-            '4cx8mRVCvqGM5XiktQedCJ', '5RE3w3M9g5vsotdIVtLONq', '2WObGIQXhjveq6yuXvf6VQ', 
-            '7j7zqRfvpOtZHNXgXeMgnr', '3pVVQsP6XAVtFyXvQvYUxd', '09TlxralXOGX35LUutvw7I', 
-            '3V9BNT8f4LgPeQqwFfRaTF', '6LZSGrLbddt9KwFbjC8SXz', '3xd4GVGAuzJGdVZLEKvWea', 
-            '7C6OeOzOEA0jW8E6uuVgqs', '3hzelPptWzx0OrSDTyIuuy'], 
-            [ "Sad",'0zSDG1EI7SGhM62M5iBiGI', '1FrNSgJjVV0uvg7bMy4HgY', '3OwsQhfC9eJdOlD3IO74l4', 
-            '1BdNfvLu7gKdiPThI4Hhwc', '19jTLBrvDBjMqNqb7iZK17', '6m2Ju7nCvHNjQ7dSTEqg8h', 
-            '7bo1dKJ6cl3JTYhuavcwWm', '6fNhZRFEkBfgW39W3wKARJ', '42qNWdLKCI41S4uzfamhFM', 
-            '6ce17pZwsMcYNab5IaC5MQ', '06cn5ZdNWO2maJ0HrxXqXK', '4ItmLaoV2YCCx0MKKQOTNT', 
-            '2XLDi0EEvJKe06OBxfsVEh', '6DaEaZczQdmL0yGydmFWMt', '2psNLeLqcvXL6VIFn146cM', 
-            '3nhYDcvWFZk97jm2bCcANA', '2D6IbtbMrzc9LpVWPSWAk1', '2P7nMEix8hB9DpZgWt7A6Y', 
-            '1SqMUyn5xMwVRfVzR9DSRs', '4j8HnSXVLfvrbNSQtF14Xf', '0Pex3CycGQdy13cjFF76xA', 
-            '1A7qPfbcyRVEdcZiwTFhZI', '33QyoRmhHKADVNXnn4VgvY', '02oAUzv4M0ItuTDy2RT3IT', 
-            '3G6hD9B2ZHOsgf4WfNu7X1', '0rRjGruFonCGOt0S5zAJNQ', '3fmQqUTD5QGkkNsXZdCMns', 
-            '0EPK3XVvgbe8q0KrS7nEiY', '2WzK3sBkdRm0VvfSKJjXCu', '3ETFRdtKVhljs65WQNyECh', 
-            '1ujlPDuUcDs8t3MLBxf21x', '05QTU0jumc79qqlpAzMEbw', '1KYThtnV4Tv3XcoLxywWsP', 
-            '5vBTQELDPlPgg6q0mK8cxv', '6CGMZijOAZvTXG21T8t6R0', '3SxiAdI8dP9AaaEz1Z24mn', 
-            '2BH3j05ZXWr5PR30sW079d', '5Ro8cPLumZRfhhfVxBG5hJ', '216QQlJgvMuozfjd7OzTXx', 
-            '4cx8mRVCvqGM5XiktQedCJ', '5RE3w3M9g5vsotdIVtLONq', '2WObGIQXhjveq6yuXvf6VQ', 
-            '7j7zqRfvpOtZHNXgXeMgnr', '3pVVQsP6XAVtFyXvQvYUxd', '09TlxralXOGX35LUutvw7I', 
-            '3V9BNT8f4LgPeQqwFfRaTF', '6LZSGrLbddt9KwFbjC8SXz', '3xd4GVGAuzJGdVZLEKvWea', 
-            '7C6OeOzOEA0jW8E6uuVgqs', '3hzelPptWzx0OrSDTyIuuy'], 
-            [ "Gym",'0zSDG1EI7SGhM62M5iBiGI', '1FrNSgJjVV0uvg7bMy4HgY', '3OwsQhfC9eJdOlD3IO74l4', 
-            '1BdNfvLu7gKdiPThI4Hhwc', '19jTLBrvDBjMqNqb7iZK17', '6m2Ju7nCvHNjQ7dSTEqg8h', 
-            '7bo1dKJ6cl3JTYhuavcwWm', '6fNhZRFEkBfgW39W3wKARJ', '42qNWdLKCI41S4uzfamhFM', 
-            '6ce17pZwsMcYNab5IaC5MQ', '06cn5ZdNWO2maJ0HrxXqXK', '4ItmLaoV2YCCx0MKKQOTNT', 
-            '2XLDi0EEvJKe06OBxfsVEh', '6DaEaZczQdmL0yGydmFWMt', '2psNLeLqcvXL6VIFn146cM', 
-            '3nhYDcvWFZk97jm2bCcANA', '2D6IbtbMrzc9LpVWPSWAk1', '2P7nMEix8hB9DpZgWt7A6Y', 
-            '1SqMUyn5xMwVRfVzR9DSRs', '4j8HnSXVLfvrbNSQtF14Xf', '0Pex3CycGQdy13cjFF76xA', 
-            '1A7qPfbcyRVEdcZiwTFhZI', '33QyoRmhHKADVNXnn4VgvY', '02oAUzv4M0ItuTDy2RT3IT', 
-            '3G6hD9B2ZHOsgf4WfNu7X1', '0rRjGruFonCGOt0S5zAJNQ', '3fmQqUTD5QGkkNsXZdCMns', 
-            '0EPK3XVvgbe8q0KrS7nEiY', '2WzK3sBkdRm0VvfSKJjXCu', '3ETFRdtKVhljs65WQNyECh', 
-            '1ujlPDuUcDs8t3MLBxf21x', '05QTU0jumc79qqlpAzMEbw', '1KYThtnV4Tv3XcoLxywWsP', 
-            '5vBTQELDPlPgg6q0mK8cxv', '6CGMZijOAZvTXG21T8t6R0', '3SxiAdI8dP9AaaEz1Z24mn', 
-            '2BH3j05ZXWr5PR30sW079d', '5Ro8cPLumZRfhhfVxBG5hJ', '216QQlJgvMuozfjd7OzTXx', 
-            '4cx8mRVCvqGM5XiktQedCJ', '5RE3w3M9g5vsotdIVtLONq', '2WObGIQXhjveq6yuXvf6VQ', 
-            '7j7zqRfvpOtZHNXgXeMgnr', '3pVVQsP6XAVtFyXvQvYUxd', '09TlxralXOGX35LUutvw7I', 
-            '3V9BNT8f4LgPeQqwFfRaTF', '6LZSGrLbddt9KwFbjC8SXz', '3xd4GVGAuzJGdVZLEKvWea', 
-            '7C6OeOzOEA0jW8E6uuVgqs', '3hzelPptWzx0OrSDTyIuuy'],
-        ]);
-    }, [getMoodPlaylists])
+    const getMoodPlaylists = 
+        [
+            {
+                mood: "Happy",
+                songs: ['0zSDG1EI7SGhM62M5iBiGI', '1FrNSgJjVV0uvg7bMy4HgY', '3OwsQhfC9eJdOlD3IO74l4', 
+                '1BdNfvLu7gKdiPThI4Hhwc', '19jTLBrvDBjMqNqb7iZK17', '6m2Ju7nCvHNjQ7dSTEqg8h', 
+                '7bo1dKJ6cl3JTYhuavcwWm', '6fNhZRFEkBfgW39W3wKARJ', '42qNWdLKCI41S4uzfamhFM', 
+                '6ce17pZwsMcYNab5IaC5MQ', '06cn5ZdNWO2maJ0HrxXqXK', '4ItmLaoV2YCCx0MKKQOTNT', 
+                '2XLDi0EEvJKe06OBxfsVEh', '6DaEaZczQdmL0yGydmFWMt', '2psNLeLqcvXL6VIFn146cM', 
+                '3nhYDcvWFZk97jm2bCcANA', '2D6IbtbMrzc9LpVWPSWAk1', '2P7nMEix8hB9DpZgWt7A6Y', 
+                '1SqMUyn5xMwVRfVzR9DSRs', '4j8HnSXVLfvrbNSQtF14Xf', '0Pex3CycGQdy13cjFF76xA', 
+                '1A7qPfbcyRVEdcZiwTFhZI', '33QyoRmhHKADVNXnn4VgvY', '02oAUzv4M0ItuTDy2RT3IT', 
+                '3G6hD9B2ZHOsgf4WfNu7X1', '0rRjGruFonCGOt0S5zAJNQ', '3fmQqUTD5QGkkNsXZdCMns', 
+                '0EPK3XVvgbe8q0KrS7nEiY', '2WzK3sBkdRm0VvfSKJjXCu', '3ETFRdtKVhljs65WQNyECh', 
+                '1ujlPDuUcDs8t3MLBxf21x', '05QTU0jumc79qqlpAzMEbw', '1KYThtnV4Tv3XcoLxywWsP', 
+                '5vBTQELDPlPgg6q0mK8cxv', '6CGMZijOAZvTXG21T8t6R0', '3SxiAdI8dP9AaaEz1Z24mn', 
+                '2BH3j05ZXWr5PR30sW079d', '5Ro8cPLumZRfhhfVxBG5hJ', '216QQlJgvMuozfjd7OzTXx', 
+                '4cx8mRVCvqGM5XiktQedCJ', '5RE3w3M9g5vsotdIVtLONq', '2WObGIQXhjveq6yuXvf6VQ', 
+                '7j7zqRfvpOtZHNXgXeMgnr', '3pVVQsP6XAVtFyXvQvYUxd', '09TlxralXOGX35LUutvw7I', 
+                '3V9BNT8f4LgPeQqwFfRaTF', '6LZSGrLbddt9KwFbjC8SXz', '3xd4GVGAuzJGdVZLEKvWea', 
+                '7C6OeOzOEA0jW8E6uuVgqs', '3hzelPptWzx0OrSDTyIuuy'
+                ]
+            },
+            {
+                mood: "Sad",
+                songs: ['0zSDG1EI7SGhM62M5iBiGI', '1FrNSgJjVV0uvg7bMy4HgY', '3OwsQhfC9eJdOlD3IO74l4', 
+                '1BdNfvLu7gKdiPThI4Hhwc', '19jTLBrvDBjMqNqb7iZK17', '6m2Ju7nCvHNjQ7dSTEqg8h', 
+                '7bo1dKJ6cl3JTYhuavcwWm', '6fNhZRFEkBfgW39W3wKARJ', '42qNWdLKCI41S4uzfamhFM', 
+                '6ce17pZwsMcYNab5IaC5MQ', '06cn5ZdNWO2maJ0HrxXqXK', '4ItmLaoV2YCCx0MKKQOTNT', 
+                '2XLDi0EEvJKe06OBxfsVEh', '6DaEaZczQdmL0yGydmFWMt', '2psNLeLqcvXL6VIFn146cM', 
+                '3nhYDcvWFZk97jm2bCcANA', '2D6IbtbMrzc9LpVWPSWAk1', '2P7nMEix8hB9DpZgWt7A6Y', 
+                '1SqMUyn5xMwVRfVzR9DSRs', '4j8HnSXVLfvrbNSQtF14Xf', '0Pex3CycGQdy13cjFF76xA', 
+                '1A7qPfbcyRVEdcZiwTFhZI', '33QyoRmhHKADVNXnn4VgvY', '02oAUzv4M0ItuTDy2RT3IT', 
+                '3G6hD9B2ZHOsgf4WfNu7X1', '0rRjGruFonCGOt0S5zAJNQ', '3fmQqUTD5QGkkNsXZdCMns', 
+                '0EPK3XVvgbe8q0KrS7nEiY', '2WzK3sBkdRm0VvfSKJjXCu', '3ETFRdtKVhljs65WQNyECh', 
+                '1ujlPDuUcDs8t3MLBxf21x', '05QTU0jumc79qqlpAzMEbw', '1KYThtnV4Tv3XcoLxywWsP', 
+                '5vBTQELDPlPgg6q0mK8cxv', '6CGMZijOAZvTXG21T8t6R0', '3SxiAdI8dP9AaaEz1Z24mn', 
+                '2BH3j05ZXWr5PR30sW079d', '5Ro8cPLumZRfhhfVxBG5hJ', '216QQlJgvMuozfjd7OzTXx', 
+                '4cx8mRVCvqGM5XiktQedCJ', '5RE3w3M9g5vsotdIVtLONq', '2WObGIQXhjveq6yuXvf6VQ', 
+                '7j7zqRfvpOtZHNXgXeMgnr', '3pVVQsP6XAVtFyXvQvYUxd', '09TlxralXOGX35LUutvw7I', 
+                '3V9BNT8f4LgPeQqwFfRaTF', '6LZSGrLbddt9KwFbjC8SXz', '3xd4GVGAuzJGdVZLEKvWea', 
+                '7C6OeOzOEA0jW8E6uuVgqs', '3hzelPptWzx0OrSDTyIuuy'
+                ]
+            },
+            {
+                mood: "Gym",
+                songs: ['0zSDG1EI7SGhM62M5iBiGI', '1FrNSgJjVV0uvg7bMy4HgY', '3OwsQhfC9eJdOlD3IO74l4', 
+                '1BdNfvLu7gKdiPThI4Hhwc', '19jTLBrvDBjMqNqb7iZK17', '6m2Ju7nCvHNjQ7dSTEqg8h', 
+                '7bo1dKJ6cl3JTYhuavcwWm', '6fNhZRFEkBfgW39W3wKARJ', '42qNWdLKCI41S4uzfamhFM', 
+                '6ce17pZwsMcYNab5IaC5MQ', '06cn5ZdNWO2maJ0HrxXqXK', '4ItmLaoV2YCCx0MKKQOTNT', 
+                '2XLDi0EEvJKe06OBxfsVEh', '6DaEaZczQdmL0yGydmFWMt', '2psNLeLqcvXL6VIFn146cM', 
+                '3nhYDcvWFZk97jm2bCcANA', '2D6IbtbMrzc9LpVWPSWAk1', '2P7nMEix8hB9DpZgWt7A6Y', 
+                '1SqMUyn5xMwVRfVzR9DSRs', '4j8HnSXVLfvrbNSQtF14Xf', '0Pex3CycGQdy13cjFF76xA', 
+                '1A7qPfbcyRVEdcZiwTFhZI', '33QyoRmhHKADVNXnn4VgvY', '02oAUzv4M0ItuTDy2RT3IT', 
+                '3G6hD9B2ZHOsgf4WfNu7X1', '0rRjGruFonCGOt0S5zAJNQ', '3fmQqUTD5QGkkNsXZdCMns', 
+                '0EPK3XVvgbe8q0KrS7nEiY', '2WzK3sBkdRm0VvfSKJjXCu', '3ETFRdtKVhljs65WQNyECh', 
+                '1ujlPDuUcDs8t3MLBxf21x', '05QTU0jumc79qqlpAzMEbw', '1KYThtnV4Tv3XcoLxywWsP', 
+                '5vBTQELDPlPgg6q0mK8cxv', '6CGMZijOAZvTXG21T8t6R0', '3SxiAdI8dP9AaaEz1Z24mn', 
+                '2BH3j05ZXWr5PR30sW079d', '5Ro8cPLumZRfhhfVxBG5hJ', '216QQlJgvMuozfjd7OzTXx', 
+                '4cx8mRVCvqGM5XiktQedCJ', '5RE3w3M9g5vsotdIVtLONq', '2WObGIQXhjveq6yuXvf6VQ', 
+                '7j7zqRfvpOtZHNXgXeMgnr', '3pVVQsP6XAVtFyXvQvYUxd', '09TlxralXOGX35LUutvw7I', 
+                '3V9BNT8f4LgPeQqwFfRaTF', '6LZSGrLbddt9KwFbjC8SXz', '3xd4GVGAuzJGdVZLEKvWea', 
+                '7C6OeOzOEA0jW8E6uuVgqs', '3hzelPptWzx0OrSDTyIuuy'
+                ]
+            }
+        ];
     
+
+    //console.log(getMoodPlaylists);
 
     //moodshift
     // const [getMoodshiftPlaylists, setMoodshiftPlaylists] = useState([]);
@@ -115,17 +123,17 @@ function MyPlaylist(){
                                 <Button> <AddPlaylistButton/> </Button>
                             </Grid>
                             
-                            {getMoodPlaylists.map(item => (
+                            {getMoodPlaylists.map(playlist => (
                                 <Grid item xs={1} sm={2} md={3}>
                                     <Playlist 
-                                        key={item}
-                                        playlist={item}
+                                        key={playlist.mood}
+                                        playlist={playlist}
                                     />
-                                    <div>{getMoodPlaylists[i][0]}</div>;
+                                    <div className="playlist-name">{playlist.mood}</div>
                                     {/* {getMoodPlaylists.array.forEach(element => {
                                         <div>{getMoodPlaylists[element][0]}</div>;
                                     })} */}
-                                    {i++} {/* bug occuring here, not meaning to print i just want to increase it*/}       
+                                     {/* bug occuring here, not meaning to print i just want to increase it*/}       
                                 </Grid>
                             ))}
 

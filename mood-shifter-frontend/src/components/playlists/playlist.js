@@ -7,7 +7,7 @@ import './playlist.css';
 let generated = false;
 let generatedColor = ''; 
 
-function Playlist(playlist){
+function Playlist( {playlist} ){
 
     if(!generated){
         generatedColor = generate();
@@ -16,14 +16,6 @@ function Playlist(playlist){
     return (
         <div>
             <div className="playlist-cover" style={{background:`${generatedColor}`}}></div>
-            <div className="playlist-name">{playlist.name}</div>
-
-           {/*  <PlaylistCover
-                coverColor = {color}
-            />
-            <PlaylistName
-                name = {name}
-            /> */}
         </div>
     );
 }
