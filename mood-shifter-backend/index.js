@@ -1,6 +1,7 @@
 // const express = require('express')
 // const app = express
 import express from 'express';
+import cors from 'cors';
 const port = 8000
 // const auth = require('./auth')
 // var querystring = require('querystring')
@@ -18,7 +19,8 @@ var redirect_uri = 'http://localhost:3000';
 var modelURLBase = 'http://localhost:5000'
 
 const app = express();
-app.use(express.json())
+app.use(express.json());
+app.use(cors());
 
 app.get('/login', function (req, res) {
   // We get sent the access token and the userID from the frontend
