@@ -1,36 +1,58 @@
 // const express = require('express')
 // const app = express
 import express from 'express';
-const port = 80
+const port = 8000
 // const auth = require('./auth')
 // var querystring = require('querystring')
 
 import { firebase_app } from './firebase_init.js';
 import { database } from './firebase_init.js';
 
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import axios from 'axios';
+import { getLikedSongs } from './spotify.js';
 
 var client_id = 'bf93ef9d71614b5392aa6528ba81510a';
 var redirect_uri = 'http://localhost:3000';
 
+var modelURLBase = 'http://localhost:5000'
+
 const app = express();
+app.use(express.json())
 
-app.get('/login', function(req, res) {
+app.get('/login', function (req, res) {
+  // We get sent the access token and the userID from the frontend
+  // The access token is needed to talk to the spotify apis, userID needs to get stored into the backend
+  let resp = {};
 
-  // var state = generateRandomString(16);
-  var state = 'bf93ef9d71614b53';
-  var scope = 'user-read-private user-read-email';
-  
+  console.log(JSON.stringify(req.body));
 
-  res.redirect('https://accounts.spotify.com/authorize?' +
-    querystring.stringify({
-      response_type: 'code',
-      client_id: client_id,
-      scope: scope,
-      redirect_uri: redirect_uri,
-      state: state
-    }));
+  // Get all of the liked songs from the user:
+  // var likedSongs = await axios.
+
+  // Get the user data if it exists from firebase
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = getDoc(docRef);
+
+  if (docSnapshot != null) {
+    resp.gettingStarted = false;
+  } else {
+    resp.gettingStarted = true;
+    setDoc(doc(database, 'users', req.body.UID), {
+      "moods": {},
+      "model": "",
+      "configs": {}
+    });
+    console.log("User with ID: ", req.body.UID, "was made!")
+  }
+
+  // Talk to the spotify apis to grab the liked songs
+  getLikedSongs(req.body.accessToken)
+  .then(spotifyResp => {
+
+    console.log(spotifyResp);
+  });
+  res.send(resp);
 });
 
 app.get('/', (req, res) => {
@@ -51,11 +73,11 @@ app.get('/test', (req, res) => {
 })
 
 app.post('/genre', (req, res) => {
-  res.send(req.body.song +  ' ' + req.body.genre)
+  res.send(req.body.song + ' ' + req.body.genre)
 })
 
 app.post('/volume', (req, res) => {
-  res.send(req.body.song +  ' ' + req.body.volume)
+  res.send(req.body.song + ' ' + req.body.volume)
 })
 
 app.post('/like', (req, res) => {
