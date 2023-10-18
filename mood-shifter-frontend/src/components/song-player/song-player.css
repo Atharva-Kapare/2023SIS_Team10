@@ -7,6 +7,7 @@
   background-color: #121212;
   color: #fff;
   row-gap: 20px;
+  min-height: 619px !important;
 }
 
 .playbar-info {
