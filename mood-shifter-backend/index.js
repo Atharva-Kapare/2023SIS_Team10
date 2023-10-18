@@ -37,6 +37,11 @@ app.get('/login', function (req, res) {
   if (docSnapshot != null) {
     resp.gettingStarted = false;
   } else {
+
+    if (docSnapshot.gettingStarted == false) {
+      resp.gettingStarted = false;
+    }
+
     resp.gettingStarted = true;
     setDoc(doc(database, 'users', req.body.UID), {
       "moods": {},
