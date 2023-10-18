@@ -168,11 +168,12 @@ function TagSongsScreen( { route, navigation } ) {
 async function sendUserSongDataToFirebase(selectedMood, addedSongs) {
     const method = 'POST';
     const params = new URLSearchParams();
+    const accessToken = localStorage.getItem("accessToken");
     params.append(`${selectedMood}`, addedSongs);
 
-    const playlistData = await fetch(`${process.env.BACKEND_URL}/login`, {
+    const playlistData = await fetch(`http://localhost:8000/login`, {
         header: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
         },
         method,
         body: params

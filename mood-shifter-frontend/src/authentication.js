@@ -55,6 +55,7 @@ export async function getAccessToken(clientId, code) {
     }
 
     const { access_token } = await result.json();
+    console.log(access_token)
     return access_token;
 }
   
@@ -105,8 +106,9 @@ async function getSong(trackID) {
     return (await fetchWebApi(`v1/tracks/${trackID}`, 'GET'));
 }
   
-async function getPlaylistData(accessToken, profile) {
+async function getPlaylistData(profile) {
     const method = 'POST';
+    const accessToken = localStorage.getItem("accessToken");
     const params = new URLSearchParams();
     params.append("accessToken", accessToken);
     params.append("profileId", profile.id);
