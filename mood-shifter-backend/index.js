@@ -37,6 +37,11 @@ app.get('/login', function (req, res) {
   if (docSnapshot != null) {
     resp.gettingStarted = false;
   } else {
+
+    if (docSnapshot.gettingStarted == false) {
+      resp.gettingStarted = false;
+    }
+
     resp.gettingStarted = true;
     setDoc(doc(database, 'users', req.body.UID), {
       "moods": {},
@@ -45,14 +50,20 @@ app.get('/login', function (req, res) {
     });
     console.log("User with ID: ", req.body.UID, "was made!")
   }
+  
 
   // Talk to the spotify apis to grab the liked songs
+  resp.likedSongs = [];
   getLikedSongs(req.body.accessToken)
   .then(spotifyResp => {
-
-    console.log(spotifyResp);
+    // console.log(spotifyResp.items);
+    for(const item in spotifyResp.items) {
+      resp.likedSongs.push(spotifyResp.items[item].track.id);
+      // resp.likedSongs.push(track.id);
+    }
+    console.log(resp);
+    res.send(resp);
   });
-  res.send(resp);
 });
 
 app.get('/', (req, res) => {
