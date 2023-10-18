@@ -61,8 +61,8 @@ async function AuthCheck({navigation}) {
       }
       const profile = await Authentication.fetchProfile(accessToken);
 
-      playlistData = Authentication.getPlaylistData(accessToken, profile)
-      console.log(playlistData);
+      playlistData = Authentication.getPlaylistData(profile.id)
+      console.log("playlistData: ", playlistData);
     };
     runAuth();
     // if(playlistData.completedStarted) {

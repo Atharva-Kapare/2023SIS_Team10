@@ -117,12 +117,11 @@ async function getPlaylistData(profile) {
         method,
         body: {
             "accessToken": accessToken,
-            "UID": profile.id
+            "UID": profile
         }
-    });
-    return await playlistData.json();
+    }).then((res) => res.json());
+    return await playlistData;
 }
-  
 
 export default {
     redirectToAuthCodeFlow,  

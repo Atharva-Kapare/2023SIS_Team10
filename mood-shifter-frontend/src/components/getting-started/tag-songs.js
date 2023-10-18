@@ -148,7 +148,7 @@ function TagSongsScreen( { route, navigation } ) {
                     }  else {
                         const selectFinish = checkTagged();
                         
-                        sendUserSongDataToFirebase(selectedMood, addedSongs);
+                        sendUserSongDataToBackend(selectedMood, addedSongs);
 
                         if(selectFinish) {
                             navigation.navigate('CongratulationsScreen')
@@ -165,20 +165,20 @@ function TagSongsScreen( { route, navigation } ) {
     );
 }
 
-async function sendUserSongDataToFirebase(selectedMood, addedSongs) {
-    const method = 'POST';
-    const params = new URLSearchParams();
-    const accessToken = localStorage.getItem("accessToken");
-    params.append(`${selectedMood}`, addedSongs);
+async function sendUserSongDataToBackend(selectedMood, addedSongs) {
+    // const method = 'POST';
+    // const params = new URLSearchParams();
+    // const accessToken = localStorage.getItem("accessToken");
+    // params.append(`${selectedMood}`, addedSongs);
 
-    const playlistData = await fetch(`http://localhost:8000/login`, {
-        header: {
-            'content-type': 'application/json',
-        },
-        method,
-        body: params
-    });
-    return await playlistData.json();
+    // const playlistData = await fetch(`http://localhost:8000/login`, {
+    //     header: {
+    //         'content-type': 'application/json',
+    //     },
+    //     method,
+    //     body: params
+    // });
+    // return await playlistData.json();
 }
 
 function checkTagged() {
