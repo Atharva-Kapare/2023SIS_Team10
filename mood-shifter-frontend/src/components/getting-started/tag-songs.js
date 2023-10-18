@@ -60,7 +60,19 @@ function TagSongsScreen( { route, navigation } ) {
         let cancel = false;
 
         if(cancel) return 
-        Authentication.fetchWebApi(`v1/search?q=${searchTerm}&type=track&limit=10`, 'GET').then(res => {
+        const options = {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json;charset=UTF-8",
+            },
+            body: JSON.stringify({
+                accessToken: localStorage.getItem("accessToken"),
+                searchTerm: searchTerm,
+            }),
+        };
+
+        fetch("http://localhost:3001/api/search", options).then((response) => response.json()).then(res => {
             setSearchResults(res.tracks.items.map(song => {
                 const smallestAlbumImage = song.album.images.reduce(
                     (smallest, image) => {

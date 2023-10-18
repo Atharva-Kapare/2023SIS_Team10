@@ -16,6 +16,9 @@ var redirect_uri = 'http://localhost:3000';
 const app = express();
 app.use(express.json());
 
+import cors from 'cors';
+app.use(cors());
+
 async function fetchWebApi(token, endpoint, method, body) {
   const res = await fetch(`https://api.spotify.com/${endpoint}`, {
   headers: {
@@ -81,6 +84,14 @@ app.get('/api/getRecommendedSongs', (req, res) => {
 */
 app.get('/api/getSong', (req, res) => {
   fetchWebApi(req.body.accessToken, `v1/tracks/${req.body.trackID}`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
+})
+
+/* Fields:
+    accessToken - String
+    searchTerm - String
+*/
+app.post('/api/search', (req, res) => {
+  fetchWebApi(req.body.accessToken, `v1/search?q=${req.body.searchTerm}&type=track&limit=10`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
 })
 
 app.get('/api/createPlaylist', (req, res) => {
