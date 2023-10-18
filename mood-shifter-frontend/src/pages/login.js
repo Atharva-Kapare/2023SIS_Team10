@@ -36,7 +36,7 @@ function Login({ navigation }) {
                 <p className="call-to-action-text">Listen to your mood</p>
                 <button 
                     className="sign-in-button-style" 
-                    onClick={() => {AuthCheck(navigation)}}
+                    onClick={() => {AuthCheck({navigation})}}
                 >
                     Sign in with Spotify
                 </button>

@@ -10,6 +10,7 @@ let songsAdded = 0;
 
 function TagSongsScreen( { route, navigation } ) {
     const { selectedMood } = route.params;
+    let moodPlaylistData = [];
     const [ searchTerm, setSearch ] = useState("");
     const [ searchResults, setSearchResults ] = useState([]);
     const [ addedSongs, setAddedSongs ] = useState([]);
@@ -146,9 +147,14 @@ function TagSongsScreen( { route, navigation } ) {
                         return false;
                     }  else {
                         const selectFinish = checkTagged();
+                        
+                        sendUserSongDataToFirebase(selectedMood, addedSongs);
+
                         if(selectFinish) {
                             navigation.navigate('CongratulationsScreen')
                         } else {
+                            
+                            
                             navigation.navigate('SelectMoodScreen')
                         }
                     }
@@ -157,6 +163,21 @@ function TagSongsScreen( { route, navigation } ) {
 
         </div>
     );
+}
+
+async function sendUserSongDataToFirebase(selectedMood, addedSongs) {
+    const method = 'POST';
+    const params = new URLSearchParams();
+    params.append(`${selectedMood}`, addedSongs);
+
+    const playlistData = await fetch(`${process.env.BACKEND_URL}/login`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        method,
+        body:params
+    });
+    return await playlistData.json();
 }
 
 function checkTagged() {

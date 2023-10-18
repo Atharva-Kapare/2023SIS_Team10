@@ -56,8 +56,8 @@ async function AuthCheck({navigation}) {
     async function runAuth() {
       accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
-          accessToken = await Authentication.getAccessToken(clientId, code);
-          localStorage.setItem("accessToken", accessToken);
+        accessToken = await Authentication.getAccessToken(clientId, code);
+        localStorage.setItem("accessToken", accessToken);
       }
       const profile = await Authentication.fetchProfile(accessToken);
 
@@ -65,11 +65,12 @@ async function AuthCheck({navigation}) {
       console.log(playlistData);
     };
     runAuth();
-    if(playlistData.completedStarted) {
-      navigation.navigate("PlaylistScreen");
-    } else {
-      navigation.navigate("GettingStartedScreen");
-    }
+    // if(playlistData.completedStarted) {
+    //   navigation.navigate("PlaylistScreen");
+    // } else {
+    //   navigation.navigate("GettingStartedScreen");
+    // }
+    navigation.navigate("GettingStartedScreen");
   }
 
   if(!code) {

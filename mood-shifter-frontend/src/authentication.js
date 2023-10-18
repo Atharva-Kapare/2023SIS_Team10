@@ -55,7 +55,6 @@ export async function getAccessToken(clientId, code) {
     }
 
     const { access_token } = await result.json();
-    console.log(result)
     return access_token;
 }
   
@@ -112,7 +111,7 @@ async function getPlaylistData(accessToken, profile) {
     params.append("accessToken", accessToken);
     params.append("profileId", profile.id);
 
-    const playlistData = await fetch(`/login`, {
+    const playlistData = await fetch(`http://localhost:8000/login`, {
         headers: {
             Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },

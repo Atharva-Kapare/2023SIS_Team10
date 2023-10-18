@@ -10,7 +10,7 @@ import { database } from './firebase_init.js';
 
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import axios from 'axios';
-import { getLikedSongs } from './spotify.js';
+// import { getLikedSongs } from './spotify.js';
 
 var client_id = 'bf93ef9d71614b5392aa6528ba81510a';
 var redirect_uri = 'http://localhost:3000';
