@@ -3,19 +3,12 @@
 import React from 'react';
 
 import './playlist.css';
-import PlaylistCover from './playlist-cover';
-import PlaylistName from './playlist-name';
 
+function Playlist( {playlist} ){
 
-function Playlist(color, name){
     return (
-        <div> 
-            {/* <PlaylistCover
-                coverColor = {color}
-            />
-            <PlaylistName
-                name = {name}
-            /> */}
+        <div>
+            <div className="playlist-cover" style={{background:`${playlist.color}`}}></div>
         </div>
     );
 }
