@@ -43,7 +43,7 @@ function Footer({ navigation }) {
           sx={{backgroundColor: '#232426'}}
         >
           <BottomNavigationAction onClick={() => {navigation.navigate('PlaylistScreen');}} style={{color:'#ffffff'}} label="Home" icon={<HomeIcon style={{color:'#ffffff'}}/>  }  />
-          <BottomNavigationAction onClick={() => {navigation.navigate('PlaylistScreen');}} style={{color:'#ffffff'}} label="Playlist" icon={<SubscriptionsIcon style={{color:'#ffffff'}} />} />
+          <BottomNavigationAction onClick={() => {navigation.navigate('SongPlayerScreen');}} style={{color:'#ffffff'}} label="Playlist" icon={<SubscriptionsIcon style={{color:'#ffffff'}} />} />
           <BottomNavigationAction onClick={() => {navigation.navigate('SettingsScreen');}} style={{color:'#ffffff'}} label="Settings" icon={<SettingsIcon style={{color:'#ffffff'}} />} />
         </BottomNavigation>
       </Paper>
