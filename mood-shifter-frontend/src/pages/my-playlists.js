@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PlaylistPageTitle from '../components/playlists/playlist-page-title';
 import AddPlaylistButton from '../components/playlists/add-playlist-button';
 import Playlist from '../components/playlists/playlist';
+import Footer from '../components/footer';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -9,7 +10,7 @@ import Button from '@mui/material/Button';
 import '../App.css';
 import '../components/playlists/playlist.css';
 
-function MyPlaylist(){
+function MyPlaylist( {navigation}){
     
     let i = 0;
     //mood
@@ -115,9 +116,12 @@ function MyPlaylist(){
                     </Box>       
                 </div>
             </div>
+            <Footer navigation={navigation}></Footer>
         </div> 
     );
 }
+
+
 
 export default MyPlaylist;
 

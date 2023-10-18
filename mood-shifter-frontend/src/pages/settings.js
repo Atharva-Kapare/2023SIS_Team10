@@ -1,7 +1,8 @@
 import React from "react";
 import './css/settings.css'
+import Footer from "../components/footer";
 
-function SettingsScreen() {
+function SettingsScreen({navigation}) {
     let username = '';
     
     return (
@@ -15,6 +16,7 @@ function SettingsScreen() {
                     <div class="slider round"></div>
                 </label>
             </div>
+            <Footer navigation={navigation}></Footer>
         </div>
     )
 }
