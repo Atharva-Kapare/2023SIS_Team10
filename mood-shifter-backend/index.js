@@ -22,7 +22,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.get('/login', function (req, res) {
+app.post('/login', function (req, res) {
   // We get sent the access token and the userID from the frontend
   // The access token is needed to talk to the spotify apis, userID needs to get stored into the backend
   let resp = {};
