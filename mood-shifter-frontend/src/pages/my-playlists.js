@@ -18,6 +18,7 @@ function MyPlaylist(){
         [
             {
                 mood: "Happy",
+                color: " ",
                 songs: ['0zSDG1EI7SGhM62M5iBiGI', '1FrNSgJjVV0uvg7bMy4HgY', '3OwsQhfC9eJdOlD3IO74l4', 
                 '1BdNfvLu7gKdiPThI4Hhwc', '19jTLBrvDBjMqNqb7iZK17', '6m2Ju7nCvHNjQ7dSTEqg8h', 
                 '7bo1dKJ6cl3JTYhuavcwWm', '6fNhZRFEkBfgW39W3wKARJ', '42qNWdLKCI41S4uzfamhFM', 
@@ -39,6 +40,7 @@ function MyPlaylist(){
             },
             {
                 mood: "Sad",
+                color: " ",
                 songs: ['0zSDG1EI7SGhM62M5iBiGI', '1FrNSgJjVV0uvg7bMy4HgY', '3OwsQhfC9eJdOlD3IO74l4', 
                 '1BdNfvLu7gKdiPThI4Hhwc', '19jTLBrvDBjMqNqb7iZK17', '6m2Ju7nCvHNjQ7dSTEqg8h', 
                 '7bo1dKJ6cl3JTYhuavcwWm', '6fNhZRFEkBfgW39W3wKARJ', '42qNWdLKCI41S4uzfamhFM', 
@@ -60,6 +62,7 @@ function MyPlaylist(){
             },
             {
                 mood: "Gym",
+                color: " ",
                 songs: ['0zSDG1EI7SGhM62M5iBiGI', '1FrNSgJjVV0uvg7bMy4HgY', '3OwsQhfC9eJdOlD3IO74l4', 
                 '1BdNfvLu7gKdiPThI4Hhwc', '19jTLBrvDBjMqNqb7iZK17', '6m2Ju7nCvHNjQ7dSTEqg8h', 
                 '7bo1dKJ6cl3JTYhuavcwWm', '6fNhZRFEkBfgW39W3wKARJ', '42qNWdLKCI41S4uzfamhFM', 
@@ -80,34 +83,10 @@ function MyPlaylist(){
                 ]
             }
         ];
-    
 
-    //console.log(getMoodPlaylists);
-
-    //moodshift
-    // const [getMoodshiftPlaylists, setMoodshiftPlaylists] = useState([]);
-
-    // useEffect(() => {
-
-    //     setMoodPlaylists(this.tempList.forEach(playlist => {
-    //         return {
-    //             id: playlist.id,
-    //             name: playlist.name,
-    //             color: playlist.color,
-    //         }
-    //     }))
-
-    //     console.log("getMoodPlaylists: ", getMoodPlaylists);
-
-    // }, [getMoodPlaylists])
-
-/*      const getMoodPlaylists =[{
-        color: gradient,
-        name: '',
-        id:''
-    } 
-
-    ]*/
+    getMoodPlaylists.forEach((playlist) => {
+        playlist.color = generate();
+    });
 
     return ( 
         <div className="App-header">
@@ -130,10 +109,6 @@ function MyPlaylist(){
                                         playlist={playlist}
                                     />
                                     <div className="playlist-name">{playlist.mood}</div>
-                                    {/* {getMoodPlaylists.array.forEach(element => {
-                                        <div>{getMoodPlaylists[element][0]}</div>;
-                                    })} */}
-                                     {/* bug occuring here, not meaning to print i just want to increase it*/}       
                                 </Grid>
                             ))}
 
@@ -146,3 +121,25 @@ function MyPlaylist(){
 }
 
 export default MyPlaylist;
+
+
+function generate() {
+    var hexValues = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e"];
+    
+    function populate(a) {
+      for ( var i = 0; i < 6; i++ ) {
+        var x = Math.round( Math.random() * 14 );
+        var y = hexValues[x];
+        a += y;
+      }
+      return a;
+    }
+    
+    var newColor1 = populate('#');
+    var newColor2 = populate('#');
+    var angle = Math.round( Math.random() * 360 );
+    
+    var gradient = "linear-gradient(" + angle + "deg, " + newColor1 + ", " + newColor2 + ")";
+
+    return gradient;
+}
