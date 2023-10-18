@@ -2,6 +2,8 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import networkx as nx
 
+mpl.use('agg')
+
 # seed = 13648  # Seed random number generators for reproducibility
 # G = nx.random_k_out_graph(10, 3, 0.5, seed=seed)
 # pos = nx.spring_layout(G, seed=seed)
@@ -35,8 +37,13 @@ import networkx as nx
 # plt.colorbar(pc, ax=ax)
 # plt.show()
 
-def createNewNetwork():
-    G = nx.DiGraph()
+def createNewNetwork(songs):
+    G = nx.complete_graph(songs, nx.DiGraph())
+    
+    nx.draw(G)
+    plt.show(block=False)
+    plt.savefig("Graph.png", format="PNG")
+
     return storeGraphJSON(G)
 
 def storeGraphJSON(graph):
