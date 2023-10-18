@@ -109,13 +109,16 @@ async function getSong(trackID) {
 async function getPlaylistData(profile) {
     const method = 'POST';
     const accessToken = localStorage.getItem("accessToken");
-    const params = new URLSearchParams();
-    params.append("accessToken", accessToken);
-    params.append("profileId", profile.id);
 
     const playlistData = await fetch(`http://localhost:8000/login`, {
+        header: {
+            "content-type": "application/json"
+        },
         method,
-        body:params
+        body: {
+            "accessToken": accessToken,
+            "UID": profile.id
+        }
     });
     return await playlistData.json();
 }
