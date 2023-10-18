@@ -29,16 +29,15 @@ root.render(
   <React.StrictMode>
     <NavigationContainer>
     <Stack.Navigator initialRouteName="Login">
-    <Stack.Screen
-      name="Login"
-      component={Login}
-      options={{ title: 'Overview' }}
-    />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ title: 'Overview' }}
+      />
         <Stack.Screen name="GettingStartedScreen" component={GettingStartedScreen} />
         <Stack.Screen name="SelectMoodScreen" component={SelectMoodScreen} />
         <Stack.Screen name="TagSongsScreen" component={TagSongsScreen} />
         <Stack.Screen name="CongratulationsScreen" component={CongratulationsScreen} />
-        {/* <Stack.Screen name="PlaylistScreen" component={Navbar} /> */}
         <Stack.Screen name="MyPlaylist" component={MyPlaylist} />
         {/* <Stack.Screen name="GetTrackScreen" component={GetTrackScreen} /> */}
         <Stack.Screen name="PlaylistScreen" component={songPlayerScreen} />
@@ -61,7 +60,7 @@ async function AuthCheck() {
       const profile = await Authentication.fetchProfile(accessToken);
       Authentication.populateUI(profile);
     };
-    runAuth()
+    runAuth();
   }
 
   if(!code) {
