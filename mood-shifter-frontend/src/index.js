@@ -39,9 +39,9 @@ root.render(
         <Stack.Screen name="SelectMoodScreen" component={SelectMoodScreen} />
         <Stack.Screen name="TagSongsScreen" component={TagSongsScreen} />
         <Stack.Screen name="CongratulationsScreen" component={CongratulationsScreen} />
-        <Stack.Screen name="MyPlaylist" component={MyPlaylist} />
+        <Stack.Screen name="PlaylistScreen" component={MyPlaylist} />
         {/* <Stack.Screen name="GetTrackScreen" component={GetTrackScreen} /> */}
-        <Stack.Screen name="PlaylistScreen" component={songPlayerScreen} />
+        <Stack.Screen name="SongPlayerScreen" component={songPlayerScreen} />
         <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
         <Stack.Screen name="Footer" component={Footer} />
         
