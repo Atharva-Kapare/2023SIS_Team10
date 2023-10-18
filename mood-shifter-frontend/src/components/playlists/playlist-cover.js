@@ -2,7 +2,6 @@
 import React from 'react';
 
 import './playlist.css';
-
 let generated = false;
 let coverColor = ''; 
 
