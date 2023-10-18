@@ -171,11 +171,11 @@ async function sendUserSongDataToFirebase(selectedMood, addedSongs) {
     params.append(`${selectedMood}`, addedSongs);
 
     const playlistData = await fetch(`${process.env.BACKEND_URL}/login`, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        header: {
+            'content-type': 'application/json'
         },
         method,
-        body:params
+        body: params
     });
     return await playlistData.json();
 }

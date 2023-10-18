@@ -112,9 +112,6 @@ async function getPlaylistData(accessToken, profile) {
     params.append("profileId", profile.id);
 
     const playlistData = await fetch(`http://localhost:8000/login`, {
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
         method,
         body:params
     });
