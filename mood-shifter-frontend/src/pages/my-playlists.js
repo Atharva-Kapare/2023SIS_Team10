@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PlaylistPageTitle from '../components/playlists/playlist-page-title';
 import AddPlaylistButton from '../components/playlists/add-playlist-button';
 import Playlist from '../components/playlists/playlist';
-
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
@@ -142,4 +141,5 @@ function generate() {
     var gradient = "linear-gradient(" + angle + "deg, " + newColor1 + ", " + newColor2 + ")";
 
     return gradient;
+
 }
