@@ -42,8 +42,6 @@ app.post('/login', async function (req, res) {
 
   console.log("Document: ", document);
 
-
-
   if (document != undefined) {
     resp.gettingStarted = document.gettingStarted;
   } else {
@@ -58,7 +56,6 @@ app.post('/login', async function (req, res) {
     
   }
   
-
   // Talk to the spotify apis to grab the liked songs
   // resp.likedSongs = [];
   const spotifyResp = await getLikedSongs(req.body.accessToken);
@@ -72,7 +69,7 @@ app.post('/login', async function (req, res) {
 
   resp.likedSongs = likedSongs;
 
-  console.log(resp);
+  console.log("Resp: ", resp);
   res.send(resp);
 });
 
