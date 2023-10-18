@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import reportWebVitals from './reportWebVitals';
-import Login from './components/login/login';
+import Login from './pages/login';
 import GettingStartedScreen from './components/getting-started/getting-started';
 import SelectMoodScreen from './components/getting-started/select-mood';
 import TagSongsScreen from './components/getting-started/tag-songs';
@@ -47,7 +47,8 @@ root.render(
   </React.StrictMode>
 );
 
-async function AuthCheck() {
+async function AuthCheck({navigation}) {
+  let playlistData;
   if (!code) {
     localStorage.clear();
     Authentication.redirectToAuthCodeFlow(clientId);
@@ -59,9 +60,16 @@ async function AuthCheck() {
           localStorage.setItem("accessToken", accessToken);
       }
       const profile = await Authentication.fetchProfile(accessToken);
-      Authentication.populateUI(profile);
+
+      playlistData = Authentication.getPlaylistData(accessToken, profile)
+      console.log(playlistData);
     };
-    runAuth()
+    runAuth();
+    if(playlistData.completedStarted) {
+      navigation.navigate("PlaylistScreen");
+    } else {
+      navigation.navigate("GettingStartedScreen");
+    }
   }
 
   if(!code) {

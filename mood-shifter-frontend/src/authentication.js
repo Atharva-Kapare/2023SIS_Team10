@@ -106,38 +106,20 @@ async function getSong(trackID) {
     return (await fetchWebApi(`v1/tracks/${trackID}`, 'GET'));
 }
   
-function populateUI(profile) {
-    if(document.getElementById("displayName") != null) {
-        document.getElementById("displayName").innerHTML = profile.display_name;
-    }
-    if(profile.images != null) {
-        if (profile.images[0]) {
-            const profileImage = new Image(200, 200);
-            profileImage.src = profile.images[0].url;
-            if(document.getElementById("avatar") != null) {
-                document.getElementById("avatar").appendChild(profileImage);
-            }
-            if(document.getElementById("imgUrl") != null) {
-                document.getElementById("imgUrl").innerText = profile.images[0].url;
-            }
-        }
-    }
-    document.addEventListener("id", function(event){
-        document.getElementById("id").innerText = profile.id;
+async function getPlaylistData(accessToken, profile) {
+    const method = 'POST';
+    const params = new URLSearchParams();
+    params.append("accessToken", accessToken);
+    params.append("profileId", profile.id);
+
+    const playlistData = await fetch(`/login`, {
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+        method,
+        body:params
     });
-    
-    document.addEventListener("email", function(event) {
-        document.getElementById("email").innerText = profile.email;
-    });
-    
-    document.addEventListener("uri", function(event) {
-        document.getElementById("uri").innerText = profile.uri;
-        if(profile.external_urls.spotify !== undefined) {
-            document.getElementById("uri").setAttribute("href", profile.external_urls.spotify);
-        }
-        document.getElementById("url").innerText = profile.href;
-        document.getElementById("url").setAttribute("href", profile.href);
-    });
+    return await playlistData.json();
 }
   
 
@@ -149,6 +131,6 @@ export default {
     getLikedSongs,
     getRecommendedSongs,
     getSong,
-    populateUI, 
+    getPlaylistData, 
     fetchWebApi
 };
