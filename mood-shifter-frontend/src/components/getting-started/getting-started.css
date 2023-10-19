@@ -194,6 +194,7 @@
     width: 90%;
     max-width: 450px;
     margin: 10px 0px 30px 0px;
+    height: auto;
 }
 
 .song-item {

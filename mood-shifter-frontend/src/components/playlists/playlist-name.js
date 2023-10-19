@@ -4,8 +4,8 @@ import React from 'react';
 
 import './playlist.css';
 
-function PlaylistName(){
-    return <div className="playlist-name"> playlist name</div>
+function PlaylistName(playlist){
+    return <div className="playlist-name">{playlist.name}</div>
 }
 
 export default PlaylistName;

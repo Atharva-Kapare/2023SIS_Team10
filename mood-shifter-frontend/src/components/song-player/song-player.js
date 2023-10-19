@@ -7,6 +7,7 @@ import SongDetails from "./playbar-buttons/song-details";
 import Authentication from "../../authentication";
 import "./song-player.css";
 import SpotifyPlayer from "react-spotify-web-playback";
+import Footer from "../footer"
 
 function SongPlayerScreen({ navigation }) {
 
@@ -29,12 +30,12 @@ function SongPlayerScreen({ navigation }) {
 
   useEffect(() => {
     likedSongs.then((res) => {
-      console.log(
-        "Component initialized",
-        res,
-        res[0].track.duration_ms / 1000,
-        accessToken
-      );
+      // console.log(
+      //   "Component initialized",
+      //   res,
+      //   res[0].track.duration_ms / 1000,
+      //   accessToken
+      // );
       if (res[0]) {
         songs = [];
         const uriList = [];
@@ -118,8 +119,9 @@ function SongPlayerScreen({ navigation }) {
         }
         }}
       ></SpotifyPlayer>
-      </div>
-      );
+      <Footer navigation={navigation}></Footer>
+    </div>
+  );
 }
 
 export default SongPlayerScreen;

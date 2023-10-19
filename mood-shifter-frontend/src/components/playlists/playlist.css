@@ -13,7 +13,7 @@
 
 .playlist-cover{
     padding: var(--standard-padding);
-    background-image: linear-gradient(to bottom right, var(--green), var(--light-green));
+    /* background-image: linear-gradient(to bottom right, var(--green), var(--light-green)); */
     width: var(--playlist-width);
     height: var(--playlist-height);
 }
