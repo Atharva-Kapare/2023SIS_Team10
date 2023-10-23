@@ -119,6 +119,7 @@ function SongPlayerScreen({ navigation }) {
         }
         }}
       ></SpotifyPlayer>
+       <i class="fa-solid fa-bars" onClick={navigation.navigate('')}></i>
       <Footer navigation={navigation}></Footer>
     </div>
   );
