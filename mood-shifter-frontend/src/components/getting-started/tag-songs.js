@@ -165,19 +165,25 @@ function TagSongsScreen( { route, navigation } ) {
 }
 
 async function sendUserSongDataToBackend(selectedMood, addedSongs) {
-    // const method = 'POST';
-    // const params = new URLSearchParams();
-    // const accessToken = localStorage.getItem("accessToken");
-    // params.append(`${selectedMood}`, addedSongs);
-
-    // const playlistData = await fetch(`http://localhost:8000/login`, {
-    //     header: {
-    //         'content-type': 'application/json',
-    //     },
-    //     method,
-    //     body: params
-    // });
-    // return await playlistData.json();
+    const profile = localStorage.GetItem("UID");
+    await fetch('http://localhost:8000/', 
+    {   method: 'POST',
+        mode: 'cors',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            "UID": profile,
+            "mood": selectedMood,
+            "songUIDS": addedSongs
+        }) 
+    })
+    .then(response => response.json())
+    // .then(data => {
+    //     localStorage.setItem("playlistData", JSON.stringify(data));
+    //     return data;
+    // })
+    .catch(error => console.error(error));
 }
 
 function checkTagged() {

@@ -109,7 +109,7 @@ async function getSong(trackID) {
 async function getPlaylistData(profile) {
     const token = localStorage.getItem("accessToken");
 
-    const res = await fetch('http://localhost:8000/login', 
+    await fetch('http://localhost:8000/login', 
     {   method: 'POST',
         mode: 'cors',
         headers: { 
