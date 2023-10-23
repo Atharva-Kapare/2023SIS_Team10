@@ -7,15 +7,17 @@ import SongDetails from "./playbar-buttons/song-details";
 import Authentication from "../../authentication";
 import "./song-player.css";
 import SpotifyPlayer from "react-spotify-web-playback";
+import Footer from "../footer"
 
 function SongPlayerScreen({ navigation }) {
 
   let [uris, setUris] = useState([""]);
   let [track, setTrack] = useState(undefined);
-  let [currentSongId, setCurrentSongId] = useState('');
   const likedSongs = Authentication.getLikedSongs();
   const accessToken = localStorage.getItem("accessToken");
-
+  let [currentIndex, setCurrentIndex] = useState(0);
+  let [previousState, setPreviousState] = useState(undefined)
+  let [fullyPlayedSongs, setFullyPlayedSongs] = useState([]);
   let [songs, setSongs] = useState([
     {
       title: "Bloop",
@@ -28,12 +30,12 @@ function SongPlayerScreen({ navigation }) {
 
   useEffect(() => {
     likedSongs.then((res) => {
-      console.log(
-        "Component initialized",
-        res,
-        res[0].track.duration_ms / 1000,
-        accessToken
-      );
+      // console.log(
+      //   "Component initialized",
+      //   res,
+      //   res[0].track.duration_ms / 1000,
+      //   accessToken
+      // );
       if (res[0]) {
         songs = [];
         const uriList = [];
@@ -44,6 +46,7 @@ function SongPlayerScreen({ navigation }) {
               name: song.track.name,
               image: song.track.album.images[0],
               artists: song.track.artists,
+              id: song.track.id
             });
           }
           songs.push({
@@ -52,33 +55,43 @@ function SongPlayerScreen({ navigation }) {
             albumCover: song.track.album.images[0].url,
             duration: song.track.duration_ms / 1000,
             uri: song.track.uri,
-          })
+          });
         }
         );
         songs.map((song) => uriList.push(song.uri));
         setUris(uriList);
         setSongs(songs);
       }
-    });
-    setCurrentSongId(songs[0].id)
-    console.log("LEEN TRACK", track);
-   
+    }); 
   }, []);
 
-  function onTrackChange(previousTracks, nextTracks) {
-    
-  }
+  function onTrackChange(state) {
+    console.log('LEEN changed track', state);
+    if(currentIndex<state.previousTracks.length || previousState.nextTracks.length === 0){
+      const percentagePlayed =  (previousState.progressMs/previousState.track.durationMs)*100;
+      console.log('LEEN next song, amount played:', percentagePlayed, fullyPlayedSongs);
+      if(percentagePlayed >= 80){
+        const playedSongs = fullyPlayedSongs;
+        playedSongs.push(previousState.track.id);
+        setFullyPlayedSongs(playedSongs);
+        if(fullyPlayedSongs.length === 2){
+          const indexOfFullyPlayedSongs = fullyPlayedSongs.length -1;
+          const objectForBackEnd = {
+            current: fullyPlayedSongs[indexOfFullyPlayedSongs],
+            previous: fullyPlayedSongs[indexOfFullyPlayedSongs-1]
 
-  function onPause() {
-    //s
-  }
-
-  function onPlay() {
-//
-  }
-
-  function onVolumeChange(volume) {
-//
+          }
+          console.log('LEEN songs fully played', objectForBackEnd);
+        }
+      }
+      else if(fullyPlayedSongs.length > 0){
+        const objectForBackEnd = {
+          current: previousState.track.id,
+          previous: fullyPlayedSongs[fullyPlayedSongs.length-1]
+        }
+        console.log('LEEN song skipped and last song fully played', objectForBackEnd);
+      }
+    }
   }
 
   return (
@@ -92,26 +105,22 @@ function SongPlayerScreen({ navigation }) {
         token={accessToken}
         uris={uris}
         callback={(state) => {
-          console.log('LEEN STATE', state);
-          if (state.isPlaying) {
-            console.log("LEEN is playing", state.isPlaying);
-            onPlay()
-          } else {
-            console.log("LEEN not playing");
-            onPause()
+            if(!previousState){
+              setPreviousState(state);
           }
-          if (state.track) {
-            console.log("LEEN track", state.track, state.previousTracks, state.nextTracks);
+          else{
+          if (state.track.id !== previousState.track.id) {
+            const indexOfTrack = state.previousTracks.length;            
             setTrack(state.track);
-            onTrackChange(state.previousTracks, state.nextTracks)
+            onTrackChange(state);
+            setCurrentIndex(indexOfTrack);
           }
-          if(state.volume){
-            console.log("LEEN Volume change", state.volume);
-            onVolumeChange(state.volume);
-            // only seems to trigger if song is paused
-          }
+          setPreviousState(state);
+        }
         }}
       ></SpotifyPlayer>
+       <i class="fa-solid fa-bars" onClick={navigation.navigate('')}></i>
+      <Footer navigation={navigation}></Footer>
     </div>
   );
 }

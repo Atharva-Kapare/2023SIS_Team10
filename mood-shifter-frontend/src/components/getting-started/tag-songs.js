@@ -9,8 +9,9 @@ let tagCount = localStorage.getItem('tagCount') || 0;
 let songsAdded = 0;
 
 function TagSongsScreen( { route, navigation } ) {
-    const { selectedMood } = route.params;
     const playlistData = JSON.parse(localStorage.getItem("playlistData"));
+    const { selectedMood } = route.params;
+    const { selectedTime } = route.params;
     const [ searchTerm, setSearch ] = useState("");
     const [ searchResults, setSearchResults ] = useState([]);
     const [ addedSongs, setAddedSongs ] = useState([]);
