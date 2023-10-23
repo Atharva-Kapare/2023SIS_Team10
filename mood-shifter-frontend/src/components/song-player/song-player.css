@@ -85,6 +85,12 @@ width: 100%
   background-color: #1db954;
 }
 
+.fa-bars{
+  align-self: end;
+  padding-right: 3px;
+  margin-top: -10px;
+  cursor: pointer;
+}
 /* * {
   box-sizing: border-box;
   margin: 0;
