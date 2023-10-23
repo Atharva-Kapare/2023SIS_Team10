@@ -23,17 +23,19 @@ app.use(express.json());
 app.use(cors());
 
 app.post('/login', async function (req, res) {
+  
   // We get sent the access token and the userID from the frontend
   // The access token is needed to talk to the spotify apis, userID needs to get stored into the backend
   let resp = {};
-
   // console.log(JSON.stringify(req.body));
-
+  
   // Get all of the liked songs from the user:
   // var likedSongs = await axios.
-
+  
   // Get the user data if it exists from firebase
+  console.log(req)
   const docRef = doc(database, "users", req.body.UID);
+  console.log("TESTTESTTESTTESTTEST")
   // const docSnapshot = await getDoc(docRef);
 
   const docSnapshot = await getDoc(docRef);
@@ -77,7 +79,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.get('/gettingStarted', (req, res) => {
+app.post('/gettingStarted', (req, res) => {
   res.send('Getting Started Works!')
 })
 

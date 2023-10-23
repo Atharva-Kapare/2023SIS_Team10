@@ -48,7 +48,6 @@ root.render(
 );
 
 async function AuthCheck({navigation}) {
-  let playlistData;
   if (!code) {
     localStorage.clear();
     Authentication.redirectToAuthCodeFlow(clientId);
@@ -61,15 +60,11 @@ async function AuthCheck({navigation}) {
       }
       const profile = await Authentication.fetchProfile(accessToken);
 
-      playlistData = Authentication.getPlaylistData(profile.id)
-      console.log("playlistData: ", playlistData);
+      localStorage.setItem("UID", profile.id);
+      const playlistData = await Authentication.getPlaylistData(profile.id)
+            
     };
     runAuth();
-    // if(playlistData.completedStarted) {
-    //   navigation.navigate("PlaylistScreen");
-    // } else {
-    //   navigation.navigate("GettingStartedScreen");
-    // }
     navigation.navigate("GettingStartedScreen");
   }
 

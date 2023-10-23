@@ -3,7 +3,7 @@ import './getting-started.css';
 
 let selected = 'none';
 
-function SelectMoodScreen( { navigation } ) {
+function SelectMoodScreen( { route, navigation } ) {
     return (
         <div className="login">
             <div className="header-div">

@@ -10,7 +10,7 @@ let songsAdded = 0;
 
 function TagSongsScreen( { route, navigation } ) {
     const { selectedMood } = route.params;
-    let moodPlaylistData = [];
+    const playlistData = JSON.parse(localStorage.getItem("playlistData"));
     const [ searchTerm, setSearch ] = useState("");
     const [ searchResults, setSearchResults ] = useState([]);
     const [ addedSongs, setAddedSongs ] = useState([]);
@@ -61,22 +61,21 @@ function TagSongsScreen( { route, navigation } ) {
         let cancel = false;
 
         if(cancel) return 
-        Authentication.fetchWebApi(`v1/search?q=${searchTerm}&type=track&limit=10`, 'GET').then(res => {
-            setSearchResults(res.tracks.items.map(song => {
-                const smallestAlbumImage = song.album.images.reduce(
-                    (smallest, image) => {
-                        if(image.height < smallest.height) return image;
-                        return smallest;
-                    }, song.album.images[0]
-                )
-                return {
-                    cover: smallestAlbumImage.url,
-                    title: song.name,
-                    uri: song.uri,
-                    artist: song.artists[0].name
-                }
-            }));
-        });
+        
+        setSearchResults(playlistData.likedSongs.map(song => {
+            const smallestAlbumImage = song.album.images.reduce(
+                (smallest, image) => {
+                    if(image.height < smallest.height) return image;
+                    return smallest;
+                }, song.album.images[0]
+            )
+            return {
+                cover: smallestAlbumImage.url,
+                title: song.name,
+                uri: song.uri,
+                artist: song.artists[0].name
+            }
+        }));
 
         return () => cancel = true;
     }, [searchTerm])

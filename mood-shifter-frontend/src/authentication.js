@@ -55,7 +55,7 @@ export async function getAccessToken(clientId, code) {
     }
 
     const { access_token } = await result.json();
-    console.log(access_token)
+    console.log("token: ", access_token)
     return access_token;
 }
   
@@ -107,20 +107,25 @@ async function getSong(trackID) {
 }
   
 async function getPlaylistData(profile) {
-    const method = 'POST';
-    const accessToken = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken");
 
-    const playlistData = await fetch(`http://localhost:8000/login`, {
-        header: {
-            "content-type": "application/json"
+    const res = await fetch('http://localhost:8000/login', 
+    {   method: 'POST',
+        mode: 'cors',
+        headers: { 
+            'Content-Type': 'application/json'
         },
-        method,
-        body: {
-            "accessToken": accessToken,
-            "UID": profile
-        }
-    }).then((res) => res.json());
-    return await playlistData;
+        body: JSON.stringify({ 
+            "accessToken": token, 
+            "UID": profile, 
+        }) 
+    })
+    .then(response => response.json())
+    .then(data => {
+        localStorage.setItem("playlistData", JSON.stringify(data));
+        return data;
+    })
+    .catch(error => console.error(error));
 }
 
 export default {
