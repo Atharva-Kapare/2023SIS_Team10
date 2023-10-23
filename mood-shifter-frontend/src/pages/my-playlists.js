@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PlaylistPageTitle from '../components/playlists/playlist-page-title';
 import AddPlaylistButton from '../components/playlists/add-playlist-button';
 import Playlist from '../components/playlists/playlist';
@@ -12,7 +12,6 @@ import '../components/playlists/playlist.css';
 
 function MyPlaylist( {navigation}){
     
-    let i = 0;
     //mood
     const getMoodPlaylists = 
         [
@@ -99,7 +98,7 @@ function MyPlaylist( {navigation}){
                             <PlaylistPageTitle/>
                             </Grid>
                             <Grid item xs={1} sm={1} md={2}>
-                                <Button> <AddPlaylistButton/> </Button>
+                                <Button onClick={() => navigation.navigate('NewPlaylistScreen')}> <AddPlaylistButton/> </Button>
                             </Grid>
                             
                             {getMoodPlaylists.map(playlist => (

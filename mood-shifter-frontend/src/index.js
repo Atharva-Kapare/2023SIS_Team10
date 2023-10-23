@@ -17,6 +17,7 @@ import songPlayerScreen from './components/song-player/song-player';
 import GetTrackScreen from './pages/gettrackscreen.js';
 import SettingsScreen from './pages/settings';
 import Footer from './components/footer';
+import NewPlaylist from './pages/new-playlist';
 
 const clientId = "8165af06e3a44a32ac86aa3d998761cd";
 const params = new URLSearchParams(window.location.search);
@@ -43,6 +44,7 @@ root.render(
         {/* <Stack.Screen name="GetTrackScreen" component={GetTrackScreen} /> */}
         <Stack.Screen name="SongPlayerScreen" component={songPlayerScreen} />
         <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+        <Stack.Screen name="NewPlaylistScreen" component={NewPlaylist} />
         <Stack.Screen name="Footer" component={Footer} />
         
       </Stack.Navigator>
