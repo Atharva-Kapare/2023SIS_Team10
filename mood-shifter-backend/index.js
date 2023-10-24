@@ -92,6 +92,29 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
+app.post('/taggedSongs', async (req,res) => {
+  // Params: UID (string), Mood (string), Songs (array)
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    let mood = req.body.mood
+    await setDoc(docRef, {
+      "moods": {
+        [mood]: req.body.songs
+      }
+    }, {merge:true})
+    .then(res.send("Hopefully updated"))
+  }
+
+  // SEND DATA TO THE BACKEND HERE:
+  
+
+
+})
+
 app.post('/gettingStarted', async (req, res) => {
 
   const docRef = doc(database, "users", req.body.UID);
