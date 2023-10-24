@@ -1,5 +1,7 @@
 import React from 'react';
-import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
+import RemoveIcon from '../assets/icons/removeIcon.png';
+import TagIcon from '../assets/icons/tagIcon.png';
+import MoreIcon from '../assets/icons/moreIcon.png';
 
 function Song( { track } ) {
 
@@ -14,8 +16,9 @@ function Song( { track } ) {
             </div>
             <div className='song-wrapper'>
                 <p className='song-add-button'>+</p>
-                <p className='song-add-button'>{}</p>
-                <p className='song-add-button'>{}</p>
+                <p className='song-add-button'>{TagIcon}</p>
+                <p className='song-add-button'>{RemoveIcon}</p>
+                <p className='song-add-button'>{MoreIcon}</p>
             </div>
         </div>
     );

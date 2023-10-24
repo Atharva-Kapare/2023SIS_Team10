@@ -4,9 +4,6 @@ import BackIcon from '../assets/icons/backIcon.png'
 import './css/song-list.css'
 import SearchIcon from "../assets/icons/search-icon.png";
 import ExportIcon from '../assets/icons/exportIcon.png';
-import RemoveIcon from '../assets/icons/removeIcon.png';
-import TagIcon from '../assets/icons/tagIcon.png';
-import MoreIcon from '../assets/icons/moreIcon.png';
 import PlayIcon from '../assets/icons/playIcon.png';
 import Song from "../components/getting-started/song";
 
