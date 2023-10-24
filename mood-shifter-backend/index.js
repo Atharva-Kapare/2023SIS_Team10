@@ -27,29 +27,25 @@ app.post('/login', async function (req, res) {
   // We get sent the access token and the userID from the frontend
   // The access token is needed to talk to the spotify apis, userID needs to get stored into the backend
   let resp = {};
-  // console.log(JSON.stringify(req.body));
-  
-  // Get all of the liked songs from the user:
-  // var likedSongs = await axios.
   
   // Get the user data if it exists from firebase
   const docRef = doc(database, "users", req.body.UID);
-  // const docSnapshot = await getDoc(docRef);
 
   const docSnapshot = await getDoc(docRef);
-  // console.log(docSnapshot);
-  const document = docSnapshot.data();
+  // Need to check if the doc snapshot exists or not, if not, need to create doc
+
+  if (docSnapshot.exists()){
+    var document = docSnapshot.data();
+    resp.gettingStarted = document.gettingStarted;
+  } else {
+    resp.gettingStarted = true;
+  }
+
   // console.log("Document: ", document);
   
   // Talk to the spotify apis to grab the liked songs
   // resp.likedSongs = [];
   let likedSongs = await getLikedSongs(req.body.accessToken);
-
-  if (document != undefined) {
-    resp.gettingStarted = document.gettingStarted;
-  } else {
-    resp.gettingStarted = true;
-  }
   
   // likedSongs = likedSongs.splice(0,20);
   // let likedSongs = [];
@@ -80,12 +76,12 @@ app.post('/login', async function (req, res) {
   // let response = await modelResp.json();
   // console.log("Res: ", response)
 
-  // setDoc(doc(database, 'users', req.body.UID), {
-  //   "moods": {},
-  //   "model": response,
-  //   "configs": {},
-  //   "gettingStarted": true
-  // }).then(console.log("User with ID: ", req.body.UID, "was made!"));
+  setDoc(doc(database, 'users', req.body.UID), {
+    "moods": {},
+    // "model": response,
+    "configs": {},
+    "gettingStarted": docSnapshot.exists() ? document.gettingStarted : true
+  }).then(console.log("Document for: ", req.body.UID, "was set"));
 
 });
 
@@ -94,10 +90,8 @@ app.get('/', (req, res) => {
 })
 
 app.post('/gettingStarted', async (req, res) => {
-  console.log(req.body.UID);
-  const docRef = doc(database, "users", req.body.UID);
-  console.log("DOCREF: ", docRef);
 
+  const docRef = doc(database, "users", req.body.UID);
   const docSnapshot = await getDoc(docRef);
 
   console.log(docSnapshot.exists());
@@ -106,7 +100,7 @@ app.post('/gettingStarted', async (req, res) => {
   } else {
     // setDoc(docRef.gettingStarted, false);
     // const resp = await docRef.update({gettingStarted: "false"});
-    updateDoc(docRef, {gettingStarted: "false"})
+    updateDoc(docRef, {gettingStarted: false})
     .then(() => {
       res.send(`Set the getting started flag to False for user: ${req.body.UID}`);
     });
