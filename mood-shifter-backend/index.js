@@ -9,7 +9,7 @@ const port = 8000
 import { firebase_app } from './firebase_init.js';
 import { database } from './firebase_init.js';
 
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
 import axios from 'axios';
 import { getLikedSongs } from './spotify.js';
 
@@ -33,9 +33,7 @@ app.post('/login', async function (req, res) {
   // var likedSongs = await axios.
   
   // Get the user data if it exists from firebase
-  console.log(req)
   const docRef = doc(database, "users", req.body.UID);
-  console.log("TESTTESTTESTTESTTEST")
   // const docSnapshot = await getDoc(docRef);
 
   const docSnapshot = await getDoc(docRef);
@@ -95,8 +93,25 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.post('/gettingStarted', (req, res) => {
-  res.send('Getting Started Works!')
+app.post('/gettingStarted', async (req, res) => {
+  console.log(req.body.UID);
+  const docRef = doc(database, "users", req.body.UID);
+  console.log("DOCREF: ", docRef);
+
+  const docSnapshot = await getDoc(docRef);
+
+  console.log(docSnapshot.exists());
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    // setDoc(docRef.gettingStarted, false);
+    // const resp = await docRef.update({gettingStarted: "false"});
+    updateDoc(docRef, {gettingStarted: "false"})
+    .then(() => {
+      res.send(`Set the getting started flag to False for user: ${req.body.UID}`);
+    });
+  }
+
 })
 
 app.get('/test', (req, res) => {
