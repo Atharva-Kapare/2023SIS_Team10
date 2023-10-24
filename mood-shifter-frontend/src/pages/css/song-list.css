@@ -32,7 +32,15 @@
     display: flex;
     justify-content: space-between;
     width: 45%;
-    margin: 30px 0 30px 0;
+    margin: 30px 0 10px 0;
+    align-items: center;
+}
+
+.sub-header-style {
+    display: flex;
+    justify-content: space-between;
+    width: 45%;
+    margin: 10px 0 30px 0;
     align-items: center;
 }
 

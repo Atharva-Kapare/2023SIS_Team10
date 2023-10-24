@@ -84,10 +84,8 @@ async function AuthCheck({navigation}) {
       const gettingStarted = JSON.parse(localStorage.getItem("GettingStarted"));
       
       if(!gettingStarted) {
-        console.log("hit")
         navigation.navigate("PlaylistScreen");
       } else {
-        console.log("miss")
         navigation.navigate("GettingStartedScreen")
       }
     };

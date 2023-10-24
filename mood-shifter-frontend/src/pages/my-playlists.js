@@ -13,14 +13,9 @@ import '../components/playlists/playlist.css';
 function MyPlaylist({ navigation }){
     GetMoodPlaylists();
     const moodPlaylists = JSON.parse(localStorage.getItem("MoodPlaylist"));
-    let formattedPlaylist = [];
-    console.log(moodPlaylists);
+    let formattedPlaylist = [];   
+
     
-
-    // moodPlaylists.map((playlist) => {
-    //     playlist.color = generate();
-    // });
-
     for ( const [ key, value ] of Object.entries(moodPlaylists) ) {
         
         let temp = [];
@@ -29,13 +24,19 @@ function MyPlaylist({ navigation }){
         }
         formattedPlaylist.push({
             "mood": key,
-            "song": temp
+            "songs": temp,
+            "color": ""
         })
     }
 
+    formattedPlaylist.map((playlist) => {
+        return playlist.color = generate();
+    });
+
+    console.log("fomat playlist: ", formattedPlaylist);
+
     return ( 
         <div className="App-header">
-
             <div>
                 <div>
                     <Box>
@@ -47,7 +48,7 @@ function MyPlaylist({ navigation }){
                                 <Button onClick={() => GetMoodPlaylists()}><AddPlaylistButton/></Button>
                             </Grid>
                             
-                            {moodPlaylists.map(playlist => (
+                            {formattedPlaylist.map(playlist => (
                                 <Grid item xs={1} sm={2} md={3}>
                                     <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
                                         playlistData: playlist,

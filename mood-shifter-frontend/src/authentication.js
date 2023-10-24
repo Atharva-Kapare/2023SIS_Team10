@@ -124,7 +124,6 @@ async function getPlaylistData(profile) {
     .then(response => response.json())
     .then(data => {
         localStorage.setItem("playlistData", JSON.stringify(data));
-        console.log(JSON.stringify(data))
         localStorage.setItem("GettingStarted", data.gettingStarted)
     })
     .catch(error => console.error(error));
