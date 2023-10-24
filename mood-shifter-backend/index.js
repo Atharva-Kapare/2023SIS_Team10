@@ -53,7 +53,6 @@ app.post('/login', async function (req, res) {
   resp.likedSongs = likedSongs;
 
   console.log("Resp: ", resp);
-  res.send(resp);
 
   if (docSnapshot.exists()) {
     var document = docSnapshot.data();
@@ -87,7 +86,7 @@ app.post('/login', async function (req, res) {
       "gettingStarted": docSnapshot.exists() ? document.gettingStarted : true
     }, { merge: true }).then(console.log("Document for: ", req.body.UID, "was set"));
   }
-
+  res.send(resp);
 });
 
 app.get('/', (req, res) => {
