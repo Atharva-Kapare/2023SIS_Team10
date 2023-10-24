@@ -115,7 +115,7 @@ app.post('/taggedSongs', async (req, res) => {
 
 })
 
-app.get('/taggedSongs', async (req, res) => {
+app.post('/taggedSongsGet', async (req, res) => {
   // Params: UID
   const docRef = doc(database, "users", req.body.UID);
   const docSnapshot = await getDoc(docRef);
