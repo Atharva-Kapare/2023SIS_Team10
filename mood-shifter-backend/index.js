@@ -120,6 +120,8 @@ app.get('/taggedSongs', async (req, res) => {
   const docRef = doc(database, "users", req.body.UID);
   const docSnapshot = await getDoc(docRef);
 
+  console.log("Tagged songs are getting got.")
+
   if (!docSnapshot.exists()) {
     res.send("The user does not exist.");
   } else {
