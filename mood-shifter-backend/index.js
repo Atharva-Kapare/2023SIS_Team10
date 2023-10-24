@@ -106,13 +106,25 @@ app.post('/taggedSongs', async (req,res) => {
         [mood]: req.body.songs
       }
     }, {merge:true})
-    .then(res.send("Hopefully updated"))
+    .then(res.send({"Success": "The lists have been stored into firebase"}))
   }
 
   // SEND DATA TO THE BACKEND HERE:
-  
 
 
+
+})
+
+app.get('/taggedSongs', async (req,res) => {
+  // Params: UID
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    console.log()
+  }
 })
 
 app.post('/gettingStarted', async (req, res) => {
