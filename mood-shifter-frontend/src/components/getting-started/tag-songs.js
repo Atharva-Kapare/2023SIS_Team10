@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import './getting-started.css';
 import SearchIcon from '../../assets/icons/search-icon.png'
 import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
-import Authentication from '../../authentication'
 import Song from './song'
 
 let tagCount = localStorage.getItem('tagCount') || 0;

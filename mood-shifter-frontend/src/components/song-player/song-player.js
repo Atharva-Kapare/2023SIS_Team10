@@ -4,7 +4,6 @@ import PlayButton from "./playbar-buttons/play-pause";
 import NextButton from "./playbar-buttons/next";
 import ProgressBar from "./playbar-buttons/progress-bar";
 import SongDetails from "./playbar-buttons/song-details";
-import Authentication from "../../authentication";
 import "./song-player.css";
 import SpotifyPlayer from "react-spotify-web-playback";
 
@@ -13,7 +12,6 @@ function SongPlayerScreen({ navigation }) {
   let [uris, setUris] = useState([""]);
   let [track, setTrack] = useState(undefined);
   let [currentSongId, setCurrentSongId] = useState('');
-  const likedSongs = Authentication.getLikedSongs();
   const accessToken = localStorage.getItem("accessToken");
 
   let [songs, setSongs] = useState([
@@ -27,17 +25,28 @@ function SongPlayerScreen({ navigation }) {
   ]);
 
   useEffect(() => {
-    likedSongs.then((res) => {
+    const options = {
+      method: "POST",
+      headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+      },
+      body: JSON.stringify({
+          accessToken: localStorage.getItem("accessToken"),
+      }),
+    };
+
+    fetch("http://localhost:3001/api/getLikedSongs", options).then((response) => response.json()).then((res) => {
       console.log(
         "Component initialized",
-        res,
-        res[0].track.duration_ms / 1000,
+        res.items,
+        res.items[0].track.duration_ms / 1000,
         accessToken
       );
-      if (res[0]) {
+      if (res.items[0]) {
         songs = [];
         const uriList = [];
-        res.forEach((song,index) =>
+        res.items.forEach((song,index) =>
         {
           if(index === 0){
             setTrack({
