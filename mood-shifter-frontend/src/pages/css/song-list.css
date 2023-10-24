@@ -1,5 +1,6 @@
-.song-list-body {
-    background-color: #000000;
+
+
+.song-list-body {    
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -31,7 +32,7 @@
     display: flex;
     justify-content: space-between;
     width: 45%;
-    margin: 30px 0 0 0;
+    margin: 30px 0 30px 0;
     align-items: center;
 }
 

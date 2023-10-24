@@ -5,13 +5,23 @@ import './css/song-list.css'
 import SearchIcon from "../assets/icons/search-icon.png";
 import ExportIcon from '../assets/icons/exportIcon.png';
 import PlayIcon from '../assets/icons/playIcon.png';
-import Song from "../components/getting-started/song";
+import Song from "../components/song-list/song";
 
 function SongListScreen({ route, navigation }) {
-    const { playlistData } = route.params;
-    console.log("playlistData: ", playlistData)
+    const { playlistData, color } = route.params;
+    console.log(color)
+
+    const songListBody = (color) => ({ 
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        height: "100%",
+        backgroundColor: `${color}`,
+    })
+
     return (
-        <div className="song-list-body">    
+        <div className="song-list-body" style={songListBody(color)}>    
             <div className="back-icon-div">
                 <button className="back-icon-style" onClick={() => {
                     navigation.navigate('PlaylistScreen');
@@ -32,11 +42,10 @@ function SongListScreen({ route, navigation }) {
             <div className="song-list-display">
                 {playlistData.songs.map(song => (
                     <div>
-                        {/* <Song
+                        <Song
                             key={song}
                             track={song}
-                        ></Song> */}
-                        <p style={{color: "#ffffff"}}>{song}</p>
+                        ></Song>
                     </div>
                 ))}
             </div>

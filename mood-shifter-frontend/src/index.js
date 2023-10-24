@@ -31,7 +31,7 @@ var root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <NavigationContainer>
-    <Stack.Navigator initialRouteName="PlaylistScreen">
+    <Stack.Navigator initialRouteName="Login">
       <Stack.Screen
         name="Login"
         component={Login}
@@ -84,6 +84,7 @@ async function AuthCheck({navigation}) {
             
     };
     runAuth();
+    
     navigation.navigate("GettingStartedScreen");
   }
 

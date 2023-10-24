@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './getting-started.css';
 import SearchIcon from '../../assets/icons/search-icon.png'
 import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
@@ -10,10 +10,9 @@ let songsAdded = 0;
 
 function TagSongsScreen( { route, navigation } ) {
     const playlistData = JSON.parse(localStorage.getItem("playlistData"));
-    const { selectedMood } = route.params;
-    const { selectedTime } = route.params;
-    const [ searchTerm, setSearch ] = useState("");
     const [ searchResults, setSearchResults ] = useState([]);
+    let { selectedMood } = route.params;
+    const [ searchTerm, setSearch ] = useState("");
     const [ addedSongs, setAddedSongs ] = useState([]);
     
     const addSong = (song) => {
@@ -36,10 +35,7 @@ function TagSongsScreen( { route, navigation } ) {
                 }
             ])
             ++songsAdded;
-        }
-
-        console.log(addedSongs);
-    
+        }    
     }
 
     function removeSong(song) {
@@ -52,33 +48,26 @@ function TagSongsScreen( { route, navigation } ) {
         })
         --songsAdded;
         setAddedSongs(tempList);
-        console.log(addedSongs);
-
     }
 
-    useEffect(() => {
-        if(!searchTerm) return setSearchResults([]);
-
-        let cancel = false;
-
-        if(cancel) return 
+    useEffect(() => {        
+        const lowerCaseTerm = searchTerm.toLowerCase();
+        const resultList = [];
         
-        setSearchResults(playlistData.likedSongs.map(song => {
-            const smallestAlbumImage = song.album.images.reduce(
-                (smallest, image) => {
-                    if(image.height < smallest.height) return image;
-                    return smallest;
-                }, song.album.images[0]
-            )
+        playlistData.likedSongs.map((song) => {
+            if(song.name.toLowerCase().includes(lowerCaseTerm) || song.artist.toLowerCase().includes(lowerCaseTerm)) {
+                resultList.push(song)
+            }
+        })
+        
+        setSearchResults(resultList.map(song => {
             return {
-                cover: smallestAlbumImage.url,
+                cover: song.image.url,
                 title: song.name,
                 uri: song.uri,
-                artist: song.artists[0].name
+                artist: song.artist
             }
         }));
-
-        return () => cancel = true;
     }, [searchTerm])
 
     return (
@@ -149,6 +138,8 @@ function TagSongsScreen( { route, navigation } ) {
                         const selectFinish = checkTagged();
                         
                         sendUserSongDataToBackend(selectedMood, addedSongs);
+                        setAddedSongs([]);
+                        selectedMood = null;
 
                         if(selectFinish) {
                             navigation.navigate('CongratulationsScreen')
@@ -167,7 +158,8 @@ function TagSongsScreen( { route, navigation } ) {
 
 async function sendUserSongDataToBackend(selectedMood, addedSongs) {
     const profile = localStorage.getItem("UID");
-    await fetch('http://localhost:8000/', 
+    console.log(addedSongs)
+    await fetch('http://localhost:8000/userPlaylistData', 
     {   method: 'POST',
         mode: 'cors',
         headers: { 
@@ -176,7 +168,7 @@ async function sendUserSongDataToBackend(selectedMood, addedSongs) {
         body: JSON.stringify({ 
             "UID": profile,
             "mood": selectedMood,
-            "songUIDS": addedSongs
+            "songs": addedSongs
         }) 
     })
     .then(response => response.json())

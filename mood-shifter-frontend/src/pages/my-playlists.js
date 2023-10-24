@@ -104,7 +104,8 @@ function MyPlaylist({ navigation }){
                             {getMoodPlaylists.map(playlist => (
                                 <Grid item xs={1} sm={2} md={3}>
                                     <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
-                                        playlistData: playlist
+                                        playlistData: playlist,
+                                        color: playlist.color
                                     })}>
                                         <Playlist 
                                             key={playlist.mood}
@@ -145,5 +146,23 @@ function generate() {
     var gradient = "linear-gradient(" + angle + "deg, " + newColor1 + ", " + newColor2 + ")";
 
     return gradient;
+
+}
+
+async function GetMoodPlaylists() {
+    const profile = localStorage.getItem("UID");
+    await fetch('http://localhost:8000/getMoodPlaylists', 
+    {   method: 'GET',
+        mode: 'cors',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            "UID": profile,
+        }) 
+    })
+    .then(response => response.json())
+    .then(data => {console.log(data)})
+    .catch(error => console.error(error));
 
 }

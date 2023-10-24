@@ -45,6 +45,7 @@ function SelectMoodScreen( { route, navigation } ) {
                                 selectedMood: selected,
                             }
                         );
+                        selected = 'none';
                     }
                 }}
             >Continue</button>

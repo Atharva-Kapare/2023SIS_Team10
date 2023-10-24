@@ -13,7 +13,7 @@ function SelectMoodScreen( { navigation } ) {
                 >Tag More Moods</button>
                 <button className="finish-button-style" onClick={() => {
                     SetGettingStartedFlag();
-                    navigation.navigate('MyPlaylist')
+                    navigation.navigate('PlaylistScreen')
                 }}>Finish</button>
             </div>
         </div>
@@ -21,18 +21,18 @@ function SelectMoodScreen( { navigation } ) {
 }
 
 async function SetGettingStartedFlag() {
-    const profile = localStorage.GetItem("UID");
-    const res = await fetch('http://localhost:8000/gettingsStarted', 
+    const profile = localStorage.getItem("UID");
+    const res = await fetch('http://localhost:8000/gettingStarted', 
     {   method: 'POST',
         mode: 'cors',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            "UID": profile,
+            "UID": profile
         })
     })
-    
+    console.log(res)
 }
 
 export default SelectMoodScreen;

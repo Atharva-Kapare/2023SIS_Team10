@@ -1,9 +1,11 @@
 import React from 'react';
-import RemoveIcon from '../assets/icons/removeIcon.png';
-import TagIcon from '../assets/icons/tagIcon.png';
-import MoreIcon from '../assets/icons/moreIcon.png';
+import RemoveIcon from '../../assets/icons/removeIcon.png';
+import TagIcon from '../../assets/icons/tagIcon.png';
+import MoreIcon from '../../assets/icons/moreIcon.png';
+import './song-list.css'
 
 function Song( { track } ) {
+    console.log(track)
 
     return (
         <div className='song-item'>
@@ -15,10 +17,9 @@ function Song( { track } ) {
                 </div>
             </div>
             <div className='song-wrapper'>
-                <p className='song-add-button'>+</p>
-                <p className='song-add-button'>{TagIcon}</p>
-                <p className='song-add-button'>{RemoveIcon}</p>
-                <p className='song-add-button'>{MoreIcon}</p>
+                <button className="icon-button-style"><img alt="tag" className='icon-style' src={TagIcon}></img></button>
+                <button className="icon-button-style"><img alt="remove" className='icon-style' src={RemoveIcon}></img></button>
+                <button className="icon-button-style"><img alt="more" className='icon-style' src={MoreIcon}></img></button>
             </div>
         </div>
     );
