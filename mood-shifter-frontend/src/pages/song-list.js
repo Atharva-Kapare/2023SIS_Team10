@@ -10,6 +10,9 @@ import Song from "../components/song-list/song";
 function SongListScreen({ route, navigation }) {
     const { playlistData, color } = route.params;
     console.log(color)
+    const newColor = color.replace(/^(.*#)/, "linear-gradient(0deg, #000000, #")
+    // newColor = newColor.replace("(", "(0");
+    console.log(newColor)
 
     const songListBody = (color) => ({ 
         minHeight: "100vh",
@@ -17,7 +20,7 @@ function SongListScreen({ route, navigation }) {
         flexDirection: "column",
         alignItems: "center",
         height: "100%",
-        backgroundColor: `${color}`,
+        background: `${newColor}`,
     })
 
     return (

@@ -93,6 +93,7 @@ function SongPlayerScreen({ navigation }) {
       }
     }
   }
+  // document.getElementById("Wrapper").style.color = "#2c2c2c";
 
   return (
     <div className="playbar">

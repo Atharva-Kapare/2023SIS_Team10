@@ -146,8 +146,6 @@ function TagSongsScreen( { route, navigation } ) {
                         if(selectFinish) {
                             navigation.navigate('CongratulationsScreen')
                         } else {
-                            
-                            
                             navigation.navigate('SelectMoodScreen')
                         }
                     }
@@ -161,7 +159,7 @@ function TagSongsScreen( { route, navigation } ) {
 async function sendUserSongDataToBackend(selectedMood, addedSongs) {
     const profile = localStorage.getItem("UID");
     console.log(addedSongs)
-    await fetch('http://localhost:8000/userPlaylistData', 
+    await fetch('http://localhost:8000/taggedSongs', 
     {   method: 'POST',
         mode: 'cors',
         headers: { 

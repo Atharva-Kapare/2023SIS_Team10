@@ -80,7 +80,8 @@ function MyPlaylist({ navigation }){
                 '3V9BNT8f4LgPeQqwFfRaTF', '6LZSGrLbddt9KwFbjC8SXz', '3xd4GVGAuzJGdVZLEKvWea', 
                 '7C6OeOzOEA0jW8E6uuVgqs', '3hzelPptWzx0OrSDTyIuuy'
                 ]
-            }
+            },
+            
         ];
 
     getMoodPlaylists.forEach((playlist) => {
