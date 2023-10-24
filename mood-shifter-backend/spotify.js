@@ -6,23 +6,37 @@ export async function getLikedSongs(token) {
     let songsResp = await spotifyLikedSongs(token, offset);
     console.log("SongResp: ", songsResp);
     let songs = songsResp.items.map(item => {
-        return item.track.id;
+        let song = {}
+        song.id = item.track.id;
+        song.name = item.track.name;
+        song.artist = item.track.artists[0].name;
+        song.uri = item.track.uri;
+        song.image = item.track.album.images.pop();
+
+        return song;
     })
 
     console.log(songs);
 
-    for (let i = 0; i <= Math.floor((songsResp.total/50)); i++) {
+    for (let i = 0; i <= Math.floor((songsResp.total / 50)); i++) {
         offset += 50;
         let tempSongs = await spotifyLikedSongs(token, offset);
         tempSongs.items.map(item => {
-            songs.push(item.track.id);
+            let song = {};
+            song.id = item.track.id;
+            song.name = item.track.name;
+            song.artist = item.track.artists[0].name
+            song.uri = item.track.uri;
+            song.image = item.track.album.images.pop();
+
+            songs.push(song);
         })
     }
 
-    // console.log(songsResp);
-    // console.log(songs.length);
+    console.log(songs);
+    console.log(songs.length);
 
-    return songsResp;
+    return songs;
 }
 
 async function spotifyLikedSongs(token, offset) {
@@ -30,10 +44,10 @@ async function spotifyLikedSongs(token, offset) {
         limit: 50,
         offset: offset
     }), {
-      headers: {
-        "Authorization": `Bearer ${token}`,
-      },
-      method: "GET"
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        },
+        method: "GET"
     });
     let response = await res.json();
     return response;
