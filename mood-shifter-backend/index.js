@@ -23,11 +23,11 @@ app.use(express.json());
 app.use(cors());
 
 app.post('/login', async function (req, res) {
-  
+
   // We get sent the access token and the userID from the frontend
   // The access token is needed to talk to the spotify apis, userID needs to get stored into the backend
   let resp = {};
-  
+
   // Get the user data if it exists from firebase
   const docRef = doc(database, "users", req.body.UID);
   // console.log("TESTTESTTESTTESTTEST")
@@ -37,19 +37,10 @@ app.post('/login', async function (req, res) {
   const docSnapshot = await getDoc(docRef);
   // Need to check if the doc snapshot exists or not, if not, need to create doc
 
-  if (docSnapshot.exists()){
-    var document = docSnapshot.data();
-    resp.gettingStarted = document.gettingStarted;
-  } else {
-    resp.gettingStarted = true;
-  }
-
-  // console.log("Document: ", document);
-  
   // Talk to the spotify apis to grab the liked songs
   // resp.likedSongs = [];
   let likedSongs = await getLikedSongs(req.body.accessToken);
-  
+
   // likedSongs = likedSongs.splice(0,20);
   // let likedSongs = [];
   // // console.log(spotifyResp);
@@ -64,27 +55,38 @@ app.post('/login', async function (req, res) {
   console.log("Resp: ", resp);
   res.send(resp);
 
-  // Now we need to take the liked songs and send it to the model so it can give us back the model to store in firebase
+  if (docSnapshot.exists()) {
+    var document = docSnapshot.data();
+    resp.gettingStarted = document.gettingStarted;
+  } else {
+    resp.gettingStarted = true;
 
-  // //UNCOMMENT BELOW
-  // const modelResp = await fetch(modelURLBase + "/new_user", {
-  //   method: "POST", 
-  //   body: JSON.stringify({"likedSongs": likedSongs}),
-  //   headers: {
-  //     "Content-Type": "application/json"
-  //   }
-  // });
 
-  // console.log("ModelResp: ", modelResp);
-  // let response = await modelResp.json();
-  // console.log("Res: ", response)
+    // console.log("Document: ", document);
 
-  setDoc(doc(database, 'users', req.body.UID), {
-    "moods": {},
-    // "model": response,
-    "configs": {},
-    "gettingStarted": docSnapshot.exists() ? document.gettingStarted : true
-  }, {merge:true}).then(console.log("Document for: ", req.body.UID, "was set"));
+
+    // Now we need to take the liked songs and send it to the model so it can give us back the model to store in firebase
+
+    // //UNCOMMENT BELOW
+    // const modelResp = await fetch(modelURLBase + "/new_user", {
+    //   method: "POST", 
+    //   body: JSON.stringify({"likedSongs": likedSongs}),
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // });
+
+    // console.log("ModelResp: ", modelResp);
+    // let response = await modelResp.json();
+    // console.log("Res: ", response)
+
+    setDoc(doc(database, 'users', req.body.UID), {
+      "moods": {},
+      // "model": response,
+      "configs": {},
+      "gettingStarted": docSnapshot.exists() ? document.gettingStarted : true
+    }, { merge: true }).then(console.log("Document for: ", req.body.UID, "was set"));
+  }
 
 });
 
@@ -92,7 +94,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.post('/taggedSongs', async (req,res) => {
+app.post('/taggedSongs', async (req, res) => {
   // Params: UID (string), Mood (string), Songs (array)
   const docRef = doc(database, "users", req.body.UID);
   const docSnapshot = await getDoc(docRef);
@@ -105,8 +107,8 @@ app.post('/taggedSongs', async (req,res) => {
       "moods": {
         [mood]: req.body.songs
       }
-    }, {merge:true})
-    .then(res.send({"Success": "The lists have been stored into firebase"}))
+    }, { merge: true })
+      .then(res.send({ "Success": "The lists have been stored into firebase" }))
   }
   // SEND DATA TO THE BACKEND HERE:
 
@@ -114,7 +116,7 @@ app.post('/taggedSongs', async (req,res) => {
 
 })
 
-app.get('/taggedSongs', async (req,res) => {
+app.get('/taggedSongs', async (req, res) => {
   // Params: UID
   const docRef = doc(database, "users", req.body.UID);
   const docSnapshot = await getDoc(docRef);
@@ -137,10 +139,10 @@ app.post('/gettingStarted', async (req, res) => {
   } else {
     // setDoc(docRef.gettingStarted, false);
     // const resp = await docRef.update({gettingStarted: "false"});
-    updateDoc(docRef, {gettingStarted: false})
-    .then(() => {
-      res.send(`Set the getting started flag to False for user: ${req.body.UID}`);
-    });
+    updateDoc(docRef, { gettingStarted: false })
+      .then(() => {
+        res.send(`Set the getting started flag to False for user: ${req.body.UID}`);
+      });
   }
 
 })
