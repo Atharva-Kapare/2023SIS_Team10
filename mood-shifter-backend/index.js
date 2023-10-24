@@ -47,14 +47,6 @@ app.get('/login', function(req, res) {
     }));
 });
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
-
-app.get('/gettingStarted', (req, res) => {
-  res.send('Getting Started Works!')
-})
-
 app.get('/test', (req, res) => {
   const resp = setDoc(doc(database, "cities", "LA"), {
     name: "Los Angeles",
@@ -66,15 +58,15 @@ app.get('/test', (req, res) => {
 /* Fields:
     accessToken - String
 */
-app.get('/api/getLikedSongs', (req, res) => {
-  fetchWebApi(req.body.accessToken, `v1/me/tracks?limit=5`, 'GET').then((spotifyRes) => {res.send(spotifyRes.items);});
+app.post('/api/getLikedSongs', (req, res) => {
+  fetchWebApi(req.body.accessToken, `v1/me/tracks?limit=5`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
 })
 
 /* Fields:
     accessToken - String
     trackIDs - String Array (max 5 values)
 */
-app.get('/api/getRecommendedSongs', (req, res) => {
+app.post('/api/getRecommendedSongs', (req, res) => {
   fetchWebApi(req.body.accessToken, `v1/recommendations?limit=5&seed_tracks=${req.body.trackIDs.join(',')}`, 'GET').then((spotifyRes) => {res.send(spotifyRes.tracks);});
 })
 
@@ -82,7 +74,7 @@ app.get('/api/getRecommendedSongs', (req, res) => {
     accessToken - String
     trackID - String
 */
-app.get('/api/getSong', (req, res) => {
+app.post('/api/getSong', (req, res) => {
   fetchWebApi(req.body.accessToken, `v1/tracks/${req.body.trackID}`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
 })
 
@@ -94,11 +86,27 @@ app.post('/api/search', (req, res) => {
   fetchWebApi(req.body.accessToken, `v1/search?q=${req.body.searchTerm}&type=track&limit=10`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
 })
 
-app.get('/api/createPlaylist', (req, res) => {
-  console.log(req.body.accessToken);
-  res.send(req.body.accessToken);
+/* Fields:
+    accessToken - String
+    name - String
+    description - String
+    trackURIs - String Array (spotify:track:{ID})
+*/
+app.post('/api/exportPlaylist', (req, res) => {
+  fetchWebApi(req.body.accessToken, 'v1/me', 'GET').then((user) => {
+    fetchWebApi(
+      req.body.accessToken, 
+      `v1/users/${user.id}/playlists`, 'POST', {
+      "name": req.body.name,
+      "description": req.body.description,
+      "public": false
+      }).then((playlist) => {
+        console.log(req.body.trackURIs.join(','))
+        fetchWebApi(req.body.accessToken, `v1/playlists/${playlist.id}/tracks?uris=${req.body.trackURIs.join(',')}`, 'POST').then((spotifyRes) => {res.send(spotifyRes);});
+      });
+  });
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Mood Shifter listening on port ${port}`)
 })
