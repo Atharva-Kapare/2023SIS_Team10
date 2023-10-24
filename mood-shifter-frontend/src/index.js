@@ -81,11 +81,14 @@ async function AuthCheck({navigation}) {
 
       localStorage.setItem("UID", profile.id);
       await Authentication.getPlaylistData(profile.id)
-            
+      const gettingStarted = localStorage.getItem("GettingStarted");
+      if(!gettingStarted) {
+        navigation.navigate("PlaylistPage");
+      } else {
+        navigation.navigate("GettingStartedScreen")
+      }
     };
     runAuth();
-    
-    navigation.navigate("GettingStartedScreen");
   }
 
   if(!code) {

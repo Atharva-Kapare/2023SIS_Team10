@@ -30,6 +30,9 @@ app.post('/login', async function (req, res) {
   
   // Get the user data if it exists from firebase
   const docRef = doc(database, "users", req.body.UID);
+  // console.log("TESTTESTTESTTESTTEST")
+  // const docSnapshot = await getDoc(docRef);
+
 
   const docSnapshot = await getDoc(docRef);
   // Need to check if the doc snapshot exists or not, if not, need to create doc
