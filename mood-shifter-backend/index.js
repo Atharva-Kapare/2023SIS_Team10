@@ -84,7 +84,7 @@ app.post('/login', async function (req, res) {
     // "model": response,
     "configs": {},
     "gettingStarted": docSnapshot.exists() ? document.gettingStarted : true
-  }).then(console.log("Document for: ", req.body.UID, "was set"));
+  }, {merge:true}).then(console.log("Document for: ", req.body.UID, "was set"));
 
 });
 
