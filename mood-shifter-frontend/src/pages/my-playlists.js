@@ -11,16 +11,27 @@ import '../App.css';
 import '../components/playlists/playlist.css';
 
 function MyPlaylist({ navigation }){
-    // const moodPlaylists = GetMoodPlaylists();
-    //mood
     GetMoodPlaylists();
-    const moodPlaylists = localStorage.getItem("MoodPlaylist")
-    console.log(moodPlaylists)
-        
+    const moodPlaylists = JSON.parse(localStorage.getItem("MoodPlaylist"));
+    let formattedPlaylist = [];
+    console.log(moodPlaylists);
+    
 
-    // getMoodPlaylists.forEach((playlist) => {
+    // moodPlaylists.map((playlist) => {
     //     playlist.color = generate();
     // });
+
+    for ( const [ key, value ] of Object.entries(moodPlaylists) ) {
+        
+        let temp = [];
+        for(const song in value) {
+            temp.push(value[song]);
+        }
+        formattedPlaylist.push({
+            "mood": key,
+            "song": temp
+        })
+    }
 
     return ( 
         <div className="App-header">
@@ -36,7 +47,7 @@ function MyPlaylist({ navigation }){
                                 <Button onClick={() => GetMoodPlaylists()}><AddPlaylistButton/></Button>
                             </Grid>
                             
-                            {/* {getMoodPlaylists.map(playlist => (
+                            {moodPlaylists.map(playlist => (
                                 <Grid item xs={1} sm={2} md={3}>
                                     <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
                                         playlistData: playlist,
@@ -49,10 +60,9 @@ function MyPlaylist({ navigation }){
                                     </button>
                                     <div className="playlist-name">{playlist.mood}</div>
                                 </Grid>
-                            ))} */}
-
+                            ))}
                         </Grid>
-                    </Box>       
+                    </Box>
                 </div>
             </div>
             <Footer navigation={navigation}></Footer>
