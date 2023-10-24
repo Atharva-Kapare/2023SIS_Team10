@@ -108,7 +108,6 @@ app.post('/taggedSongs', async (req,res) => {
     }, {merge:true})
     .then(res.send({"Success": "The lists have been stored into firebase"}))
   }
-
   // SEND DATA TO THE BACKEND HERE:
 
 
@@ -123,7 +122,7 @@ app.get('/taggedSongs', async (req,res) => {
   if (!docSnapshot.exists()) {
     res.send("The user does not exist.");
   } else {
-    console.log()
+    res.send(docSnapshot.data().moods);
   }
 })
 
