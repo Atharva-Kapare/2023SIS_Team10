@@ -41,38 +41,54 @@ app.post('/login', async function (req, res) {
   const docSnapshot = await getDoc(docRef);
   // console.log(docSnapshot);
   const document = docSnapshot.data();
-
-  console.log("Document: ", document);
+  // console.log("Document: ", document);
+  
+  // Talk to the spotify apis to grab the liked songs
+  // resp.likedSongs = [];
+  let likedSongs = await getLikedSongs(req.body.accessToken);
 
   if (document != undefined) {
     resp.gettingStarted = document.gettingStarted;
   } else {
-
     resp.gettingStarted = true;
-    setDoc(doc(database, 'users', req.body.UID), {
-      "moods": {},
-      "model": "",
-      "configs": {},
-      "gettingStarted": true
-    }).then(console.log("User with ID: ", req.body.UID, "was made!"));
-    
   }
   
-  // Talk to the spotify apis to grab the liked songs
-  // resp.likedSongs = [];
-  const spotifyResp = await getLikedSongs(req.body.accessToken);
-  let likedSongs = [];
-  // console.log(spotifyResp);
-  for(const item in spotifyResp.items) {
-    likedSongs.push(spotifyResp.items[item].track.id);
-    // console.log(spotifyResp.items[item].track.id);
-    // resp.likedSongs.push(track.id);
-  }
+  // likedSongs = likedSongs.splice(0,20);
+  // let likedSongs = [];
+  // // console.log(spotifyResp);
+  // for(const item in spotifyResp.items) {
+  //   likedSongs.push(spotifyResp.items[item].track.id);
+  //   // console.log(spotifyResp.items[item].track.id);
+  //   // resp.likedSongs.push(track.id);
+  // }
 
   resp.likedSongs = likedSongs;
 
   console.log("Resp: ", resp);
   res.send(resp);
+
+  // Now we need to take the liked songs and send it to the model so it can give us back the model to store in firebase
+
+  // //UNCOMMENT BELOW
+  // const modelResp = await fetch(modelURLBase + "/new_user", {
+  //   method: "POST", 
+  //   body: JSON.stringify({"likedSongs": likedSongs}),
+  //   headers: {
+  //     "Content-Type": "application/json"
+  //   }
+  // });
+
+  // console.log("ModelResp: ", modelResp);
+  // let response = await modelResp.json();
+  // console.log("Res: ", response)
+
+  // setDoc(doc(database, 'users', req.body.UID), {
+  //   "moods": {},
+  //   "model": response,
+  //   "configs": {},
+  //   "gettingStarted": true
+  // }).then(console.log("User with ID: ", req.body.UID, "was made!"));
+
 });
 
 app.get('/', (req, res) => {
