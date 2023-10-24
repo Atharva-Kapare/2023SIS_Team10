@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import '../components/getting-started/getting-started.css';
 import '../App.css';
 import '../components/playlists/playlist.css';
+import Authentication from '../index';
 
 let playlistSelected = 'none';
 let moodSelected = 'none';
@@ -9,6 +10,8 @@ let timeSelected = 'none';
 
 
 function NewPlaylist( { route, navigation } ) {
+    let moods = getCurrentMoodList();
+
     return (
         <div className="login">
             <div className="header-div">
@@ -29,9 +32,13 @@ function NewPlaylist( { route, navigation } ) {
                 <h3 className="section-header">Mood</h3>
                 <div className='mood-row'>
                     <button id='new' className='mood-button-style'>+</button>
-                    <button id='1' className='mood-button-style' onClick={() => changeSelectedMood('happy')}>Happy</button>
-                    <button id='2' className='mood-button-style' onClick={() => changeSelectedMood('sad')}>Sad</button>
-                    <button id='3' className='mood-button-style' onClick={() => changeSelectedMood('angry')}>Angry</button>
+                    {moods.forEach(() => (
+
+                        <button id='1' className='mood-button-style' onClick={
+                            () => changeSelectedMood('happy')
+                        }>Happy</button>
+                    
+                    ))}
                 </div>
             </div>
 
@@ -90,6 +97,28 @@ function changeSelectedMood(mood) {
 
 function changeSelectedTime(time) {
     timeSelected = time;
+}
+
+async function getCurrentMoodList() {
+    const profile = localStorage.getItem("UID");
+
+    if(profile != null) {
+        await fetch('http://localhost:8000/getMoods', 
+        {   method: 'GET',
+            mode: 'cors',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                "UID": profile,
+            })
+        })
+        .then(response => response.json())
+        .then(data => {console.log(data)})
+        .catch(error => console.error(error));
+    } else {
+        Authentication.AuthCheck()
+    }
 }
 
 export default NewPlaylist;

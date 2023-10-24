@@ -166,7 +166,7 @@ function TagSongsScreen( { route, navigation } ) {
 }
 
 async function sendUserSongDataToBackend(selectedMood, addedSongs) {
-    const profile = localStorage.GetItem("UID");
+    const profile = localStorage.getItem("UID");
     await fetch('http://localhost:8000/', 
     {   method: 'POST',
         mode: 'cors',
@@ -180,10 +180,7 @@ async function sendUserSongDataToBackend(selectedMood, addedSongs) {
         }) 
     })
     .then(response => response.json())
-    // .then(data => {
-    //     localStorage.setItem("playlistData", JSON.stringify(data));
-    //     return data;
-    // })
+    .then(data => {console.log(data)})
     .catch(error => console.error(error));
 }
 

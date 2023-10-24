@@ -16,6 +16,7 @@
     /* background-image: linear-gradient(to bottom right, var(--green), var(--light-green)); */
     width: var(--playlist-width);
     height: var(--playlist-height);
+    border: none;
 }
 
 .playlist-name{

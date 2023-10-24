@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import '../App.css';
 import '../components/playlists/playlist.css';
 
-function MyPlaylist( {navigation}){
+function MyPlaylist({ navigation }){
     
     //mood
     const getMoodPlaylists = 
@@ -98,15 +98,19 @@ function MyPlaylist( {navigation}){
                             <PlaylistPageTitle/>
                             </Grid>
                             <Grid item xs={1} sm={1} md={2}>
-                                <Button onClick={() => navigation.navigate('NewPlaylistScreen')}> <AddPlaylistButton/> </Button>
+                                <Button onClick={() => navigation.navigate('NewPlaylistScreen')}><AddPlaylistButton/></Button>
                             </Grid>
                             
                             {getMoodPlaylists.map(playlist => (
                                 <Grid item xs={1} sm={2} md={3}>
-                                    <Playlist 
-                                        key={playlist.mood}
-                                        playlist={playlist}
-                                    />
+                                    <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
+                                        playlistData: playlist
+                                    })}>
+                                        <Playlist 
+                                            key={playlist.mood}
+                                            playlist={playlist}
+                                        />
+                                    </button>
                                     <div className="playlist-name">{playlist.mood}</div>
                                 </Grid>
                             ))}
@@ -120,10 +124,7 @@ function MyPlaylist( {navigation}){
     );
 }
 
-
-
 export default MyPlaylist;
-
 
 function generate() {
     var hexValues = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e"];
