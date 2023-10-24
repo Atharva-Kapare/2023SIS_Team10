@@ -45,7 +45,7 @@ function MyPlaylist({ navigation }){
                             <PlaylistPageTitle/>
                             </Grid>
                             <Grid item xs={1} sm={1} md={2}>
-                                <Button onClick={() => GetMoodPlaylists()}><AddPlaylistButton/></Button>
+                                <Button onClick={() => navigation.navigate("NewPlaylistScreen")}><AddPlaylistButton/></Button>
                             </Grid>
                             
                             {formattedPlaylist.map(playlist => (

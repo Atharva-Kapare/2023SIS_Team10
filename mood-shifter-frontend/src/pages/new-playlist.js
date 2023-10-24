@@ -32,13 +32,13 @@ function NewPlaylist( { route, navigation } ) {
                 <h3 className="section-header">Mood</h3>
                 <div className='mood-row'>
                     <button id='new' className='mood-button-style'>+</button>
-                    {moods.forEach(() => (
+                    {/* {moods.forEach(() => (
 
                         <button id='1' className='mood-button-style' onClick={
                             () => changeSelectedMood('happy')
                         }>Happy</button>
                     
-                    ))}
+                    ))} */}
                 </div>
             </div>
 

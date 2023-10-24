@@ -11,8 +11,8 @@
 .back-icon-div {
     display: flex;
     justify-content: flex-start;
-    margin: 30px 0 0 50px;
-    width: 50%;
+    padding: 40px 40px 0 40px;
+    width: 100%;
 }
 
 .back-icon-style {
@@ -31,17 +31,21 @@
 .header-style {
     display: flex;
     justify-content: space-between;
-    width: 45%;
+    width: 100%;
     margin: 30px 0 10px 0;
+    padding: 0 60px 0 40px;
     align-items: center;
+    max-width: 600px;
 }
 
 .sub-header-style {
     display: flex;
     justify-content: space-between;
-    width: 45%;
+    width: 100%;
     margin: 10px 0 30px 0;
+    padding: 0 40px 0 40px;
     align-items: center;
+    max-width: 600px;
 }
 
 .icon-style-large {
@@ -52,13 +56,15 @@
 }
 
 .icon-style-small {
-    max-height: 50px;
-    max-width: 40px;
+    max-height: 40px;
+    max-width: 30px;
     height: 50px;
     width: 40px;
+    margin: 0 20px 0 0;
 }
 
 .song-list-display {
     width: 50%;
+    min-width: 400px;
     overflow: scroll;
 }

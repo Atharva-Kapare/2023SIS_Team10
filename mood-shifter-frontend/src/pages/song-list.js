@@ -11,8 +11,6 @@ function SongListScreen({ route, navigation }) {
     const { playlistData, color } = route.params;
     const newColor = color.replace(/^(.*#)/, "linear-gradient(0deg, #000000, #")
 
-    console.log("playlistData: ", playlistData)
-
     const songListBody = (color) => ({ 
         minHeight: "100vh",
         display: "flex",
@@ -20,6 +18,8 @@ function SongListScreen({ route, navigation }) {
         alignItems: "center",
         height: "100%",
         background: `${newColor}`,
+        width: "100vw",
+        overflowX: "clip",
     })
 
     return (

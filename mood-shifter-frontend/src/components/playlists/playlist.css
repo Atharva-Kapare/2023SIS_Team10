@@ -17,6 +17,11 @@
     width: var(--playlist-width);
     height: var(--playlist-height);
     border: none;
+    box-shadow: 5px 5px #474747 ;
+}
+
+.playlist-logo {
+    margin: 0px 0px 0px -7px;
 }
 
 .playlist-name{
