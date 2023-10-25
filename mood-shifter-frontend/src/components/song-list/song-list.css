@@ -1,0 +1,10 @@
+.icon-style {
+    min-width: 20px;
+    min-height: 30px;
+}
+
+.icon-button-style {
+    background-color: transparent;
+    border: none;
+    padding: 5px;
+}

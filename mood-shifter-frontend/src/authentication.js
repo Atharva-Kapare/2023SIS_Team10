@@ -55,7 +55,7 @@ export async function getAccessToken(clientId, code) {
     }
 
     const { access_token } = await result.json();
-    console.log(result)
+    console.log("token: ", access_token)
     return access_token;
 }
   
@@ -106,40 +106,28 @@ async function getSong(trackID) {
     return (await fetchWebApi(`v1/tracks/${trackID}`, 'GET'));
 }
   
-function populateUI(profile) {
-    if(document.getElementById("displayName") != null) {
-        document.getElementById("displayName").innerHTML = profile.display_name;
-    }
-    if(profile.images != null) {
-        if (profile.images[0]) {
-            const profileImage = new Image(200, 200);
-            profileImage.src = profile.images[0].url;
-            if(document.getElementById("avatar") != null) {
-                document.getElementById("avatar").appendChild(profileImage);
-            }
-            if(document.getElementById("imgUrl") != null) {
-                document.getElementById("imgUrl").innerText = profile.images[0].url;
-            }
-        }
-    }
-    document.addEventListener("id", function(event){
-        document.getElementById("id").innerText = profile.id;
-    });
-    
-    document.addEventListener("email", function(event) {
-        document.getElementById("email").innerText = profile.email;
-    });
-    
-    document.addEventListener("uri", function(event) {
-        document.getElementById("uri").innerText = profile.uri;
-        if(profile.external_urls.spotify !== undefined) {
-            document.getElementById("uri").setAttribute("href", profile.external_urls.spotify);
-        }
-        document.getElementById("url").innerText = profile.href;
-        document.getElementById("url").setAttribute("href", profile.href);
-    });
+async function getPlaylistData(profile) {
+    const token = localStorage.getItem("accessToken");
+    const result = false;
+
+    await fetch('http://localhost:8000/login', 
+    {   method: 'POST',
+        mode: 'cors',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            "accessToken": token, 
+            "UID": profile, 
+        }) 
+    })
+    .then(response => response.json())
+    .then(data => {
+        localStorage.setItem("playlistData", JSON.stringify(data));
+        localStorage.setItem("GettingStarted", data.gettingStarted)
+    })
+    .catch(error => console.error(error));
 }
-  
 
 export default {
     redirectToAuthCodeFlow,  
@@ -149,6 +137,6 @@ export default {
     getLikedSongs,
     getRecommendedSongs,
     getSong,
-    populateUI, 
+    getPlaylistData, 
     fetchWebApi
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './getting-started.css';
 import SearchIcon from '../../assets/icons/search-icon.png'
 import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
@@ -9,11 +9,11 @@ let tagCount = localStorage.getItem('tagCount') || 0;
 let songsAdded = 0;
 
 function TagSongsScreen( { route, navigation } ) {
-    const { selectedPlaylist } = route.params;
-    const { selectedMood } = route.params;
-    const { selectedTime } = route.params;
-    const [ searchTerm, setSearch ] = useState("");
+    const playlistData = JSON.parse(localStorage.getItem("playlistData"));
+    console.log(playlistData)
     const [ searchResults, setSearchResults ] = useState([]);
+    let { selectedMood } = route.params;
+    const [ searchTerm, setSearch ] = useState("");
     const [ addedSongs, setAddedSongs ] = useState([]);
     
     const addSong = (song) => {
@@ -36,10 +36,7 @@ function TagSongsScreen( { route, navigation } ) {
                 }
             ])
             ++songsAdded;
-        }
-
-        console.log(addedSongs);
-    
+        }    
     }
 
     function removeSong(song) {
@@ -52,34 +49,27 @@ function TagSongsScreen( { route, navigation } ) {
         })
         --songsAdded;
         setAddedSongs(tempList);
-        console.log(addedSongs);
-
     }
 
-    useEffect(() => {
-        if(!searchTerm) return setSearchResults([]);
-
-        let cancel = false;
-
-        if(cancel) return 
-        Authentication.fetchWebApi(`v1/search?q=${searchTerm}&type=track&limit=10`, 'GET').then(res => {
-            setSearchResults(res.tracks.items.map(song => {
-                const smallestAlbumImage = song.album.images.reduce(
-                    (smallest, image) => {
-                        if(image.height < smallest.height) return image;
-                        return smallest;
-                    }, song.album.images[0]
-                )
-                return {
-                    cover: smallestAlbumImage.url,
-                    title: song.name,
-                    uri: song.uri,
-                    artist: song.artists[0].name
-                }
-            }));
-        });
-
-        return () => cancel = true;
+    useEffect(() => {        
+        const lowerCaseTerm = searchTerm.toLowerCase();
+        const resultList = [];
+        
+        playlistData.likedSongs.map((song) => {
+            if(song.name.toLowerCase().includes(lowerCaseTerm) || song.artist.toLowerCase().includes(lowerCaseTerm)) {
+                resultList.push(song)
+            }
+        })
+        
+        setSearchResults(resultList.map(song => {
+            return {
+                cover: song.image.url,
+                title: song.name,
+                uri: song.uri,
+                artist: song.artist
+            }
+        }));
+        
     }, [searchTerm])
 
     return (
@@ -148,6 +138,11 @@ function TagSongsScreen( { route, navigation } ) {
                         return false;
                     }  else {
                         const selectFinish = checkTagged();
+                        
+                        sendUserSongDataToBackend(selectedMood, addedSongs);
+                        setAddedSongs([]);
+                        selectedMood = null;
+
                         if(selectFinish) {
                             navigation.navigate('CongratulationsScreen')
                         } else {
@@ -159,6 +154,26 @@ function TagSongsScreen( { route, navigation } ) {
 
         </div>
     );
+}
+
+async function sendUserSongDataToBackend(selectedMood, addedSongs) {
+    const profile = localStorage.getItem("UID");
+    console.log(addedSongs)
+    await fetch('http://localhost:8000/taggedSongs', 
+    {   method: 'POST',
+        mode: 'cors',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            "UID": profile,
+            "mood": selectedMood,
+            "songs": addedSongs
+        }) 
+    })
+    .then(response => response.json())
+    .then(data => {console.log(data)})
+    .catch(error => console.error(error));
 }
 
 function checkTagged() {

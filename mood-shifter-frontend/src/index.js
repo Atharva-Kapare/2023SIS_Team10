@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import reportWebVitals from './reportWebVitals';
-import Login from './components/login/login';
+import Login from './pages/login';
 import GettingStartedScreen from './components/getting-started/getting-started';
 import SelectMoodScreen from './components/getting-started/select-mood';
 import TagSongsScreen from './components/getting-started/tag-songs';
@@ -18,6 +18,7 @@ import GetTrackScreen from './pages/gettrackscreen.js';
 import SettingsScreen from './pages/settings';
 import Footer from './components/footer';
 import NewPlaylist from './pages/new-playlist';
+import SongListScreen from './pages/song-list';
 
 const clientId = "8165af06e3a44a32ac86aa3d998761cd";
 const params = new URLSearchParams(window.location.search);
@@ -36,23 +37,36 @@ root.render(
         component={Login}
         options={{ title: 'Overview' }}
       />
+        {/* Getting Started Pages */}
         <Stack.Screen name="GettingStartedScreen" component={GettingStartedScreen} />
         <Stack.Screen name="SelectMoodScreen" component={SelectMoodScreen} />
         <Stack.Screen name="TagSongsScreen" component={TagSongsScreen} />
         <Stack.Screen name="CongratulationsScreen" component={CongratulationsScreen} />
+        {/* Getting Started Pages */}
+
+        {/* Playlist Screen - where all playlists the user has are shown (mood and mood-shifter) */}
         <Stack.Screen name="PlaylistScreen" component={MyPlaylist} />
-        {/* <Stack.Screen name="GetTrackScreen" component={GetTrackScreen} /> */}
+
+        {/* Song Player where individual songs are pulled and played */}
         <Stack.Screen name="SongPlayerScreen" component={songPlayerScreen} />
+
+        {/* Settings Page */}
         <Stack.Screen name="SettingsScreen" component={SettingsScreen} />
+
+        {/* Screen to create a new playlist and add to firebase */}
         <Stack.Screen name="NewPlaylistScreen" component={NewPlaylist} />
+
+        {/* Footer component */}
         <Stack.Screen name="Footer" component={Footer} />
-        
+
+        {/* Display all songs in a playlist screen */}
+        <Stack.Screen name="SongListScreen" component={SongListScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   </React.StrictMode>
 );
 
-async function AuthCheck() {
+async function AuthCheck({navigation}) {
   if (!code) {
     localStorage.clear();
     Authentication.redirectToAuthCodeFlow(clientId);
@@ -60,11 +74,20 @@ async function AuthCheck() {
     async function runAuth() {
       accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
-          accessToken = await Authentication.getAccessToken(clientId, code);
-          localStorage.setItem("accessToken", accessToken);
+        accessToken = await Authentication.getAccessToken(clientId, code);
+        localStorage.setItem("accessToken", accessToken);
       }
       const profile = await Authentication.fetchProfile(accessToken);
-      Authentication.populateUI(profile);
+
+      localStorage.setItem("UID", profile.id);
+      await Authentication.getPlaylistData(profile.id)
+      const gettingStarted = JSON.parse(localStorage.getItem("GettingStarted"));
+      
+      if(!gettingStarted) {
+        navigation.navigate("PlaylistScreen");
+      } else {
+        navigation.navigate("GettingStartedScreen")
+      }
     };
     runAuth();
   }
