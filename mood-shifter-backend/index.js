@@ -115,6 +115,28 @@ app.post('/taggedSongs', async (req, res) => {
 
 })
 
+app.post('/setConfig', async (req, res) => {
+  // Params: UID (string), Mood (string), Songs (array)
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    let name = req.body.name
+    await setDoc(docRef, {
+      "configs": {
+        [mood]: req.body
+      }
+    }, { merge: true })
+      .then(res.send({ "Success": "The configs have been stored into firebase" }))
+  }
+  // SEND DATA TO THE BACKEND HERE:
+
+
+
+})
+
 app.post('/taggedSongsGet', async (req, res) => {
   // Params: UID
   const docRef = doc(database, "users", req.body.UID);
