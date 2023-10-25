@@ -9,7 +9,7 @@ import Song from "../components/song-list/song";
 
 function SongListScreen({ route, navigation }) {
     const { playlistData, color } = route.params;
-    const newColor = color.replace(/^(.*#)/, "linear-gradient(0deg, #000000, #")
+    const newColor = color.replace(/^(.*#)/, "linear-gradient(0deg, #000000, #");
 
     const songListBody = (color) => ({ 
         minHeight: "100vh",
@@ -37,7 +37,7 @@ function SongListScreen({ route, navigation }) {
             </div>
             <div className="sub-header-style">
                 <img className="icon-style-large" alt="Play Song" src={PlayIcon}></img>
-                <img className="icon-style-small" alt="Eport Playlist" src={ExportIcon}></img>
+                <img className="icon-style-small" alt="Export Playlist" src={ExportIcon}></img>
             </div>
 
             {/* Song List */}

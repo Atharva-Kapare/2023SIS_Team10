@@ -3,7 +3,7 @@ import React from 'react';
 import logo from '../assets/moodshifter-logo.png';
 import logoTile from '../assets/moodshifter-logo-tile.png';
 import spotifyLogo from '../assets/spotify-logo.png';
-import AuthCheck from '../index';
+import Index from '../index';
 import { Button } from 'react-native';
 
 function Login({ navigation }) {
@@ -36,7 +36,7 @@ function Login({ navigation }) {
                 <p className="call-to-action-text">Listen to your mood</p>
                 <button 
                     className="sign-in-button-style" 
-                    onClick={() => {AuthCheck({navigation})}}
+                    onClick={() => {Index.AuthCheck({navigation})}}
                 >
                     Sign in with Spotify
                 </button>

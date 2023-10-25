@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PlaylistPageTitle from '../components/playlists/playlist-page-title';
 import AddPlaylistButton from '../components/playlists/add-playlist-button';
 import Playlist from '../components/playlists/playlist';
@@ -11,30 +11,32 @@ import '../App.css';
 import '../components/playlists/playlist.css';
 
 function MyPlaylist({ navigation }){
-    GetMoodPlaylists();
-    const moodPlaylists = JSON.parse(localStorage.getItem("MoodPlaylist"));
-    let formattedPlaylist = [];   
-    console.log("moodPlay: ",moodPlaylists)
 
-    if(moodPlaylists !== null || moodPlaylists !== undefined) {
-        for ( const [ key, value ] of Object.entries(moodPlaylists) ) {
-            let temp = [];
-            for(const song in value) {
-                temp.push(value[song]);
-            }
-            formattedPlaylist.push({
-                "mood": key,
-                "songs": temp,
-                "color": ""
-            })
-        }
-    }
-    
-    formattedPlaylist.map((playlist) => {
-        return playlist.color = generate();
-    });
+    const moodPlaylists = GetMoodPlaylists();
+    const moodShiftPlaylists = GetMoodShiftPlaylist();
 
-    console.log("fomat playlist: ", formattedPlaylist);
+    let [ formattedPlaylist, setFormattedPlaylist ] = useState([{
+        "mood": "Dummy",
+        "songs": "song",
+        "color": ""
+    }]);
+
+    useEffect(() => {
+        moodPlaylists.then((res) => {
+         let keyStuff = [];
+         
+         Object.keys(res).forEach((key)=> {
+                keyStuff.push(
+                    {
+                        "mood": key,
+                        "songs": res[key],
+                        "color": generate()
+                    }
+                )
+            });
+            setFormattedPlaylist(keyStuff);            
+        })
+    }, []);
 
     return ( 
         <div className="App-header">
@@ -48,7 +50,6 @@ function MyPlaylist({ navigation }){
                             <Grid item xs={1} sm={1} md={2}>
                                 <Button onClick={() => navigation.navigate("NewPlaylistScreen")}><AddPlaylistButton/></Button>
                             </Grid>
-                            
                             {formattedPlaylist.map(playlist => (
                                 <Grid item xs={1} sm={2} md={3}>
                                     <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
@@ -98,20 +99,42 @@ function generate() {
 
 async function GetMoodPlaylists() {
     const profile = localStorage.getItem("UID");
-    await fetch('http://localhost:8000/taggedSongsGet', 
-    {   method: 'POST',
-        mode: 'cors',
-        headers: { 
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ 
-            "UID": profile,
-        })
+    const result = await fetch('http://localhost:8000/taggedSongsGet', 
+    {   
+      method: 'POST',
+      mode: 'cors',
+      headers: { 
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+          "UID": profile,
+      })
     })
     .then(response => response.json())
     .then(data => {
-        console.log("data: ",data);
-        localStorage.setItem("MoodPlaylist", JSON.stringify(data))
+        return data;
     })
     .catch(error => console.error(error));
-}
+    return result;
+  }
+
+async function GetMoodShiftPlaylist() {
+    const profile = localStorage.getItem("UID");
+    const result = await fetch('http://localhost:8000/setConfig', 
+    {   
+      method: 'POST',
+      mode: 'cors',
+      headers: { 
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+          "UID": profile,
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+        return data;
+    })
+    .catch(error => console.error(error));
+    return result;
+  }
