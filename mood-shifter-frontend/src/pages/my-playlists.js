@@ -14,21 +14,22 @@ function MyPlaylist({ navigation }){
     GetMoodPlaylists();
     const moodPlaylists = JSON.parse(localStorage.getItem("MoodPlaylist"));
     let formattedPlaylist = [];   
+    console.log("moodPlay: ",moodPlaylists)
 
-    
-    for ( const [ key, value ] of Object.entries(moodPlaylists) ) {
-        
-        let temp = [];
-        for(const song in value) {
-            temp.push(value[song]);
+    if(moodPlaylists !== null || moodPlaylists !== undefined) {
+        for ( const [ key, value ] of Object.entries(moodPlaylists) ) {
+            let temp = [];
+            for(const song in value) {
+                temp.push(value[song]);
+            }
+            formattedPlaylist.push({
+                "mood": key,
+                "songs": temp,
+                "color": ""
+            })
         }
-        formattedPlaylist.push({
-            "mood": key,
-            "songs": temp,
-            "color": ""
-        })
     }
-
+    
     formattedPlaylist.map((playlist) => {
         return playlist.color = generate();
     });
@@ -109,6 +110,7 @@ async function GetMoodPlaylists() {
     })
     .then(response => response.json())
     .then(data => {
+        console.log("data: ",data);
         localStorage.setItem("MoodPlaylist", JSON.stringify(data))
     })
     .catch(error => console.error(error));

@@ -1,55 +1,75 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './getting-started.css';
+import { Box, Grid } from '@mui/material';
 
 let selected = 'none';
 
 function SelectMoodScreen( { route, navigation } ) {
+    const defaultMood = { "moods": [
+        "Happy", "Sad", "Tired",
+        "Angry", "Depressed", "Nervous",
+        "Bored", "Calm", "Melancholic",
+        "Frustrated", "Envious", "Irritated",
+        "Joyful", "Embarrased", "Elated"
+    ]}
+
+    const [ updatedList, setUpdatedList ] = useState(defaultMood);
+    console.log("USESTATELIST: ", updatedList)
+
     return (
-        <div className="login">
-            <div className="header-div">
-                <h4 className="text-style step-text">Step 1</h4>
-                <h1 className="text-style">Select Mood</h1>
-                <h3 className="text-style sub-text">Choose a common mood you find yourself in</h3>
-                <button className='mood-button-style new-mood-button-style'>+</button>
-            </div>
+        <Box>
+            <Grid container rowSpacing={{ xs: 2, sm: 3, md: 4 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
+                <div className="login">
+                    <div className="header-div">
+                        <h4 className="text-style step-text">Step 1</h4>
+                        <h1 className="text-style">Select Mood</h1>
+                        <h3 className="text-style sub-text">Choose a common mood you find yourself in</h3>
+                        <button className='mood-button-style new-mood-button-style'>+</button>
+                    </div>
 
-            {/* Mood List */}
-            <div className='mood-div'>
-                <h3 className="section-header">Suggested</h3>
-                <div className='mood-row'>
-                    <button className='mood-button-style' onClick={() => changeSelected('Happy')}>Happy</button>
-                    <button className='mood-button-style' onClick={() => changeSelected('Sleepy')}>Sleepy</button>
-                    <button className='mood-button-style' onClick={() => changeSelected('Stressed')}>Stressed</button>
-                </div>
-                <div className='mood-row'>
-                    <button className='mood-button-style' onClick={() => changeSelected('Tired')}>Tired</button>
-                    <button className='mood-button-style' onClick={() => changeSelected('Annoyed')}>Annoyed</button>
-                    <button className='mood-button-style' onClick={() => changeSelected('Sad')}>Sad</button>
-                </div>
-                <div className='mood-row'>
-                    <button className='mood-button-style' onClick={() => changeSelected('Jealous')}>Jealous</button>
-                    <button className='mood-button-style' onClick={() => changeSelected('Enthusiast')}>Enthusiastic</button>
-                    <button className='mood-button-style' onClick={() => changeSelected('Anxious')}>Anxious</button>
-                    <button className='mood-button-style' onClick={() => changeSelected('Surprised')}>Surprised</button>
-                </div>
-            </div>
-            {/* Mood List */}
+                    {/* Mood List */}
+                    <div className='mood-div'>
+                        <h3 className="section-header">Suggested</h3>
+                        <div className='mood-row'>
+                            {updatedList.moods.map(mood => (
+                                <Grid item xs={1} sm={2} md={3}>
+                                    <div>
+                                        <button className='mood-button-style' onClick={() => changeSelected(mood)}>{mood}</button>
+                                    </div>
+                                </Grid>
+                            ))}
+                        </div>
+                    </div>
+                    {/* Mood List */}
 
-            <button className="sign-in-button-style" onClick={() => 
-                { 
-                    if(selected === 'none') {
-                        alert("You must select a mood to continue!");
-                    } else {
-                        navigation.push('TagSongsScreen', 
-                            {
-                                selectedMood: selected,
+                    <button className="sign-in-button-style" onClick={() => 
+                        { 
+                            if(selected === 'none') {
+                                alert("You must select a mood to continue!");
+                            } else {
+                                navigation.push('TagSongsScreen', 
+                                    {
+                                        selectedMood: selected,
+                                    }
+                                );
+
+
+
+                                let result = {"moods":[]};
+                                updatedList.moods.forEach(mood => {
+                                    if(mood !== selected) {
+                                        result.moods.push(mood);
+                                    }
+                                    return result
+                                })
+                                setUpdatedList(result);
+                                selected = 'none';
                             }
-                        );
-                        selected = 'none';
-                    }
-                }}
-            >Continue</button>
-        </div>
+                        }}
+                    >Continue</button>
+                </div>
+            </Grid>
+        </Box>
     );
 }
 
