@@ -1,4 +1,5 @@
 from flask import Flask
+from flask import request
 from network import *
 
 app = Flask(__name__)
@@ -7,6 +8,10 @@ app = Flask(__name__)
 def hello_world():
     return "<p>Hello, World!</p>"
 
-@app.route("/new_user")
+@app.route("/new_user", methods=["POST"])
 def createNewModel():
-    return createNewNetwork()
+    data = request.get_json()
+    # print(data)
+    # print(data["likedSongs"])
+
+    return createNewNetwork(data["likedSongs"])
