@@ -16,16 +16,40 @@ function MyPlaylist({ navigation }){
     const moodShiftPlaylists = GetMoodShiftPlaylist();
 
     let [ formattedPlaylist, setFormattedPlaylist ] = useState([{
-        "mood": "Dummy",
+        "mood": "Error Loading Playlists!",
         "songs": "song",
         "color": ""
     }]);
 
+    let [ formattedMoodPlaylist, setFormattedMoodShiftPlaylist ] = useState([{
+        "name": "Error Loading Playlists!",
+        "fromMood": "",
+        "toMood": "",
+        "duration": "",
+        "songs": [],
+    }])
+
+    useEffect(() => {
+        moodShiftPlaylists.then((res) => {
+            let keyStuff = [];
+
+            Object.keys(res).forEach((key) => {
+                keyStuff.push({
+                    "name": key,
+                    "fromMood": res[key].fromMood,
+                    "toMood": res[key].toMood,
+                    "duration": res[key].duration,
+                    "songs": res[key].songs
+                })
+            });
+            setFormattedMoodShiftPlaylist(keyStuff)
+        })
+    }, [])
+
     useEffect(() => {
         moodPlaylists.then((res) => {
          let keyStuff = [];
-         
-         Object.keys(res).forEach((key)=> {
+            Object.keys(res).forEach((key)=> {
                 keyStuff.push(
                     {
                         "mood": key,
@@ -50,7 +74,24 @@ function MyPlaylist({ navigation }){
                             <Grid item xs={1} sm={1} md={2}>
                                 <Button onClick={() => navigation.navigate("NewPlaylistScreen")}><AddPlaylistButton/></Button>
                             </Grid>
+                            <h2 className='header-style'>Mood Playlists</h2>
                             {formattedPlaylist.map(playlist => (
+                                <Grid item xs={1} sm={2} md={3}>
+                                    <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
+                                        playlistData: playlist,
+                                        color: playlist.color
+                                    })}>
+                                        <Playlist 
+                                            key={playlist.mood}
+                                            playlist={playlist}
+                                        />
+                                    </button>
+                                    <div className="playlist-name">{playlist.mood}</div>
+                                </Grid>
+                            ))}
+
+                            <h2 className='header-style'>Mood Shifter Playlists</h2>
+                            {formattedMoodPlaylist.map(playlist => (
                                 <Grid item xs={1} sm={2} md={3}>
                                     <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
                                         playlistData: playlist,
@@ -120,7 +161,7 @@ async function GetMoodPlaylists() {
 
 async function GetMoodShiftPlaylist() {
     const profile = localStorage.getItem("UID");
-    const result = await fetch('http://localhost:8000/setConfig', 
+    const result = await fetch('http://localhost:8000/getConfig', 
     {   
       method: 'POST',
       mode: 'cors',
