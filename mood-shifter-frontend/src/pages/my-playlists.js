@@ -11,7 +11,6 @@ import '../App.css';
 import '../components/playlists/playlist.css';
 
 function MyPlaylist({ navigation }){
-
     const moodPlaylists = GetMoodPlaylists();
     const moodShiftPlaylists = GetMoodShiftPlaylist();
 
@@ -61,6 +60,12 @@ function MyPlaylist({ navigation }){
             setFormattedPlaylist(keyStuff);            
         })
     }, []);
+  
+  //current moods
+    let moodOutput = [];
+        formattedPlaylist.forEach((entry) => {
+        moodOutput.push(entry.mood)
+    })
 
     return ( 
         <div className="App-header">
@@ -72,7 +77,7 @@ function MyPlaylist({ navigation }){
                             <PlaylistPageTitle/>
                             </Grid>
                             <Grid item xs={1} sm={1} md={2}>
-                                <Button onClick={() => navigation.navigate("NewPlaylistScreen")}><AddPlaylistButton/></Button>
+                                <Button onClick={() => navigation.navigate("NewPlaylistScreen", {moods:moodOutput})}><AddPlaylistButton/></Button>
                             </Grid>
                             <h2 className='header-style'>Mood Playlists</h2>
                             {formattedPlaylist.map(playlist => (

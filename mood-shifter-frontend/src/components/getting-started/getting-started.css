@@ -123,6 +123,17 @@
     background-color: #515151;
 }
 
+.mood-buttons {
+    background-color: transparent;
+    font-size: 15px;
+    color: #ffffff;
+    border: solid 3px #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    opacity: 70%;
+    margin: 10px 10px 0 0;
+}
+
 .header-div {
     display: flex;
     flex-direction: column;
