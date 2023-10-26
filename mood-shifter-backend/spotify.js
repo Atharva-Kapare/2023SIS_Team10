@@ -52,3 +52,40 @@ async function spotifyLikedSongs(token, offset) {
     let response = await res.json();
     return response;
 }
+
+async function getTrackData(token, songs){
+    const res = await fetch("https://api.spotify.com/v1/tracks?" + new URLSearchParams({
+        ids: songs.toString()
+    }), {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        },
+        method: "GET"
+    });
+    let response = await res.json();
+
+    // Need: ID, Name, Artist, URI, Image
+
+
+
+    // return response;
+}
+
+async function getRecommendations(token, songs) {
+    const res = await fetch("https://api.spotify.com/v1/recommendations?" + new URLSearchParams({
+        seed_tracks: songs.toString(),
+        limit: 50
+    }), {
+        headers: {
+            "Authorization": `Bearer ${token}`,
+        },
+        method: "GET"
+    });
+    let response = await res.json();
+
+    // Need: ID, Name, Artist, URI, Image
+
+
+
+    // return response;
+}

@@ -12,7 +12,9 @@ let timeLength = 'none';
 let selected = {};
 
 function NewPlaylist( { route, navigation } ) {
-    const { moods } = route.params;
+
+   //connected to moodsOuput on playlist page
+  const { moods } = route.params;
 
     return (
         <div className="login">
@@ -115,6 +117,33 @@ function changeSelectedEndMood(mood) {
     }
 }
 
+async function getCurrentMoodList() {
+    const profile = localStorage.getItem("UID");
+    const name = "Happy to Sad (30m)"
+
+    if(profile != null) {
+        await fetch('http://localhost:8000/setConfigs', 
+        {   method: 'POST',
+            mode: 'cors',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                "UID": profile,
+                "name": name,
+                "fromMood": "Sad",
+                "toMood": "Happy",
+                "duration": "30"
+            })
+        })
+        .then(response => response.json())
+        .then(data => {console.log("Output: ",data)})
+        .catch(error => console.error(error));
+    } else {
+        Authentication.AuthCheck()
+    }
+}
+    
 function changeSelectedTime(time) {
     timeLength = time;
 }

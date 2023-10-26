@@ -115,6 +115,46 @@ app.post('/taggedSongs', async (req, res) => {
 
 })
 
+app.post('/setConfig', async (req, res) => {
+  // Params: UID (string), Mood (string), Songs (array)
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    let name = req.body.name
+    await setDoc(docRef, {
+      "configs": {
+        [mood]: req.body
+      }
+    }, { merge: true })
+      .then(res.send({ "Success": "The configs have been stored into firebase" }))
+  }
+})
+
+app.post('/getConfig', async (req, res) => {
+  // Params: UID
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  console.log("Tagged songs are getting got.")
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    res.send(docSnapshot.data().configs);
+  }
+})
+
+app.post('/getConfigPlaylist', async (req, res) => {
+  // Params: config
+  // We need to pass this into the model now and it should send back the songs in an array
+  // We will then need to take that array and add all of the necessary data for the frontend
+
+  res.send({"You've":"Hit the backend, there's no songs here yet ya dog."})
+})
+
 app.post('/taggedSongsGet', async (req, res) => {
   // Params: UID
   const docRef = doc(database, "users", req.body.UID);
