@@ -29,6 +29,11 @@ function MyPlaylist({ navigation }){
             })
         }
     }
+    //current moods
+    let moodOutput = [];
+        formattedPlaylist.forEach((entry) => {
+        moodOutput.push(entry.mood)
+    })
     
     formattedPlaylist.map((playlist) => {
         return playlist.color = generate();
@@ -46,7 +51,7 @@ function MyPlaylist({ navigation }){
                             <PlaylistPageTitle/>
                             </Grid>
                             <Grid item xs={1} sm={1} md={2}>
-                                <Button onClick={() => navigation.navigate("NewPlaylistScreen")}><AddPlaylistButton/></Button>
+                                <Button onClick={() => navigation.navigate("NewPlaylistScreen", {moods:moodOutput})}><AddPlaylistButton/></Button>
                             </Grid>
                             
                             {formattedPlaylist.map(playlist => (
