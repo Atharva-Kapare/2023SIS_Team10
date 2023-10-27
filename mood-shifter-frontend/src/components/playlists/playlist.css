@@ -13,9 +13,15 @@
 
 .playlist-cover{
     padding: var(--standard-padding);
-    background-image: linear-gradient(to bottom right, var(--green), var(--light-green));
+    /* background-image: linear-gradient(to bottom right, var(--green), var(--light-green)); */
     width: var(--playlist-width);
     height: var(--playlist-height);
+    border: none;
+    /* box-shadow: 5px 5px #474747 ; */
+}
+
+.playlist-logo {
+    margin: 0px 0px 0px -7px;
 }
 
 .playlist-name{
@@ -39,4 +45,9 @@
     width: var(--standard-button-size);
     height: var(--standard-button-size);
     margin: 20%; 
+}
+
+.header-style {
+    color: #ffffff;
+    margin: 0 0 10px 0;
 }

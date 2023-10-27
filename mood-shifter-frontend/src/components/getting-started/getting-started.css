@@ -106,9 +106,9 @@
     background-color: transparent;
     font-size: 15px;
     color: #ffffff;
-    border: solid 4px #ffffff;
+    border: solid 2px #ffffff;
     border-radius: 10px;
-    padding: 8px;
+    padding: 10px;
     opacity: 70%;
     margin: 10px 10px 0 0;
 }
@@ -121,6 +121,17 @@
     border: solid 4px #60dc70;
     color: #60dc70;
     background-color: #515151;
+}
+
+.mood-buttons {
+    background-color: transparent;
+    font-size: 15px;
+    color: #ffffff;
+    border: solid 2px #ffffff;
+    border-radius: 10px;
+    padding: 10px;
+    opacity: 70%;
+    margin: 10px 10px 0 0;
 }
 
 .header-div {
@@ -149,7 +160,7 @@
     text-align: left;
     opacity: 60%;
     padding: 0;
-    margin: 0;
+    margin: 5px 0px;
 }
 
 .new-mood-button-style {
@@ -299,4 +310,12 @@
 .song-button {
     background-color: transparent;
     border: none;
+}
+
+.new-mood-playlist-div {
+    display: flex;
+    flex-direction: column;
+    margin: 0 0 50px 20px;
+    width: 100%;
+    max-width: 450px;
 }

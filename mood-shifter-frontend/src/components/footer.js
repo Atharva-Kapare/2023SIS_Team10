@@ -20,7 +20,7 @@ import Avatar from '@mui/material/Avatar';
   );
 } */
 
-function Footer() {
+function Footer({ navigation }) {
   const [value, setValue] = React.useState(0);
   const ref = React.useRef(null);
 
@@ -42,12 +42,13 @@ function Footer() {
           }}
           sx={{backgroundColor: '#232426'}}
         >
-          <BottomNavigationAction  style={{color:'#ffffff'}} label="Home" icon={<HomeIcon style={{color:'#ffffff'}}/>  }  />
-          <BottomNavigationAction  style={{color:'#ffffff'}} label="Playlist" icon={<SubscriptionsIcon style={{color:'#ffffff'}} />} />
-          <BottomNavigationAction  style={{color:'#ffffff'}} label="Settings" icon={<SettingsIcon style={{color:'#ffffff'}} />} />
+          <BottomNavigationAction onClick={() => {navigation.navigate('PlaylistScreen');}} style={{color:'#ffffff'}} label="Home" icon={<HomeIcon style={{color:'#ffffff'}}/>  }  />
+          <BottomNavigationAction onClick={() => {navigation.navigate('SongPlayerScreen');}} style={{color:'#ffffff'}} label="Player" icon={<SubscriptionsIcon style={{color:'#ffffff'}} />} />
+          <BottomNavigationAction onClick={() => {navigation.navigate('SettingsScreen');}} style={{color:'#ffffff'}} label="Settings" icon={<SettingsIcon style={{color:'#ffffff'}} />} />
         </BottomNavigation>
       </Paper>
     </Box>
   );
 }
+
 export default Footer;

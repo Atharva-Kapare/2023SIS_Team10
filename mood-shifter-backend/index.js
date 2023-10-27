@@ -1,51 +1,206 @@
 // const express = require('express')
 // const app = express
 import express from 'express';
-const port = 3001
+import cors from 'cors';
+const port = 8000
 // const auth = require('./auth')
 // var querystring = require('querystring')
 
 import { firebase_app } from './firebase_init.js';
 import { database } from './firebase_init.js';
 
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import axios from 'axios';
+import { getLikedSongs } from './spotify.js';
 
 var client_id = 'bf93ef9d71614b5392aa6528ba81510a';
 var redirect_uri = 'http://localhost:3000';
 
+var modelURLBase = 'http://localhost:5000'
+
 const app = express();
 app.use(express.json());
 
-import cors from 'cors';
+// import cors from 'cors';
+// app.use(cors());
+
+// async function fetchWebApi(token, endpoint, method, body) {
+//   const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+//   headers: {
+//       Authorization: `Bearer ${token}`,
+//   },
+//   method,
+//   body:JSON.stringify(body)
+//   });
+//   return await res.json();
+// }
+
 app.use(cors());
 
-async function fetchWebApi(token, endpoint, method, body) {
-  const res = await fetch(`https://api.spotify.com/${endpoint}`, {
-  headers: {
-      Authorization: `Bearer ${token}`,
-  },
-  method,
-  body:JSON.stringify(body)
-  });
-  return await res.json();
-}
+app.post('/login', async function (req, res) {
 
-app.get('/login', function(req, res) {
+  // We get sent the access token and the userID from the frontend
+  // The access token is needed to talk to the spotify apis, userID needs to get stored into the backend
+  let resp = {};
 
-  // var state = generateRandomString(16);
-  var state = 'bf93ef9d71614b53';
-  var scope = 'user-read-private user-read-email';
-  
+  // Get the user data if it exists from firebase
+  const docRef = doc(database, "users", req.body.UID);
+  // console.log("TESTTESTTESTTESTTEST")
+  // const docSnapshot = await getDoc(docRef);
 
-  res.redirect('https://accounts.spotify.com/authorize?' +
-    querystring.stringify({
-      response_type: 'code',
-      client_id: client_id,
-      scope: scope,
-      redirect_uri: redirect_uri,
-      state: state
-    }));
+
+  const docSnapshot = await getDoc(docRef);
+  // Need to check if the doc snapshot exists or not, if not, need to create doc
+
+  // Talk to the spotify apis to grab the liked songs
+  // resp.likedSongs = [];
+  let likedSongs = await getLikedSongs(req.body.accessToken);
+
+  // likedSongs = likedSongs.splice(0,20);
+  // let likedSongs = [];
+  // // console.log(spotifyResp);
+  // for(const item in spotifyResp.items) {
+  //   likedSongs.push(spotifyResp.items[item].track.id);
+  //   // console.log(spotifyResp.items[item].track.id);
+  //   // resp.likedSongs.push(track.id);
+  // }
+
+  resp.likedSongs = likedSongs;
+
+  console.log("Resp: ", resp);
+
+  if (docSnapshot.exists()) {
+    var document = docSnapshot.data();
+    resp.gettingStarted = document.gettingStarted;
+  } else {
+    resp.gettingStarted = true;
+
+
+    // console.log("Document: ", document);
+
+
+    // Now we need to take the liked songs and send it to the model so it can give us back the model to store in firebase
+
+    // //UNCOMMENT BELOW
+    // const modelResp = await fetch(modelURLBase + "/new_user", {
+    //   method: "POST", 
+    //   body: JSON.stringify({"likedSongs": likedSongs}),
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // });
+
+    // console.log("ModelResp: ", modelResp);
+    // let response = await modelResp.json();
+    // console.log("Res: ", response)
+
+    setDoc(doc(database, 'users', req.body.UID), {
+      "moods": {},
+      // "model": response,
+      "configs": {},
+      "gettingStarted": docSnapshot.exists() ? document.gettingStarted : true
+    }, { merge: true }).then(console.log("Document for: ", req.body.UID, "was set"));
+  }
+  res.send(resp);
 });
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.post('/taggedSongs', async (req, res) => {
+  // Params: UID (string), Mood (string), Songs (array)
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    let mood = req.body.mood
+    await setDoc(docRef, {
+      "moods": {
+        [mood]: req.body.songs
+      }
+    }, { merge: true })
+      .then(res.send({ "Success": "The lists have been stored into firebase" }))
+  }
+  // SEND DATA TO THE BACKEND HERE:
+
+
+
+})
+
+app.post('/setConfig', async (req, res) => {
+  // Params: UID (string), Mood (string), Songs (array)
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    let name = req.body.name
+    await setDoc(docRef, {
+      "configs": {
+        [mood]: req.body
+      }
+    }, { merge: true })
+      .then(res.send({ "Success": "The configs have been stored into firebase" }))
+  }
+})
+
+app.post('/getConfig', async (req, res) => {
+  // Params: UID
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  console.log("Tagged songs are getting got.")
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    res.send(docSnapshot.data().configs);
+  }
+})
+
+app.post('/getConfigPlaylist', async (req, res) => {
+  // Params: config
+  // We need to pass this into the model now and it should send back the songs in an array
+  // We will then need to take that array and add all of the necessary data for the frontend
+
+  res.send({"You've":"Hit the backend, there's no songs here yet ya dog."})
+})
+
+app.post('/taggedSongsGet', async (req, res) => {
+  // Params: UID
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  console.log("Tagged songs are getting got.")
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    res.send(docSnapshot.data().moods);
+  }
+})
+
+app.post('/gettingStarted', async (req, res) => {
+
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  console.log(docSnapshot.exists());
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    // setDoc(docRef.gettingStarted, false);
+    // const resp = await docRef.update({gettingStarted: "false"});
+    updateDoc(docRef, { gettingStarted: false })
+      .then(() => {
+        res.send(`Set the getting started flag to False for user: ${req.body.UID}`);
+      });
+  }
+
+})
 
 app.get('/test', (req, res) => {
   const resp = setDoc(doc(database, "cities", "LA"), {
@@ -76,6 +231,14 @@ app.post('/api/getRecommendedSongs', (req, res) => {
 */
 app.post('/api/getSong', (req, res) => {
   fetchWebApi(req.body.accessToken, `v1/tracks/${req.body.trackID}`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
+
+app.post('/genre', (req, res) => {
+  res.send(req.body.song + ' ' + req.body.genre)
+})
+
+app.post('/volume', (req, res) => {
+  res.send(req.body.song + ' ' + req.body.volume)
+
 })
 
 /* Fields:

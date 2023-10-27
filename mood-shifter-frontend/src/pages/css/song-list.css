@@ -1,0 +1,70 @@
+
+
+.song-list-body {    
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.back-icon-div {
+    display: flex;
+    justify-content: flex-start;
+    padding: 40px 40px 0 40px;
+    width: 100%;
+}
+
+.back-icon-style {
+    max-width: 150px;
+    max-height: 50px;
+    border: none;
+    background-color: transparent;
+}
+
+.title-style {
+    color: #ffffff;
+    font-size: 30px;
+
+}
+
+.header-style {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 30px 0 10px 0;
+    padding: 0 60px 0 40px;
+    align-items: center;
+    max-width: 600px;
+}
+
+.sub-header-style {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin: 10px 0 30px 0;
+    padding: 0 40px 0 40px;
+    align-items: center;
+    max-width: 600px;
+}
+
+.icon-style-large {
+    max-height: 150px;
+    max-width: 150px;
+    height: 100px;
+    width: 80px;
+}
+
+.icon-style-small {
+    max-height: 40px;
+    max-width: 30px;
+    height: 50px;
+    width: 40px;
+    margin: 0 20px 0 0;
+}
+
+.song-list-display {
+    width: 50%;
+    min-width: 400px;
+    overflow: scroll;
+}
