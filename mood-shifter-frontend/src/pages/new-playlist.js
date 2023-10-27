@@ -39,7 +39,7 @@ function NewPlaylist( { route, navigation } ) {
                 <div className='mood-row'>
                     <button id='newEnd' className='mood-buttons' onClick={() => selectNewMood("newEnd")}>+</button>
                     {moods.map((mood) => (
-                        <button id={`End${mood}`} className='mood-buttons' onClick={() =>  changeSelectedEndMood(`End${mood}`)}>{mood} </button>
+                        <button id={`End${mood}`} className='mood-buttons' onClick={() =>  changeSelectedEndMood(`End${mood}`, mood)}>{mood} </button>
                     ))}
                 </div>
             </div>
@@ -48,10 +48,10 @@ function NewPlaylist( { route, navigation } ) {
              <div className='mood-div'>
                 <h3 className="section-header">Time</h3>
                 <div className='mood-row'>
-                    <button id='30min' className='mood-buttons' onClick={() => changeSelectedTime('thirtymins')}>30 min</button>
-                    <button id='1hr' className='mood-buttons' onClick={() => changeSelectedTime('onehour')}>1 hr</button>
-                    <button id='1.5hrs' className='mood-buttons' onClick={() => changeSelectedTime('oneandhalfhours')}>1.5 hrs</button>
-                    <button id='2hrs' className='mood-buttons' onClick={() => changeSelectedTime('twohours')}>2 hrs</button>
+                    <button id='30' className='mood-buttons' onClick={() => changeSelectedTime('30')}>30 min</button>
+                    <button id='60' className='mood-buttons' onClick={() => changeSelectedTime('60')}>1 hr</button>
+                    <button id='90' className='mood-buttons' onClick={() => changeSelectedTime('90')}>1.5 hrs</button>
+                    <button id='120' className='mood-buttons' onClick={() => changeSelectedTime('120')}>2 hrs</button>
                 </div>
             </div>
 
@@ -61,6 +61,8 @@ function NewPlaylist( { route, navigation } ) {
                     if(startMood !== 'none') {
                         if(endMood !== 'none'){
                             if(timeLength !== 'none'){
+                                getCurrentMoodList()
+                                clearSelected()
                                 navigation.navigate('PlaylistScreen')
                             } else{ alert("You must select a time.");}
                         } else{ alert("You must select an ending mood.");}    
@@ -102,27 +104,52 @@ function changeSelectedStartMood(mood) {
     }
 }
 
-function changeSelectedEndMood(mood) {
+function changeSelectedEndMood(id, mood) {
     endMood = mood;
-    selected[mood] = selected[mood] ?? false;
-    if (selected[mood] === false){
-        document.getElementById(mood).style.border = "solid 2px #60dc70";
-        selected[mood] = true;
-        console.log('Start mood', selected, mood);
+    selected[id] = selected[id] ?? false;
+    if (selected[id] === false){
+        document.getElementById(id).style.border = "solid 2px #60dc70";
+        selected[id] = true;
+        console.log('Start mood', selected, id);
     }
     else{
-        document.getElementById(mood).style.border = "solid 2px #ffffff"; 
-        selected[mood] = false;
-        console.log('Start mood', selected, mood);
+        document.getElementById(id).style.border = "solid 2px #ffffff"; 
+        selected[id] = false;
+        console.log('Start mood', selected, id);
     }
+}
+
+function changeSelectedTime(time) {
+    timeLength = time;
+    selected[time] = selected[time] ?? false;
+    if (selected[time] === false){
+        document.getElementById(time).style.border = "solid 2px #60dc70";
+        selected[time] = true;
+        console.log('Start mood', selected, time);
+    }
+    else{
+        document.getElementById(time).style.border = "solid 2px #ffffff"; 
+        selected[time] = false;
+        console.log('Start mood', selected, time);
+    }
+}
+
+function clearSelected(){
+    Object.keys(selected).forEach((key) => {
+        selected[key] = false;
+    })
+
+    startMood = 'none';
+    endMood = 'none';
+    timeLength = 'none';
 }
 
 async function getCurrentMoodList() {
     const profile = localStorage.getItem("UID");
-    const name = "Happy to Sad (30m)"
+    const name = `${startMood} to ${endMood} (${timeLength}m)`
 
     if(profile != null) {
-        await fetch('http://localhost:8000/setConfigs', 
+        await fetch('http://localhost:8000/setConfig', 
         {   method: 'POST',
             mode: 'cors',
             headers: { 
@@ -131,9 +158,9 @@ async function getCurrentMoodList() {
             body: JSON.stringify({ 
                 "UID": profile,
                 "name": name,
-                "fromMood": "Sad",
-                "toMood": "Happy",
-                "duration": "30"
+                "fromMood": startMood,
+                "toMood": endMood,
+                "duration": timeLength
             })
         })
         .then(response => response.json())
@@ -142,10 +169,6 @@ async function getCurrentMoodList() {
     } else {
         Authentication.AuthCheck()
     }
-}
-    
-function changeSelectedTime(time) {
-    timeLength = time;
 }
 
 export default NewPlaylist;
