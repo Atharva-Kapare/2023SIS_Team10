@@ -74,12 +74,13 @@ function MyPlaylist({ navigation }){
                     <Box>
                         <Grid container rowSpacing={{ xs: 2, sm: 3, md: 4 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
                             <Grid item xs={1} sm={5} md={10}>
-                            <PlaylistPageTitle/>
+                                <PlaylistPageTitle/>
                             </Grid>
                             <Grid item xs={1} sm={1} md={2}>
                                 <Button onClick={() => navigation.navigate("NewPlaylistScreen", {moods:moodOutput})}><AddPlaylistButton/></Button>
                             </Grid>
-                            <h2 className='header-style'>Mood Playlists</h2>
+                            {/* <h2 className='header-style'>Mood Playlists</h2> */}
+                            {/* Mood Playlists */}
                             {formattedPlaylist.map(playlist => (
                                 <Grid item xs={1} sm={2} md={3}>
                                     <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
@@ -95,7 +96,8 @@ function MyPlaylist({ navigation }){
                                 </Grid>
                             ))}
 
-                            <h2 className='header-style'>Mood Shifter Playlists</h2>
+                            {/* <h2 className='header-style'>Mood Shifter Playlists</h2> */}
+                            {/* Moodshift Playlist */}
                             {formattedMoodPlaylist.map(playlist => (
                                 <Grid item xs={1} sm={2} md={3}>
                                     <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
