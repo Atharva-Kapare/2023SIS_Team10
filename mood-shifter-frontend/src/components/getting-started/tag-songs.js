@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './getting-started.css';
 import SearchIcon from '../../assets/icons/search-icon.png'
 import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
-import Authentication from '../../authentication'
 import Song from './song'
 
 let tagCount = localStorage.getItem('tagCount') || 0;
@@ -50,7 +49,7 @@ function TagSongsScreen( { route, navigation } ) {
         --songsAdded;
         setAddedSongs(tempList);
     }
-
+  
     useEffect(() => {        
         const lowerCaseTerm = searchTerm.toLowerCase();
         const resultList = [];
@@ -69,7 +68,6 @@ function TagSongsScreen( { route, navigation } ) {
                 artist: song.artist
             }
         }));
-        
     }, [searchTerm])
 
     return (

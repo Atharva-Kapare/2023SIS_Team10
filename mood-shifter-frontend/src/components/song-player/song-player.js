@@ -4,7 +4,6 @@ import PlayButton from "./playbar-buttons/play-pause";
 import NextButton from "./playbar-buttons/next";
 import ProgressBar from "./playbar-buttons/progress-bar";
 import SongDetails from "./playbar-buttons/song-details";
-import Authentication from "../../authentication";
 import "./song-player.css";
 import SpotifyPlayer from "react-spotify-web-playback";
 import Footer from "../footer"
@@ -13,7 +12,15 @@ function SongPlayerScreen({ navigation }) {
 
   let [uris, setUris] = useState([""]);
   let [track, setTrack] = useState(undefined);
+  
+  
+// <<<<<<< backend-api
+  let [currentSongId, setCurrentSongId] = useState('');
+// =======
   const likedSongs = Authentication.getLikedSongs();
+// >>>>>>> development
+  
+  
   const accessToken = localStorage.getItem("accessToken");
   let [currentIndex, setCurrentIndex] = useState(0);
   let [previousState, setPreviousState] = useState(undefined)
@@ -29,6 +36,30 @@ function SongPlayerScreen({ navigation }) {
   ]);
 
   useEffect(() => {
+    
+    
+    
+// <<<<<<< backend-api
+    const options = {
+      method: "POST",
+      headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json;charset=UTF-8",
+      },
+      body: JSON.stringify({
+          accessToken: localStorage.getItem("accessToken"),
+      }),
+    };
+
+    fetch("http://localhost:3001/api/getLikedSongs", options).then((response) => response.json()).then((res) => {
+      console.log(
+        "Component initialized",
+        res.items,
+        res.items[0].track.duration_ms / 1000,
+        accessToken
+      );
+      if (res.items[0]) {
+// =======
     likedSongs.then((res) => {
       // console.log(
       //   "Component initialized",
@@ -37,9 +68,13 @@ function SongPlayerScreen({ navigation }) {
       //   accessToken
       // );
       if (res[0]) {
+// >>>>>>> development
+        
+        
+        
         songs = [];
         const uriList = [];
-        res.forEach((song,index) =>
+        res.items.forEach((song,index) =>
         {
           if(index === 0){
             setTrack({
