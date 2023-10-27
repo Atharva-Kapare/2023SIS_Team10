@@ -19,6 +19,7 @@ import SettingsScreen from './pages/settings';
 import Footer from './components/footer';
 import NewPlaylist from './pages/new-playlist';
 import SongListScreen from './pages/song-list';
+import NewMoodScreen from './pages/new-mood';
 
 const clientId = "8165af06e3a44a32ac86aa3d998761cd";
 const params = new URLSearchParams(window.location.search);
@@ -61,6 +62,9 @@ root.render(
 
         {/* Display all songs in a playlist screen */}
         <Stack.Screen name="SongListScreen" component={SongListScreen} />
+
+        {/* Create custom mood screen */}
+        <Stack.Screen name="NewMoodScreen" component={NewMoodScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   </React.StrictMode>

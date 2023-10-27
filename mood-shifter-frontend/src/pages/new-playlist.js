@@ -26,7 +26,7 @@ function NewPlaylist( { route, navigation } ) {
             <div className='new-mood-playlist-div'>
                 <h3 className="section-header">Starting Mood</h3>
                 <div className='mood-row'>
-                    <button id='newStart' className='mood-buttons' onClick={() => selectNewMood("newStart")}>+</button>
+                    <button id='newStart' className='mood-buttons' onClick={() => {navigation.navigate("NewMoodScreen")}}>+</button>
                     {moods.map((mood) => (
                         <button id={mood} className='mood-buttons' onClick={() => changeSelectedStartMood(mood)}>{mood}</button>
                     ))}
@@ -37,7 +37,7 @@ function NewPlaylist( { route, navigation } ) {
             <div className='new-mood-playlist-div'>
                 <h3 className="section-header">Ending Mood</h3>
                 <div className='mood-row'>
-                    <button id='newEnd' className='mood-buttons' onClick={() => selectNewMood("newEnd")}>+</button>
+                    <button id='newEnd' className='mood-buttons' onClick={() => {navigation.navigate("NewMoodScreen")}}>+</button>
                     {moods.map((mood) => (
                         <button id={`End${mood}`} className='mood-buttons' onClick={() =>  changeSelectedEndMood(`End${mood}`)}>{mood} </button>
                     ))}
