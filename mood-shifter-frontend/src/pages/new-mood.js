@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import './css/new-mood.css'
 import SearchIcon from '../assets/icons/search-icon.png'
 import authentication from '../authentication'
+import Song from "../components/getting-started/song";
 
 function NewMoodScreen() {
 
@@ -45,29 +46,67 @@ function NewMoodScreen() {
         setAddedSongs(tempList);
     }
 
-    useEffect(() => {        
+    // useEffect(() => {        
 
+    //     if(!searchTerm) return setSearchResults([]);
+
+    //     const searchRes = authentication.SearchSpotify(searchTerm);
+    //     console.log("tracks: ",searchRes.tracks)
+        
+    //     setSearchResults(searchRes.tracks.items.map(song => {
+    //         const smallestImage = song.album.images.reduce(
+    //             (smallest, image) => {
+    //                 if (image.height < smallest.height) return image
+    //                 return smallest
+    //             }, song.album.images[0])
+
+    //         return {
+    //             cover: smallestImage.url,
+    //             title: song.name,
+    //             uri: song.uri,
+    //             artist: song.artist[0].name
+    //         }
+    //     }));
+        
+    // }, [searchTerm])
+
+    useEffect(() => {
         if(!searchTerm) return setSearchResults([]);
 
-        const searchRes = authentication.SearchSpotify(searchTerm);
-        console.log("tracks: ",searchRes.tracks)
-        
-        setSearchResults(searchRes.tracks.items.map(song => {
-            const smallestImage = song.album.images.reduce(
-                (smallest, image) => {
-                    if (image.height < smallest.height) return image
-                    return smallest
-                }, song.album.images[0])
+        let cancel = false;
 
-            return {
-                cover: smallestImage.url,
-                title: song.name,
-                uri: song.uri,
-                artist: song.artist[0].name
-            }
-        }));
-        
-    }, [searchTerm])
+        if(cancel) return 
+        const options = {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json;charset=UTF-8",
+            },
+            body: JSON.stringify({
+                accessToken: localStorage.getItem("accessToken"),
+                searchTerm: searchTerm,
+            }),
+        };
+
+        fetch("http://localhost:8000/api/search", options).then((response) => response.json()).then(res => {
+            setSearchResults(res.tracks.items.map(song => {
+                const smallestAlbumImage = song.album.images.reduce(
+                    (smallest, image) => {
+                        if(image.height < smallest.height) return image;
+                        return smallest;
+                    }, song.album.images[0]
+                )
+                return {
+                    cover: smallestAlbumImage.url,
+                    title: song.name,
+                    uri: song.uri,
+                    artist: song.artists[0].name
+                }
+            }));
+        });
+
+        return () => cancel = true;
+    })
 
     return (
         <div className="page-body">
@@ -94,7 +133,14 @@ function NewMoodScreen() {
             {/* Song search list */}
             <p className="sub-text">Suggested</p>
             <div>
-
+                {searchResults.map((song) => (
+                    <div  style={{ cursor: "pointer" }} onClick={() => addSong(song)}>
+                        <Song 
+                            track={song}
+                            key={song.uri}
+                        />
+                    </div>
+                ))}
             </div>
 
             {/* Create Button */}
@@ -109,22 +155,5 @@ function createNewMood() {
 
 }
 
-async function GetSearchResults(searchTerm) {
-    console.log("SearchTerm: ", searchTerm)
-    await fetch(`https://api.spotify.com/v1/search?q=${searchTerm}`, 
-    {   method: 'GET',
-        mode: 'cors',
-        headers: { 
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data)
-        return data;
-    })
-    .catch(error => console.error(error));
-}
 
 export default NewMoodScreen;
