@@ -140,7 +140,7 @@ app.post('/setConfig', async (req, res) => {
     let name = req.body.name
     await setDoc(docRef, {
       "configs": {
-        [mood]: req.body
+        [req.body.mood]: req.body
       }
     }, { merge: true })
       .then(res.send({ "Success": "The configs have been stored into firebase" }))
