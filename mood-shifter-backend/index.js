@@ -139,7 +139,7 @@ app.post('/setConfig', async (req, res) => {
     let name = req.body.name
     await setDoc(docRef, {
       "configs": {
-        [mood]: req.body
+        [name]: req.body
       }
     }, { merge: true })
       .then(res.send({ "Success": "The configs have been stored into firebase" }))
@@ -233,22 +233,22 @@ app.post('/api/getSong', (req, res) => {
   fetchWebApi(req.body.accessToken, `v1/tracks/${req.body.trackID}`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
 })
 
-app.post('/genre', (req, res) => {
-  res.send(req.body.song + ' ' + req.body.genre)
-})
+// app.post('/genre', (req, res) => {
+//   res.send(req.body.song + ' ' + req.body.genre)
+// })
 
-app.post('/volume', (req, res) => {
-  res.send(req.body.song + ' ' + req.body.volume)
+// app.post('/volume', (req, res) => {
+//   res.send(req.body.song + ' ' + req.body.volume)
 
-})
+// })
 
 /* Fields:
     accessToken - String
     searchTerm - String
 */
-app.post('/api/search', (req, res) => {
-  fetchWebApi(req.body.accessToken, `v1/search?q=${req.body.searchTerm}&type=track&limit=10`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
-})
+// app.post('/api/search', (req, res) => {
+//   fetchWebApi(req.body.accessToken, `v1/search?q=${req.body.searchTerm}&type=track&limit=10`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
+// })
 
 /* Fields:
     accessToken - String

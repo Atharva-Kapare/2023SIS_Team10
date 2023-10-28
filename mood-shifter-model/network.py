@@ -38,19 +38,21 @@ mpl.use('agg')
 # plt.show()
 
 def createNewNetwork(songs):
-    G = nx.complete_graph(songs, nx.DiGraph())
-    data = {
-        "skipped": 32,
-        "played": 10,
-        "weight": float(10/32)
-    }
-    G.edges(data = True)
-    nx.set_edge_attributes(G, 32, "skipped")
-    nx.set_edge_attributes(G, 10, "played")
-    nx.set_edge_attributes(G, float(10/32), "weight")
+    # G = nx.complete_graph(songs, nx.DiGraph())
+    # data = {
+    #     "skipped": 32,
+    #     "played": 10,
+    #     "weight": float(10/32)
+    # }
+    # G.edges(data = True)
+    # nx.set_edge_attributes(G, 32, "skipped")
+    # nx.set_edge_attributes(G, 10, "played")
+    # nx.set_edge_attributes(G, float(10/32), "weight")
 
+    G = nx.DiGraph()
+    G.add_nodes_from(songs)
     
-    nx.draw(G)
+    nx.draw(G,with_labels = True)
     plt.show(block=False)
     plt.savefig("Graph.png", format="PNG")
 
