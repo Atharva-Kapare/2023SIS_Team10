@@ -33,7 +33,10 @@ function SongListScreen({ route, navigation }) {
                 </button>
             </div>
             <div className="header-style">
-                <h1 alt="Playlist" className="title-style">{ playlistData.mood } Playlist</h1>
+                <div className="title-div">
+                    <h1 alt="Playlist" className="title-style">{playlistData.fromMood} to {playlistData.toMood} Playlist</h1>
+                    <h3 alt="Playlist" className="title-style">{playlistData.duration}m</h3>
+                </div>
                 <img alt="Search Song" src={SearchIcon}></img>
             </div>
             <div className="sub-header-style">
@@ -43,14 +46,14 @@ function SongListScreen({ route, navigation }) {
 
             {/* Song List */}
             <div className="song-list-display">
-                {playlistData.songs.map(song => (
+                {/* {playlistData.songs.map(song => (
                     <div>
                         <Song
                             key={song}
                             track={song}
                         ></Song>
                     </div>
-                ))}
+                ))} */}
             </div>
             {/* Song List */}
 

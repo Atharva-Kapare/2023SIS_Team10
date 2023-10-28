@@ -10,7 +10,7 @@ import Button from '@mui/material/Button';
 import '../App.css';
 import '../components/playlists/playlist.css';
 
-function MyPlaylist({ navigation }){
+function MyPlaylist({ navigation, route }){
     const moodPlaylists = GetMoodPlaylists();
     const moodShiftPlaylists = GetMoodShiftPlaylist();
 
@@ -24,9 +24,26 @@ function MyPlaylist({ navigation }){
         "name": "Error Loading Playlists!",
         "fromMood": "",
         "toMood": "",
-        "duration": "",
-        "songs": [],
+        "duration": ""
     }])
+
+    useEffect(() => {
+        if(route.params) {
+            console.log("hit: ", route.params)
+            const params = route.params
+            setFormattedMoodShiftPlaylist([
+                ...formattedMoodPlaylist,
+                {
+                    name: `${params.fromMood} to ${params.toMood} (${params.duration}m)`,
+                    fromMood: params.fromMood,
+                    toMood: params.toMood,
+                    duration: params.duration,
+                    color: generate()
+                }
+
+            ])
+        }
+    }, [route.params?.toMood])
 
     useEffect(() => {
         moodShiftPlaylists.then((res) => {
@@ -38,11 +55,11 @@ function MyPlaylist({ navigation }){
                     "fromMood": res[key].fromMood,
                     "toMood": res[key].toMood,
                     "duration": res[key].duration,
-                    "songs": res[key].songs
+                    "color": generate()
                 })
             });
             setFormattedMoodShiftPlaylist(keyStuff)
-        })
+        });
     }, [])
 
     useEffect(() => {
@@ -100,7 +117,7 @@ function MyPlaylist({ navigation }){
                             {/* Moodshift Playlist */}
                             {formattedMoodPlaylist.map(playlist => (
                                 <Grid item xs={1} sm={2} md={3}>
-                                    <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
+                                    <button style={{border: "none"}} onClick={() => navigation.navigate('MoodShiftListScreen', {
                                         playlistData: playlist,
                                         color: playlist.color
                                     })}>
@@ -109,7 +126,7 @@ function MyPlaylist({ navigation }){
                                             playlist={playlist}
                                         />
                                     </button>
-                                    <div className="playlist-name">{playlist.mood}</div>
+                                    <div className="playlist-name">{playlist.name}</div>
                                 </Grid>
                             ))}
                         </Grid>
@@ -120,8 +137,6 @@ function MyPlaylist({ navigation }){
         </div> 
     );
 }
-
-export default MyPlaylist;
 
 function generate() {
     var hexValues = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e"];
@@ -142,7 +157,6 @@ function generate() {
     var gradient = "linear-gradient(" + angle + "deg, " + newColor1 + ", " + newColor2 + ")";
 
     return gradient;
-
 }
 
 async function GetMoodPlaylists() {
@@ -164,7 +178,7 @@ async function GetMoodPlaylists() {
     })
     .catch(error => console.error(error));
     return result;
-  }
+}
 
 async function GetMoodShiftPlaylist() {
     const profile = localStorage.getItem("UID");
@@ -181,8 +195,12 @@ async function GetMoodShiftPlaylist() {
     })
     .then(response => response.json())
     .then(data => {
+        console.log("API OUT: ", data);
         return data;
     })
     .catch(error => console.error(error));
     return result;
-  }
+}
+
+export default MyPlaylist;
+

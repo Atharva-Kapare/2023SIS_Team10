@@ -39,7 +39,7 @@ function SongPlayerScreen({ navigation }) {
       if (res[0]) {
         songs = [];
         const uriList = [];
-        res.items.forEach((song,index) =>
+        res.forEach((song,index) =>
         {
           if(index === 0){
             setTrack({
@@ -68,13 +68,16 @@ function SongPlayerScreen({ navigation }) {
   function onTrackChange(state) {
     console.log('LEEN changed track', state);
     if(currentIndex<state.previousTracks.length || previousState.nextTracks.length === 0){
+      
       const percentagePlayed =  (previousState.progressMs/previousState.track.durationMs)*100;
       console.log('LEEN next song, amount played:', percentagePlayed, fullyPlayedSongs);
       if(percentagePlayed >= 80){
+        
         const playedSongs = fullyPlayedSongs;
         playedSongs.push(previousState.track.id);
         setFullyPlayedSongs(playedSongs);
         if(fullyPlayedSongs.length === 2){
+          
           const indexOfFullyPlayedSongs = fullyPlayedSongs.length -1;
           const objectForBackEnd = {
             current: fullyPlayedSongs[indexOfFullyPlayedSongs],
@@ -120,7 +123,7 @@ function SongPlayerScreen({ navigation }) {
         }
         }}
       ></SpotifyPlayer>
-       <i class="fa-solid fa-bars" onClick={navigation.navigate('')}></i>
+       {/* <i class="fa-solid fa-bars" onClick={() => navigation.navigate('')}></i> */}
       <Footer navigation={navigation}></Footer>
     </div>
   );

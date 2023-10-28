@@ -61,9 +61,22 @@ function NewPlaylist( { route, navigation } ) {
                     if(startMood !== 'none') {
                         if(endMood !== 'none'){
                             if(timeLength !== 'none'){
-                                getCurrentMoodList()
-                                clearSelected()
-                                navigation.navigate('PlaylistScreen')
+                                console.log({
+                                    fromMood: startMood,
+                                    toMood: endMood,
+                                    duration: timeLength
+                                })
+                                navigation.navigate({
+                                    name: "PlaylistScreen",
+                                    params: {
+                                        fromMood: startMood,
+                                        toMood: endMood,
+                                        duration: timeLength
+                                    },
+                                    merge: true
+                                });
+                                SetConfigs();
+                                clearSelected();
                             } else{ alert("You must select a time.");}
                         } else{ alert("You must select an ending mood.");}    
                     } else{ alert("You must select a starting Mood.");}
@@ -144,7 +157,7 @@ function clearSelected(){
     timeLength = 'none';
 }
 
-async function getCurrentMoodList() {
+async function SetConfigs() {
     const profile = localStorage.getItem("UID");
     const name = `${startMood} to ${endMood} (${timeLength}m)`
 
