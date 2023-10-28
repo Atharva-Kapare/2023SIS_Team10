@@ -106,7 +106,7 @@ function NewMoodScreen() {
         });
 
         return () => cancel = true;
-    })
+    }, [searchTerm])
 
     return (
         <div className="page-body">

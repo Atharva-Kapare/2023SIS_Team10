@@ -103,6 +103,7 @@ app.post('/login', async function (req, res) {
   }
   res.send(resp);
 });
+
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
@@ -124,8 +125,6 @@ app.post('/taggedSongs', async (req, res) => {
       .then(res.send({ "Success": "The lists have been stored into firebase" }))
   }
   // SEND DATA TO THE BACKEND HERE:
-
-
 
 })
 
@@ -222,7 +221,8 @@ app.post('/api/getLikedSongs', (req, res) => {
     trackIDs - String Array (max 5 values)
 */
 app.post('/api/getRecommendedSongs', (req, res) => {
-  fetchWebApi(req.body.accessToken, `v1/recommendations?limit=5&seed_tracks=${req.body.trackIDs.join(',')}`, 'GET').then((spotifyRes) => {res.send(spotifyRes.tracks);});
+  fetchWebApi(req.body.accessToken, `v1/recommendations?limit=5&seed_tracks=${req.body.trackIDs.join(',')}`, 'GET')
+  .then((spotifyRes) => {res.send(spotifyRes.tracks);});
 })
 
 /* Fields:
@@ -231,6 +231,7 @@ app.post('/api/getRecommendedSongs', (req, res) => {
 */
 app.post('/api/getSong', (req, res) => {
   fetchWebApi(req.body.accessToken, `v1/tracks/${req.body.trackID}`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
+})
 
 app.post('/genre', (req, res) => {
   res.send(req.body.song + ' ' + req.body.genre)
