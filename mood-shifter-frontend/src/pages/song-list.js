@@ -36,7 +36,7 @@ function SongListScreen({ route, navigation }) {
                 <img alt="Search Song" src={SearchIcon}></img>
             </div>
             <div className="sub-header-style">
-                <img className="icon-style-large" alt="Play Song" src={PlayIcon}></img>
+                <img className="icon-style-large" alt="Play Song" src={PlayIcon} onClick={ () => {navigation.navigate('SongPlayerScreen', {mood: playlistData.mood})}}></img>
                 <img className="icon-style-small" alt="Eport Playlist" src={ExportIcon}></img>
             </div>
 
