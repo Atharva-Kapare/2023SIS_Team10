@@ -88,7 +88,7 @@ function NewMoodScreen() {
             }),
         };
 
-        fetch("http://localhost:8000/api/search", options).then((response) => response.json()).then(res => {
+        fetch("https://api.spotify.com/v1/search", options).then((response) => response.json()).then(res => {
             setSearchResults(res.tracks.items.map(song => {
                 const smallestAlbumImage = song.album.images.reduce(
                     (smallest, image) => {

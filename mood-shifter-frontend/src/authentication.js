@@ -108,6 +108,7 @@ async function getSong(trackID) {
   
 async function getPlaylistData(profile) {
     const token = localStorage.getItem("accessToken");
+    console.log("TOKEN: ", token)
     const result = false;
 
     await fetch('http://localhost:8000/login', 

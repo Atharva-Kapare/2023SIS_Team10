@@ -229,9 +229,9 @@ app.post('/api/getRecommendedSongs', (req, res) => {
     accessToken - String
     trackID - String
 */
-app.post('/api/getSong', (req, res) => {
-  fetchWebApi(req.body.accessToken, `v1/tracks/${req.body.trackID}`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
-})
+// app.post('/api/getSong', (req, res) => {
+//   fetchWebApi(req.body.accessToken, `v1/tracks/${req.body.trackID}`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
+// })
 
 // app.post('/genre', (req, res) => {
 //   res.send(req.body.song + ' ' + req.body.genre)
