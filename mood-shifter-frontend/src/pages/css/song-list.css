@@ -20,6 +20,8 @@
     max-height: 50px;
     border: none;
     background-color: transparent;
+    padding-top: 15px;
+    padding-left: 10px;
 }
 
 .title-style {

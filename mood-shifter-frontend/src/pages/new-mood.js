@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import './css/new-mood.css'
-import SearchIcon from '../assets/icons/search-icon.png'
-import authentication from '../authentication'
+import './css/new-mood.css';
+import SearchIcon from '../assets/icons/search-icon.png';
+import BackIcon from '../assets/icons/backIcon.png';
+import authentication from '../authentication';
 import Song from "../components/getting-started/song";
+import NewPlaylist from "./new-playlist";
+import { Box, Grid } from "@mui/material";
 
-function NewMoodScreen() {
+
+function NewMoodScreen({navigation}) {
 
     let songsAdded = 0;
     const [ searchResults, setSearchResults ] = useState([]);
@@ -83,43 +87,66 @@ function NewMoodScreen() {
 
     return (
         <div className="page-body">
-            <h1 className="page-title">Making a new Mood</h1>
-            <input className="mood-input" type="text" placeholder="type your custom mood..."></input>
-            
-            {/* Added header */}
-            <div className="added-header">
-                <p className="sub-text">Added</p>
-                <p className="sub-text">0/3</p>
-            </div>
+            <Box>
+                <Grid container rowSpacing={{ xs: 3, sm: 4, md: 6 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
+                    {/* Back Button */}
+                    <Grid item xs={.5} sm={1} md={2}>
+                        <button className="back-icon-style" onClick={() => {
+                            navigation.navigate('NewPlaylistScreen');
+                        }}>
+                            <img src={BackIcon} alt="back"></img>
+                        </button>
+                    </Grid>
 
-            {/* List of added songs */}
-            <div>
+                    {/* title */}
+                    <Grid item xs={1.5} sm={5} md={10}>
+                        <h1 className="page-title">Add a new mood</h1>
+                    </Grid>
 
-            </div>
+                    {/* mood input */}
+                    <Grid item xs={2} sm={5} md={11}>
+                        <p className="section-header">Mood Name</p>
+                        <input className="mood-input" type="text" placeholder="type your custom mood..."></input>
+                    </Grid>
 
-            {/* search bar */}
-            <div className="search-div">
-                <img className="icon-style" alt="search icon" src={SearchIcon}></img>
-                <input className="mood-input" placeholder="enter a song name..." type="text" onChange={e => setSearch(e.target.value)}></input>
-            </div>
+                    {/* search bar */}
+                    <Grid item xs={2} sm={5} md={11}>
+                        <p className="section-header">Tag Songs</p>
+                        <div className="search-div">
+                            <img className="icon-style" alt="search icon" src={SearchIcon}></img>
+                            <input className="mood-input" placeholder="enter a song name..." type="text" onChange={e => setSearch(e.target.value)}></input>
+                        </div>
+                    </Grid>
 
-            {/* Song search list */}
-            <p className="sub-text">Suggested</p>
-            <div>
-                {searchResults.map((song) => (
-                    <div  style={{ cursor: "pointer" }} onClick={() => addSong(song)}>
-                        <Song 
-                            track={song}
-                            key={song.uri}
-                        />
-                    </div>
-                ))}
-            </div>
+                    {/* Added songs header */}
+                    <Grid item xs={1.6} sm={4} md={10}>
+                    <p className="sub-text">Added</p>
+                    </Grid>
+                    <Grid item xs={.4} sm={2} md={2}>
+                    <p className="sub-text">0/3</p>
+                    </Grid>
 
-            {/* Create Button */}
-            <div className="button-div">
-                <button className="create-button-style" onClick={createNewMood()}>Create</button>
-            </div>
+                    {/* Song search list */}
+                    <Grid item xs={2} sm={6} md={12}>
+                        <p className="sub-text">Suggested</p>
+                    </Grid>
+                    <Grid item xs={2} sm={5} md={11}>
+                        {searchResults.map((song) => (
+                            <div  style={{ cursor: "pointer" }} onClick={() => addSong(song)}>
+                                <Song 
+                                    track={song}
+                                    key={song.uri}
+                                />
+                            </div>
+                        ))}
+                    </Grid>
+
+                    {/* Create Button */}
+                    <Grid item xs={2} sm={5} md={10}>
+                        <button className="create-button-style" onClick={createNewMood()}>Create</button>
+                    </Grid>
+                </Grid>
+            </Box>
         </div>
     );
 }
