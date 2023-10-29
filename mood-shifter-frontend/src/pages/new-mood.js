@@ -114,7 +114,7 @@ function NewMoodScreen({navigation}) {
                     <Grid item xs={2} sm={5} md={11}>
                         <p className="section-header">Tag Songs</p>
                         <div className="search-div">
-                            <img className="icon-style" alt="search icon" src={SearchIcon}></img>
+                            <img className="search-style" alt="search icon" src={SearchIcon}></img>
                             <input className="mood-input" placeholder="Enter a song name..." type="text" onChange={e => setSearch(e.target.value)}></input>
                         </div>
                     </Grid>
