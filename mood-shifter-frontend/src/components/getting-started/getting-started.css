@@ -93,14 +93,37 @@
 .mood-div {
     display: flex;
     flex-direction: column;
-    margin: 0 0 130px 20px;
+    margin: 20px 20px 130px 20px;
     width: 100%;
     max-width: 450px;
+    padding: 20px;
+
 }
 
 .mood-row {
     display: flex;
+    overflow-x:auto;
 }
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #535353;
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #60dc70;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 
 .mood-button-style {
     background-color: transparent;

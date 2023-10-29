@@ -15,3 +15,19 @@ def createNewModel():
     # print(data["likedSongs"])
 
     return createNewNetwork(data["likedSongs"])
+
+@app.route("/tagSongs", methods=["POST"])
+def tag_songs():
+    data = request.get_json()
+    # print(data)
+    # print(data["likedSongs"])
+
+    return tagSongs(data["model"], data["songs"], data["tag"])
+
+@app.route("/mood2mood", methods=["POST"])
+def mood_2_mood():
+    data = request.get_json()
+    # print(data)
+    # print(data["likedSongs"])
+
+    return mood2mood(data["model"], data["fromSong"], data["toSong"], data["duration"])

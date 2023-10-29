@@ -4,17 +4,17 @@ import PlayButton from "./playbar-buttons/play-pause";
 import NextButton from "./playbar-buttons/next";
 import ProgressBar from "./playbar-buttons/progress-bar";
 import SongDetails from "./playbar-buttons/song-details";
-import Authentication from "../../authentication";
 import "./song-player.css";
 import SpotifyPlayer from "react-spotify-web-playback";
-import Footer from "../footer";
+import Footer from "../footer"
+import authentication from "../../authentication";
 
 function SongPlayerScreen({ navigation, route }) {
   const  playlistData = JSON.parse(localStorage.getItem("MoodPlaylist"));
   let {mood} = route?.params || "NOMOOD";
   let [uris, setUris] = useState([""]);
   let [track, setTrack] = useState(undefined);
-  const likedSongs = Authentication.getLikedSongs();
+  const likedSongs = authentication.getLikedSongs();
   const accessToken = localStorage.getItem("accessToken");
   let [currentIndex, setCurrentIndex] = useState(0);
   let [previousState, setPreviousState] = useState(undefined);
@@ -202,8 +202,8 @@ function SongPlayerScreen({ navigation, route }) {
         }}
         play={playThisPlease}
       ></SpotifyPlayer>
-      <i className="fa-solid fa-bars" onClick={ () => {navigation.navigate('')}}></i>
-      <Footer navigation={navigation} ></Footer>
+       {/* <i class="fa-solid fa-bars" onClick={() => navigation.navigate('')}></i> */}
+      <Footer navigation={navigation}></Footer>
     </div>
   );
 }

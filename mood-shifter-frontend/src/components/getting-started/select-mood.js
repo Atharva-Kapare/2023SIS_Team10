@@ -24,7 +24,7 @@ function SelectMoodScreen( { route, navigation } ) {
                         <h4 className="text-style step-text">Step 1</h4>
                         <h1 className="text-style">Select Mood</h1>
                         <h3 className="text-style sub-text">Choose a common mood you find yourself in</h3>
-                        <button className='mood-button-style new-mood-button-style'>+</button>
+                        <button className='mood-button-style new-mood-button-style' onClick={() => navigation.navigate("NewMoodScreen")}>+</button>
                     </div>
 
                     {/* Mood List */}
