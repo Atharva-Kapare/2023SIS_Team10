@@ -84,11 +84,11 @@ def tagSongs(graph, songs, tag):
 
 
         if currentTags[song["id"]] is None:
-            G.add_node(song["id"], name=song["name"], tags=[tag])
+            G.add_node(song["id"], name=song["title"], tags=[tag])
         else:
             newTags = currentTags[song["id"]]
             newTags.append(tag)
-            G.add_node(song["id"], name=song["name"], tags=[newTags])
+            G.add_node(song["id"], name=song["title"], tags=newTags)
             
     connected = nx.complete_graph(nodes, nx.DiGraph())
     G.add_edges_from(connected.edges)
