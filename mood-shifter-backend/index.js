@@ -9,7 +9,7 @@ const port = 8000
 import { firebase_app } from './firebase_init.js';
 import { database } from './firebase_init.js';
 
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, memoryLruGarbageCollector, setDoc, updateDoc } from "firebase/firestore";
 import axios from 'axios';
 import { getLikedSongs } from './spotify.js';
 
@@ -146,7 +146,7 @@ app.post('/taggedSongs', async (req, res) => {
   // Now we have to set the model in firebase
   await setDoc(docRef, {
     "model": response
-  })
+  }, {merge: true})
   .then(() => {
     console.log("The model should now be set with the latest tags.")
   })
