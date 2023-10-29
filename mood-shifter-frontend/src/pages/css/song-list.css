@@ -68,3 +68,9 @@
     min-width: 400px;
     overflow: scroll;
 }
+
+.title-div {
+    display: flex;
+    flex-direction: column;
+    max-width: 300px;
+}

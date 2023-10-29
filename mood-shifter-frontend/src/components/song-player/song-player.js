@@ -7,20 +7,13 @@ import SongDetails from "./playbar-buttons/song-details";
 import "./song-player.css";
 import SpotifyPlayer from "react-spotify-web-playback";
 import Footer from "../footer"
+import authentication from "../../authentication";
 
 function SongPlayerScreen({ navigation }) {
 
   let [uris, setUris] = useState([""]);
   let [track, setTrack] = useState(undefined);
-  
-  
-// <<<<<<< backend-api
-  let [currentSongId, setCurrentSongId] = useState('');
-// =======
-  const likedSongs = Authentication.getLikedSongs();
-// >>>>>>> development
-  
-  
+  const likedSongs = authentication.getLikedSongs();
   const accessToken = localStorage.getItem("accessToken");
   let [currentIndex, setCurrentIndex] = useState(0);
   let [previousState, setPreviousState] = useState(undefined)
@@ -36,45 +29,17 @@ function SongPlayerScreen({ navigation }) {
   ]);
 
   useEffect(() => {
-    
-    
-    
-// <<<<<<< backend-api
-    const options = {
-      method: "POST",
-      headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json;charset=UTF-8",
-      },
-      body: JSON.stringify({
-          accessToken: localStorage.getItem("accessToken"),
-      }),
-    };
-
-    fetch("http://localhost:3001/api/getLikedSongs", options).then((response) => response.json()).then((res) => {
-      console.log(
-        "Component initialized",
-        res.items,
-        res.items[0].track.duration_ms / 1000,
-        accessToken
-      );
-      if (res.items[0]) {
-// =======
     likedSongs.then((res) => {
-      // console.log(
-      //   "Component initialized",
-      //   res,
-      //   res[0].track.duration_ms / 1000,
-      //   accessToken
-      // );
+    // console.log(
+    //   "Component initialized",
+    //   res,
+    //   res[0].track.duration_ms / 1000,
+    //   accessToken
+    // );
       if (res[0]) {
-// >>>>>>> development
-        
-        
-        
         songs = [];
         const uriList = [];
-        res.items.forEach((song,index) =>
+        res.forEach((song,index) =>
         {
           if(index === 0){
             setTrack({
@@ -91,25 +56,28 @@ function SongPlayerScreen({ navigation }) {
             duration: song.track.duration_ms / 1000,
             uri: song.track.uri,
           });
-        }
-        );
+        });
+
         songs.map((song) => uriList.push(song.uri));
         setUris(uriList);
         setSongs(songs);
       }
-    }); 
+    });
   }, []);
 
   function onTrackChange(state) {
     console.log('LEEN changed track', state);
     if(currentIndex<state.previousTracks.length || previousState.nextTracks.length === 0){
+      
       const percentagePlayed =  (previousState.progressMs/previousState.track.durationMs)*100;
       console.log('LEEN next song, amount played:', percentagePlayed, fullyPlayedSongs);
       if(percentagePlayed >= 80){
+        
         const playedSongs = fullyPlayedSongs;
         playedSongs.push(previousState.track.id);
         setFullyPlayedSongs(playedSongs);
         if(fullyPlayedSongs.length === 2){
+          
           const indexOfFullyPlayedSongs = fullyPlayedSongs.length -1;
           const objectForBackEnd = {
             current: fullyPlayedSongs[indexOfFullyPlayedSongs],
@@ -155,7 +123,7 @@ function SongPlayerScreen({ navigation }) {
         }
         }}
       ></SpotifyPlayer>
-       <i class="fa-solid fa-bars" onClick={navigation.navigate('')}></i>
+       {/* <i class="fa-solid fa-bars" onClick={() => navigation.navigate('')}></i> */}
       <Footer navigation={navigation}></Footer>
     </div>
   );

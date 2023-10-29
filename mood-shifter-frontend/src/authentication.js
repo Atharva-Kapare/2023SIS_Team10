@@ -108,6 +108,7 @@ async function getSong(trackID) {
   
 async function getPlaylistData(profile) {
     const token = localStorage.getItem("accessToken");
+    console.log("TOKEN: ", token)
     const result = false;
 
     await fetch('http://localhost:8000/login', 
@@ -129,6 +130,24 @@ async function getPlaylistData(profile) {
     .catch(error => console.error(error));
 }
 
+async function SearchSpotify(searchTerm) {
+    await fetch(`https://api.spotify.com/v1/search?q=${searchTerm}&type=track`, 
+    {   
+        method: 'GET',
+        mode: 'cors',
+        headers: { 
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data)
+        return data;
+    })
+    .catch(error => console.error(error));
+}
+
 export default {
     redirectToAuthCodeFlow,  
     getAccessToken, 
@@ -138,5 +157,6 @@ export default {
     getRecommendedSongs,
     getSong,
     getPlaylistData, 
-    fetchWebApi
+    fetchWebApi,
+    SearchSpotify
 };
