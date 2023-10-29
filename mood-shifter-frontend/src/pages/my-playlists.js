@@ -86,56 +86,54 @@ function MyPlaylist({ navigation, route }){
 
     return ( 
         <div className="App-header">
-            <div>
-                <div>
-                    <Box>
-                        <Grid container rowSpacing={{ xs: 2, sm: 3, md: 4 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
-                            <Grid item xs={1.5} sm={5} md={10}>
-                                <PlaylistPageTitle/>
-                            </Grid>
-                            <Grid item xs={.5} sm={1} md={2}>
-                                <Button onClick={() => navigation.navigate("NewPlaylistScreen", {moods:moodOutput})}><AddPlaylistButton/></Button>
-                            </Grid>
-                            {formattedPlaylist.map(playlist => (
-                                <Grid item xs={1} sm={2} md={3}>
-                                    <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
-                                        playlistData: playlist,
-                                        color: playlist.color
-                                    })}>
-                                        <Playlist 
-                                            key={playlist.mood}
-                                            playlist={playlist}
-                                        />
-                                    </button>
-                                    <div className="playlist-name">{playlist.mood}</div>
-                                </Grid>
-                            ))}
+            <Box>
+                <Grid container rowSpacing={{ xs: 2, sm: 3, md: 4 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
+                    {/* title and add playlist btn */}
+                    <Grid item xs={1.5} sm={5} md={10}>
+                        <PlaylistPageTitle/>
+                    </Grid>
+                    <Grid item xs={.5} sm={1} md={2}>
+                        <Button onClick={() => navigation.navigate("NewPlaylistScreen", {moods:moodOutput})}><AddPlaylistButton/></Button>
+                    </Grid>
 
-                            {/* <h2 className='header-style'>Mood Shifter Playlists</h2> */}
-                            {/* Moodshift Playlist */}
-                            {formattedMoodPlaylist.map(playlist => (
-                                <Grid item xs={1} sm={2} md={3}>
-                                    <button style={{border: "none"}} onClick={() => navigation.navigate('MoodShiftListScreen', {
-                                        playlistData: playlist,
-                                        color: playlist.color
-                                    })}>
-                                        <Playlist 
-                                            key={playlist.mood}
-                                            playlist={playlist}
-                                        />
-                                    </button>
-                                    <div className="playlist-name">{playlist.name}</div>
-                                </Grid>
-                            ))}
+                    {/* Mood Playlists */}
+                    {formattedPlaylist.map(playlist => (
+                        <Grid item xs={1} sm={2} md={3}>
+                            <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
+                                playlistData: playlist,
+                                color: playlist.color
+                            })}>
+                                <Playlist 
+                                    key={playlist.mood}
+                                    playlist={playlist}
+                                />
+                            </button>
+                            <div className="playlist-name">{playlist.mood}</div>
                         </Grid>
-                    </Box>
-                </div>
-            </div>
+                    ))}
+                    {/* Mood Shift Playlists */}
+                    {formattedMoodPlaylist.map(playlist => (
+                        <Grid item xs={1} sm={2} md={3}>
+                            <button style={{border: "none"}} onClick={() => navigation.navigate('MoodShiftListScreen', {
+                                playlistData: playlist,
+                                color: playlist.color
+                            })}>
+                                <Playlist 
+                                    key={playlist.mood}
+                                    playlist={playlist}
+                                />
+                            </button>
+                            <div className="playlist-name">{playlist.name}</div>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Box>
             <Footer navigation={navigation}></Footer>
         </div> 
     );
 }
 
+// generates background color
 function generate() {
     var hexValues = ["0","1","2","3","4","5","6","7","8","9","a","b","c","d","e"];
     
