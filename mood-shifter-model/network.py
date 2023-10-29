@@ -37,7 +37,7 @@ mpl.use('agg')
 # plt.colorbar(pc, ax=ax)
 # plt.show()
 
-def createNewNetwork(songs):
+def createNewNetwork(likedSongs):
     # G = nx.complete_graph(songs, nx.DiGraph())
     # data = {
     #     "skipped": 32,
@@ -48,15 +48,67 @@ def createNewNetwork(songs):
     # nx.set_edge_attributes(G, 32, "skipped")
     # nx.set_edge_attributes(G, 10, "played")
     # nx.set_edge_attributes(G, float(10/32), "weight")
-
+    G = None
     G = nx.DiGraph()
-    G.add_nodes_from(songs)
-    
-    nx.draw(G,with_labels = True)
-    plt.show(block=False)
-    plt.savefig("Graph.png", format="PNG")
+
+    for song in likedSongs:
+        print(song["id"])
+        G.add_node(song["id"], name=song["name"], tags=[], skipped=[])
+
+
+    # G.add_nodes_from(songs)
+    saveGraphImage(G)
 
     return storeGraphJSON(G)
+
+
+def mood2mood(graph, fromMood, toMood, duration):
+    G = None
+    G = getGraphJSON(graph)
+
+    fromNodes = [x for x,y in G.nodes(data=True) if y['tags'].counts(fromMood)==1]
+    print(fromMood)
+
+    return False
+
+def tagSongs(graph, songs, tag):
+    G = None
+    G = getGraphJSON(graph)
+
+    # We want to make a connected graph with all of the songs passed in the songs (array of objects)
+    nodes = []
+    currentTags = nx.get_node_attributes(G, "tags")
+    # print(currentTags)
+    for song in songs:
+        nodes.append(song["id"])
+
+
+        if currentTags[song["id"]] is None:
+            G.add_node(song["id"], name=song["name"], tags=[tag])
+        else:
+            newTags = currentTags[song["id"]]
+            newTags.append(tag)
+            G.add_node(song["id"], name=song["name"], tags=[newTags])
+            
+    connected = nx.complete_graph(nodes, nx.DiGraph())
+    G.add_edges_from(connected.edges)
+
+    saveGraphImage(G)
+    return storeGraphJSON(G)
+
+def saveGraphImage(G):
+    labels = nx.get_node_attributes(G,'name')
+
+    options = {"node_size": 150}
+
+    
+    plt.figure(figsize=(10,10), dpi=60)
+    plt.axis("off")
+    pos = nx.spring_layout(G, k=0.5)
+    nx.draw(G,with_labels = True, labels=labels, pos=pos, font_weight='normal',node_size=60,font_size=8)
+    # plt.show(block=False)
+    # plt.tight_layout()
+    plt.savefig("Graph.png", format="PNG")
 
 def storeGraphJSON(graph):
     return nx.node_link_data(graph)

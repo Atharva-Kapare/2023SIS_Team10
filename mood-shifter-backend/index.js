@@ -125,7 +125,34 @@ app.post('/taggedSongs', async (req, res) => {
       .then(res.send({ "Success": "The lists have been stored into firebase" }))
   }
   // SEND DATA TO THE BACKEND HERE:
+  // Pass the model, songs (array of objects), mood name (string) back to the model
+  let modelResp = await fetch(modelURLBase + "/tagSongs", {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      "model": docSnapshot.data().model,
+      "songs": req.body.songs,
+      "tag": req.body.mood
+    }),
+    method: "POST"
+  })
+  let response = await modelResp.json();
+  console.log(response)
 
+  // Now we have to set the model in firebase
+  // await setDoc(docRef, {
+  //   "model": response
+  // })
+
+  // const res = await fetch("https://api.spotify.com/v1/me/tracks?", {
+  //   headers: {
+  //     "Authorization": `Bearer ${token}`,
+  //   },
+  //   method: "GET"
+  // });
+  // let response = await res.json();
+  return true;
 })
 
 app.post('/setConfig', async (req, res) => {
@@ -165,7 +192,7 @@ app.post('/getConfigPlaylist', async (req, res) => {
   // We need to pass this into the model now and it should send back the songs in an array
   // We will then need to take that array and add all of the necessary data for the frontend
 
-  res.send({"You've":"Hit the backend, there's no songs here yet ya dog."})
+  res.send({ "You've": "Hit the backend, there's no songs here yet ya dog." })
 })
 
 app.post('/taggedSongsGet', async (req, res) => {
@@ -213,7 +240,7 @@ app.get('/test', (req, res) => {
     accessToken - String
 */
 app.post('/api/getLikedSongs', (req, res) => {
-  fetchWebApi(req.body.accessToken, `v1/me/tracks?limit=5`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
+  fetchWebApi(req.body.accessToken, `v1/me/tracks?limit=5`, 'GET').then((spotifyRes) => { res.send(spotifyRes); });
 })
 
 /* Fields:
@@ -221,8 +248,7 @@ app.post('/api/getLikedSongs', (req, res) => {
     trackIDs - String Array (max 5 values)
 */
 app.post('/api/getRecommendedSongs', (req, res) => {
-  fetchWebApi(req.body.accessToken, `v1/recommendations?limit=5&seed_tracks=${req.body.trackIDs.join(',')}`, 'GET')
-  .then((spotifyRes) => {res.send(spotifyRes.tracks);});
+  fetchWebApi(req.body.accessToken, `v1/recommendations?limit=5&seed_tracks=${req.body.trackIDs.join(',')}`, 'GET').then((spotifyRes) => { res.send(spotifyRes.tracks); });
 })
 
 /* Fields:
@@ -259,15 +285,15 @@ app.post('/api/getRecommendedSongs', (req, res) => {
 app.post('/api/exportPlaylist', (req, res) => {
   fetchWebApi(req.body.accessToken, 'v1/me', 'GET').then((user) => {
     fetchWebApi(
-      req.body.accessToken, 
+      req.body.accessToken,
       `v1/users/${user.id}/playlists`, 'POST', {
       "name": req.body.name,
       "description": req.body.description,
       "public": false
-      }).then((playlist) => {
-        console.log(req.body.trackURIs.join(','))
-        fetchWebApi(req.body.accessToken, `v1/playlists/${playlist.id}/tracks?uris=${req.body.trackURIs.join(',')}`, 'POST').then((spotifyRes) => {res.send(spotifyRes);});
-      });
+    }).then((playlist) => {
+      console.log(req.body.trackURIs.join(','))
+      fetchWebApi(req.body.accessToken, `v1/playlists/${playlist.id}/tracks?uris=${req.body.trackURIs.join(',')}`, 'POST').then((spotifyRes) => { res.send(spotifyRes); });
+    });
   });
 })
 
