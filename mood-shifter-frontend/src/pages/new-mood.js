@@ -6,6 +6,7 @@ import authentication from '../authentication';
 import Song from "../components/getting-started/song";
 import NewPlaylist from "./new-playlist";
 import { Box, Grid } from "@mui/material";
+import Footer from "../components/footer";
 
 
 function NewMoodScreen({navigation}) {
@@ -106,7 +107,7 @@ function NewMoodScreen({navigation}) {
                     {/* mood input */}
                     <Grid item xs={2} sm={5} md={11}>
                         <p className="section-header">Mood Name</p>
-                        <input className="mood-input" type="text" placeholder="type your custom mood..."></input>
+                        <input className="mood-input" type="text" placeholder="Type your custom mood..."></input>
                     </Grid>
 
                     {/* search bar */}
@@ -114,7 +115,7 @@ function NewMoodScreen({navigation}) {
                         <p className="section-header">Tag Songs</p>
                         <div className="search-div">
                             <img className="icon-style" alt="search icon" src={SearchIcon}></img>
-                            <input className="mood-input" placeholder="enter a song name..." type="text" onChange={e => setSearch(e.target.value)}></input>
+                            <input className="mood-input" placeholder="Enter a song name..." type="text" onChange={e => setSearch(e.target.value)}></input>
                         </div>
                     </Grid>
 
@@ -147,6 +148,7 @@ function NewMoodScreen({navigation}) {
                     </Grid>
                 </Grid>
             </Box>
+            <Footer navigation={navigation}></Footer>
         </div>
     );
 }
