@@ -5,7 +5,7 @@ import React from 'react';
 import './playlist.css';
 
 function PlaylistPageTitle(){
-    return <div className="playlist-page-title"> My Moods</div>
+    return <div className="playlist-page-title"> My Playlists</div>
 }
 
 export default PlaylistPageTitle;

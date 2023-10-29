@@ -78,7 +78,7 @@ async function AuthCheck({navigation}) {
         localStorage.setItem("accessToken", accessToken);
       }
       const profile = await Authentication.fetchProfile(accessToken);
-
+      console.log("PROFILE.ID: ",profile.id)
       localStorage.setItem("UID", profile.id);
       await Authentication.getPlaylistData(profile.id)
       const gettingStarted = JSON.parse(localStorage.getItem("GettingStarted"));
@@ -89,7 +89,7 @@ async function AuthCheck({navigation}) {
         navigation.navigate("GettingStartedScreen")
       }
     };
-    runAuth();
+    runAuth()
   }
 
   if(!code) {
@@ -104,4 +104,6 @@ async function AuthCheck({navigation}) {
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
 
-export default AuthCheck;
+export default {
+  AuthCheck
+}

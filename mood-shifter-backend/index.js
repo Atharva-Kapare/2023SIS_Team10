@@ -20,6 +20,21 @@ var modelURLBase = 'http://localhost:5000'
 
 const app = express();
 app.use(express.json());
+
+// import cors from 'cors';
+// app.use(cors());
+
+// async function fetchWebApi(token, endpoint, method, body) {
+//   const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+//   headers: {
+//       Authorization: `Bearer ${token}`,
+//   },
+//   method,
+//   body:JSON.stringify(body)
+//   });
+//   return await res.json();
+// }
+
 app.use(cors());
 
 app.post('/login', async function (req, res) {
@@ -88,7 +103,6 @@ app.post('/login', async function (req, res) {
   }
   res.send(resp);
 });
-
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
@@ -113,6 +127,46 @@ app.post('/taggedSongs', async (req, res) => {
 
 
 
+})
+
+app.post('/setConfig', async (req, res) => {
+  // Params: UID (string), Mood (string), Songs (array)
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    let name = req.body.name
+    await setDoc(docRef, {
+      "configs": {
+        [mood]: req.body
+      }
+    }, { merge: true })
+      .then(res.send({ "Success": "The configs have been stored into firebase" }))
+  }
+})
+
+app.post('/getConfig', async (req, res) => {
+  // Params: UID
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  console.log("Tagged songs are getting got.")
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    res.send(docSnapshot.data().configs);
+  }
+})
+
+app.post('/getConfigPlaylist', async (req, res) => {
+  // Params: config
+  // We need to pass this into the model now and it should send back the songs in an array
+  // We will then need to take that array and add all of the necessary data for the frontend
+
+  res.send({"You've":"Hit the backend, there's no songs here yet ya dog."})
 })
 
 app.post('/taggedSongsGet', async (req, res) => {
@@ -156,18 +210,66 @@ app.get('/test', (req, res) => {
   });
 })
 
+/* Fields:
+    accessToken - String
+*/
+app.post('/api/getLikedSongs', (req, res) => {
+  fetchWebApi(req.body.accessToken, `v1/me/tracks?limit=5`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
+})
+
+/* Fields:
+    accessToken - String
+    trackIDs - String Array (max 5 values)
+*/
+app.post('/api/getRecommendedSongs', (req, res) => {
+  fetchWebApi(req.body.accessToken, `v1/recommendations?limit=5&seed_tracks=${req.body.trackIDs.join(',')}`, 'GET').then((spotifyRes) => {res.send(spotifyRes.tracks);});
+})
+
+/* Fields:
+    accessToken - String
+    trackID - String
+*/
+app.post('/api/getSong', (req, res) => {
+  fetchWebApi(req.body.accessToken, `v1/tracks/${req.body.trackID}`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
+
 app.post('/genre', (req, res) => {
   res.send(req.body.song + ' ' + req.body.genre)
 })
 
 app.post('/volume', (req, res) => {
   res.send(req.body.song + ' ' + req.body.volume)
+
 })
 
-app.post('/like', (req, res) => {
-  res.send(req.body.song)
+/* Fields:
+    accessToken - String
+    searchTerm - String
+*/
+app.post('/api/search', (req, res) => {
+  fetchWebApi(req.body.accessToken, `v1/search?q=${req.body.searchTerm}&type=track&limit=10`, 'GET').then((spotifyRes) => {res.send(spotifyRes);});
+})
+
+/* Fields:
+    accessToken - String
+    name - String
+    description - String
+    trackURIs - String Array (spotify:track:{ID})
+*/
+app.post('/api/exportPlaylist', (req, res) => {
+  fetchWebApi(req.body.accessToken, 'v1/me', 'GET').then((user) => {
+    fetchWebApi(
+      req.body.accessToken, 
+      `v1/users/${user.id}/playlists`, 'POST', {
+      "name": req.body.name,
+      "description": req.body.description,
+      "public": false
+      }).then((playlist) => {
+        console.log(req.body.trackURIs.join(','))
+        fetchWebApi(req.body.accessToken, `v1/playlists/${playlist.id}/tracks?uris=${req.body.trackURIs.join(',')}`, 'POST').then((spotifyRes) => {res.send(spotifyRes);});
+      });
+  });
 })
 
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
+  console.log(`Mood Shifter listening on port ${port}`)
 })
