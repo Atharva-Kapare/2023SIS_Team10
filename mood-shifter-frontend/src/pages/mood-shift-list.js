@@ -33,12 +33,12 @@ function SongListScreen({ route, navigation }) {
                     {/* spacer */}
                     <Grid item xs={2} sm={6} md={12}></Grid> 
                     
-
                     {/* title */}
                     <Grid item xs={2} sm={6} md={8}>
                         <h1 alt="Playlist" className="title-style">{playlistData.fromMood} to {playlistData.toMood} Playlist</h1>
                     </Grid>
 
+                    {/* spacer */}
                     <Grid item xs={1.1} sm={4} md={1}></Grid> 
 
                     {/* search */}
@@ -47,7 +47,6 @@ function SongListScreen({ route, navigation }) {
                     </Grid> */}
 
                     {/* export and play */}
-                    
                     <Grid item xs={.3} sm={.5} md={1}> 
                         <img className="icon-style-small" style={{cursor: "pointer"}} alt="Export Playlist" src={ExportIcon} onClick={() => { 
                               const options = {
