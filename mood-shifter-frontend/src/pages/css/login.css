@@ -1,4 +1,4 @@
-.login {
+.loading {
     background-color:rgb(7, 7, 7);
     min-height: 100vh;
     width: 100%;
@@ -6,6 +6,10 @@
     align-items: center;
     flex-direction: column;
     background-size: cover;
+}
+
+.login {
+    opacity: 100%;
 }
 
 .app-title {
@@ -70,4 +74,12 @@
 .spotify-logo-style {
     width: 180px;
     margin: 80px 0 40px 0;
+}
+
+.loading-circle-style {
+    position: absolute;
+    opacity: 100%;
+    width: 120px;
+    height: auto;
+    display: flex;
 }
