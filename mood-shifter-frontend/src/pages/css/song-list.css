@@ -53,6 +53,7 @@
     max-width: 150px;
     height: 100px;
     width: 80px;
+    cursor:pointer;
 }
 
 .icon-style-small {

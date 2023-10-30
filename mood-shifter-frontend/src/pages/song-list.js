@@ -37,7 +37,7 @@ function SongListScreen({ route, navigation }) {
                 <img alt="Search Song" src={SearchIcon}></img>
             </div>
             <div className="sub-header-style">
-                <img className="icon-style-large" alt="Play Song" src={PlayIcon}></img>
+                <img className="icon-style-large" alt="Play Song" src={PlayIcon} onClick={ () => {navigation.navigate('SongPlayerScreen', {playlistData: playlistData})}}></img>
                 <img className="icon-style-small" alt="Export Playlist" src={ExportIcon}></img>
             </div>
 
