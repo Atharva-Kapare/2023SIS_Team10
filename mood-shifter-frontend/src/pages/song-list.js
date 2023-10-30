@@ -32,7 +32,26 @@ function SongListScreen({ route, navigation }) {
                     </Grid>
                     {/* title */}
                     <Grid item xs={1.5} sm={5} md={11}>
-                        <h1 alt="Playlist" className="title-style">{ playlistData.mood } Playlist</h1>
+                        <img className="icon-style-large" alt="Play Song" src={PlayIcon} onClick={ () => {navigation.navigate('SongPlayerScreen', {playlistData: playlistData})}}></img>
+                        <img className="icon-style-small" style={{cursor: "pointer"}} alt="Export Playlist" src={ExportIcon} onClick={() => { 
+                              const options = {
+                                  method: "POST",
+                                  headers: {
+                                      Accept: "application/json",
+                                      "Content-Type": "application/json;charset=UTF-8",
+                                  },
+                                  body: JSON.stringify({
+                                      accessToken: localStorage.getItem("accessToken"),
+                                      name: playlistData.mood + " Playlist",
+                                      description: "A playlist curated by MoodShifter",
+                                      trackURIs: playlistData.songs.map(song => (song.uri))
+                                  }),
+                              };
+
+                              fetch("http://localhost:8000/api/exportPlaylist", options);
+                              alert("Your playlist has been exported to Spotify!");
+                          }}>
+                        </img>
                     </Grid>
 
                     {/* search */}
