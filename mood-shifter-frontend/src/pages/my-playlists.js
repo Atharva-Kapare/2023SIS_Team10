@@ -29,7 +29,6 @@ function MyPlaylist({ navigation, route }){
 
     useEffect(() => {
         if(route.params) {
-            console.log("hit: ", route.params)
             const params = route.params
             setFormattedMoodShiftPlaylist([
                 ...formattedMoodPlaylist,
@@ -74,15 +73,21 @@ function MyPlaylist({ navigation, route }){
                     }
                 )
             });
-            setFormattedPlaylist(keyStuff);            
+            setFormattedPlaylist(keyStuff);   
         })
     }, []);
   
   //current moods
     let moodOutput = [];
-        formattedPlaylist.forEach((entry) => {
-        moodOutput.push(entry.mood)
+    formattedPlaylist.forEach((entry) => {
+        moodOutput.push(
+            {
+                "mood": entry.mood,
+                "songs": []
+            }
+        )
     })
+    console.log(moodOutput)
 
     return ( 
         <div className="App-header">
@@ -93,13 +98,21 @@ function MyPlaylist({ navigation, route }){
                         <PlaylistPageTitle/>
                     </Grid>
                     <Grid item xs={.5} sm={1} md={2}>
-                        <Button onClick={() => navigation.navigate("NewPlaylistScreen", {moods:moodOutput})}><AddPlaylistButton/></Button>
+                        <Button onClick={() => navigation.navigate(
+                            {
+                                name:"NewPlaylistScreen", 
+                                params: {
+                                    moods:moodOutput
+                                },
+                                merge: true
+                            })}
+                        ><AddPlaylistButton/></Button>
                     </Grid>
 
                     {/* Mood Playlists */}
                     {formattedPlaylist.map(playlist => (
                         <Grid item xs={1} sm={2} md={3}>
-                            <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
+                            <button className='playlist-cover-btn' style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
                                 playlistData: playlist,
                                 color: playlist.color
                             })}>
@@ -114,7 +127,7 @@ function MyPlaylist({ navigation, route }){
                     {/* Mood Shift Playlists */}
                     {formattedMoodPlaylist.map(playlist => (
                         <Grid item xs={1} sm={2} md={3}>
-                            <button style={{border: "none"}} onClick={() => navigation.navigate('MoodShiftListScreen', {
+                            <button className='playlist-cover-btn' style={{border: "none"}} onClick={() => navigation.navigate('MoodShiftListScreen', {
                                 playlistData: playlist,
                                 color: playlist.color
                             })}>

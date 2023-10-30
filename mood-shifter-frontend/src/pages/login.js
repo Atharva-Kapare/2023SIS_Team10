@@ -11,7 +11,7 @@ function Login({ navigation }) {
     const [opacityLogin, setOpacityLogin] = useState("100%");
     const [opacityLoading, setOpacityLoading] = useState("0%");
     return (
-            <div className="login">
+            <div className="App-header">
                     <div className="background-tile" style={{opacity: opacityLogin}}>
                         <div className="background-tile-row">
                             <img src={logoTile} alt=""></img>

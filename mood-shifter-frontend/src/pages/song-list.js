@@ -30,9 +30,25 @@ function SongListScreen({ route, navigation }) {
                             </button>
                         </div>
                     </Grid>
+                    {/* spacer */}
+                    <Grid item xs={2} sm={6} md={12}></Grid> 
+                    
+
                     {/* title */}
-                    <Grid item xs={1.5} sm={5} md={11}>
-                        <img className="icon-style-large" alt="Play Song" src={PlayIcon} onClick={ () => {navigation.navigate('SongPlayerScreen', {playlistData: playlistData})}}></img>
+                    <Grid item xs={2} sm={6} md={8}>
+                        <h1 alt="Playlist" className="title-style">{ playlistData.mood } Playlist</h1>
+                    </Grid>
+
+                    <Grid item xs={1.1} sm={4} md={1}></Grid> 
+
+                    {/* search */}
+                    {/* <Grid item xs={.3} sm={2} md={1}>
+                        <img className="search-style-small" alt="Search Song" src={SearchIcon}></img>
+                    </Grid> */}
+
+                    {/* spacer, export and play */}
+                    
+                    <Grid item xs={.3} sm={.5} md={1}> 
                         <img className="icon-style-small" style={{cursor: "pointer"}} alt="Export Playlist" src={ExportIcon} onClick={() => { 
                               const options = {
                                   method: "POST",
@@ -47,25 +63,13 @@ function SongListScreen({ route, navigation }) {
                                       trackURIs: playlistData.songs.map(song => (song.uri))
                                   }),
                               };
-
                               fetch("http://localhost:8000/api/exportPlaylist", options);
                               alert("Your playlist has been exported to Spotify!");
                           }}>
                         </img>
                     </Grid>
-
-                    {/* search */}
-                    <Grid item xs={.5} sm={1} md={1}>
-                        <img alt="Search Song" src={SearchIcon}></img>
-                    </Grid>
-
-                    {/* spacer, export and play */}
-                    <Grid item xs={1.} sm={4} md={9}></Grid> 
-                    <Grid item xs={.3} sm={.5} md={1}> 
-                        <img className="icon-style-small" alt="Export Playlist" src={ExportIcon}></img>
-                    </Grid>
                     <Grid item xs={.5} sm={.5} md={1}>
-                        <img className="icon-style-large" alt="Play Song" src={PlayIcon}></img>
+                        <img className="icon-style-large" alt="Play Song" src={PlayIcon} onClick={ () => {navigation.navigate('SongPlayerScreen', {playlistData: playlistData})}}></img>
                     </Grid>
                     
                     {/* Song List */}

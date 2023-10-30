@@ -6,7 +6,7 @@ const tagCount = localStorage.getItem('tagCount');
 
 function GettingStartedScreen( { navigation } ) {
     return (
-        <div className="login">
+        <div className="App-header">
             <div className="content-spacer"></div>
             <div className="login-content-div">
                 <h1 className="heading">Welcome to Moodshifter!</h1>
