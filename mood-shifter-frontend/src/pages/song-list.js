@@ -19,19 +19,17 @@ function SongListScreen({ route, navigation }) {
     })
 
     return (
-        <div className="song-list-body" style={songListBody(color)}>
-            
+        <div className="song-list-body" style={songListBody(color)}> 
             <Box>
                 <Grid container rowSpacing={{ xs: 3, sm: 4, md: 6 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
                     {/* back button */}
                     <Grid item xs={1.8} sm={5} md={11}>
                         <div className="back-icon-div song-list-space">
-                            <button className="back-icon-style" onClick={() => {navigation.navigate('PlaylistScreen');}}>
+                            <button className="back-icon-style" onClick={() => {navigation.navigate('PlaylistScreen', {playlistData: playlistData})}}>
                                 <img src={BackIcon} alt="back"></img>
                             </button>
                         </div>
                     </Grid>
-
                     {/* title */}
                     <Grid item xs={1.5} sm={5} md={11}>
                         <h1 alt="Playlist" className="title-style">{ playlistData.mood } Playlist</h1>

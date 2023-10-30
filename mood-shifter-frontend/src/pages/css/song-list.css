@@ -56,6 +56,7 @@
     max-width: 150px;
     height: 90px;
     width: 80px;
+    cursor:pointer;
 }
 
 .icon-style-small {
