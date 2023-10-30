@@ -57,7 +57,7 @@ def createNewNetwork(likedSongs):
 
     for song in likedSongs:
         # print(song["id"])
-        G.add_node(song["id"], name=song["name"], tags=[], skipped=[], artist=song["artist"], cover=song["image"]["url"], uri=song["uri"])
+        G.add_node(song["id"], name=song["name"], tags=[], skipped=[], artist=song["artist"], cover=song["image"]["url"], uri=song["uri"], songID=song["id"])
 
 
     # G.add_nodes_from(songs)
@@ -125,11 +125,11 @@ def tagSongs(graph, songs, tag):
         nodes.append(song["id"])
 
         if currentTags[song["id"]] is None:
-            G.add_node(song["id"], name=song["title"], tags=tag, skipped=[], artist=song["artist"], cover=song["cover"], uri=song["uri"])
+            G.add_node(song["id"], name=song["title"], tags=tag, skipped=[], artist=song["artist"], cover=song["cover"], uri=song["uri"], songID=song["id"])
         else:
             newTags = currentTags[song["id"]]
             newTags.append(tag)
-            G.add_node(song["id"], name=song["title"], tags=newTags, skipped=[], artist=song["artist"], cover=song["cover"], uri=song["uri"])
+            G.add_node(song["id"], name=song["title"], tags=newTags, skipped=[], artist=song["artist"], cover=song["cover"], uri=song["uri"], songID=song["id"])
             
     connected = nx.complete_graph(nodes, nx.DiGraph())
     connected.edges(data = True)
