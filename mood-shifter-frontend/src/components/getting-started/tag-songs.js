@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './getting-started.css';
-import SearchIcon from '../../assets/icons/search-icon.png'
-import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
-import Song from './song-minus'
+import SearchIcon from '../../assets/icons/search-icon.png';
+import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png';
+import SongMinus from './song-minus';
+import SongPlus from './song-plus';
 import { Box, Grid } from '@mui/material';
 
 let tagCount = localStorage.getItem('tagCount') || 0;
@@ -111,7 +112,7 @@ function TagSongsScreen( { route, navigation } ) {
                     <Grid item xs={2} sm={6} md={12}>
                     {addedSongs.map(song => (
                         <div  style={{ cursor: "pointer"}} onClick={() => removeSong(song)}>
-                            <Song 
+                            <SongMinus 
                                 track={song}
                                 key={song.uri}
                             />
@@ -128,7 +129,7 @@ function TagSongsScreen( { route, navigation } ) {
                     <div style={{ overflowY: "scroll", maxHeight: "300px"}}>
                         {searchResults.map(song => (
                             <div  style={{ cursor: "pointer" }} onClick={() => addSong(song)}>
-                                <Song 
+                                <SongPlus 
                                     track={song}
                                     key={song.uri}
                                 />
