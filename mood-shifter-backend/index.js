@@ -24,16 +24,16 @@ app.use(express.json());
 // import cors from 'cors';
 // app.use(cors());
 
-// async function fetchWebApi(token, endpoint, method, body) {
-//   const res = await fetch(`https://api.spotify.com/${endpoint}`, {
-//   headers: {
-//       Authorization: `Bearer ${token}`,
-//   },
-//   method,
-//   body:JSON.stringify(body)
-//   });
-//   return await res.json();
-// }
+async function fetchWebApi(token, endpoint, method, body) {
+  const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+  headers: {
+      Authorization: `Bearer ${token}`,
+  },
+  method,
+  body:JSON.stringify(body)
+  });
+  return await res.json();
+}
 
 app.use(cors());
 

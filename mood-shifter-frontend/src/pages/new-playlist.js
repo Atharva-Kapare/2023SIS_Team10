@@ -4,6 +4,9 @@ import '../components/getting-started/getting-started.css';
 import '../App.css';
 import '../components/playlists/playlist.css';
 import Authentication from '../index';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
 
 let startMood = 'none';
 let endMood = 'none';
@@ -17,72 +20,90 @@ function NewPlaylist( { route, navigation } ) {
   const { moods } = route.params;
 
     return (
-        <div className="login">
-            <div className="header-div">
-                <h1 className="playlist-page-title">New Mood Playlist</h1>
-            </div>
+        <div className="App-header">
+        <Box>
+            <Grid container rowSpacing={{ xs: 4, sm: 4, md: 6 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
+                <Grid item xs={2} sm={6} md={12}>
+                    <h1 className="playlist-page-title">New Mood Playlist</h1>
+                </Grid>
 
-            {/* start Mood */}
-            <div className='new-mood-playlist-div'>
-                <h3 className="section-header">Starting Mood</h3>
-                <div className='mood-row'>
-                    <button id='newStart' className='mood-buttons' onClick={() => {navigation.navigate("NewMoodScreen")}}>+</button>
-                    {moods.map((mood) => (
-                        <button id={mood} className='mood-buttons' onClick={() => changeSelectedStartMood(mood)}>{mood}</button>
-                    ))}
-                </div>
-            </div>
+                {/* start Mood */}
+                <Grid item xs={2} sm={3} md={4}>
+                    <Grid>
+                        <h3 className="section-header">Starting Mood</h3>
+                    </Grid>
+                    <Grid>
+                        <div className='mood-row'>
+                            <button id='newStart' className='mood-buttons' onClick={() => {navigation.navigate("NewMoodScreen")}}>+</button>
+                            {moods.map((mood) => (
+                                <button id={mood} className='mood-buttons' onClick={() => changeSelectedStartMood(mood)}>{mood}</button>
+                            ))}
+                        </div>
+                    </Grid>
+                </Grid>
 
-            {/* end Mood */}
-            <div className='new-mood-playlist-div'>
-                <h3 className="section-header">Ending Mood</h3>
-                <div className='mood-row'>
-                    <button id='newEnd' className='mood-buttons' onClick={() => {navigation.navigate("NewMoodScreen")}}>+</button>
-                    {moods.map((mood) => (
-                        <button id={`End${mood}`} className='mood-buttons' onClick={() =>  changeSelectedEndMood(`End${mood}`, mood)}>{mood} </button>
-                    ))}
-                </div>
-            </div>
+                {/* end Mood */}
+                <Grid item xs={2} sm={3} md={4}>
+                    <Grid>
+                        <h3 className="section-header">Ending Mood</h3>                
+                    </Grid>
+                    <Grid>
+                        <div className='mood-row'>
+                            <button id='newEnd' className='mood-buttons' onClick={() => {navigation.navigate("NewMoodScreen")}}>+</button>
+                            {moods.map((mood) => (
+                                <button id={`End${mood}`} className='mood-buttons' onClick={() =>  changeSelectedEndMood(`End${mood}`, mood)}>{mood} </button>
+                            ))}
+                        </div>
+                    </Grid>
+                </Grid>
 
-             {/* Time */}
-             <div className='mood-div'>
-                <h3 className="section-header">Time</h3>
-                <div className='mood-row'>
-                    <button id='30' className='mood-buttons' onClick={() => changeSelectedTime('30')}>30 min</button>
-                    <button id='60' className='mood-buttons' onClick={() => changeSelectedTime('60')}>1 hr</button>
-                    <button id='90' className='mood-buttons' onClick={() => changeSelectedTime('90')}>1.5 hrs</button>
-                    <button id='120' className='mood-buttons' onClick={() => changeSelectedTime('120')}>2 hrs</button>
-                </div>
-            </div>
+                {/* Time */}
+                <Grid  item xs={2} sm={3} md={4}>
+                    <Grid>
+                        <h3 className="section-header">Time</h3>
+                    </Grid>
+                    <Grid>
+                        <div className='mood-row'>
+                            <button id='30' className='mood-buttons' onClick={() => changeSelectedTime('30')}>30m </button>
+                            <button id='60' className='mood-buttons' onClick={() => changeSelectedTime('60')}>60m</button>
+                            <button id='90' className='mood-buttons' onClick={() => changeSelectedTime('90')}>90m</button>
+                            <button id='120' className='mood-buttons' onClick={() => changeSelectedTime('120')}>120m</button>
+                        </div>
+                    </Grid>
+                </Grid>         
 
-            {/* Mood List */}
-            <button className="sign-in-button-style" onClick={() => 
-                { 
-                    if(startMood !== 'none') {
-                        if(endMood !== 'none'){
-                            if(timeLength !== 'none'){
-                                console.log({
-                                    fromMood: startMood,
-                                    toMood: endMood,
-                                    duration: timeLength
-                                })
-                                navigation.navigate({
-                                    name: "PlaylistScreen",
-                                    params: {
+                {/* Mood List */}
+                <Grid item xs={2} sm={6} md={12}>
+                    <button className="sign-in-button-style" onClick={() => 
+                    { 
+                        if(startMood !== 'none') {
+                            if(endMood !== 'none'){
+                                if(timeLength !== 'none'){
+                                    console.log({
                                         fromMood: startMood,
                                         toMood: endMood,
                                         duration: timeLength
-                                    },
-                                    merge: true
-                                });
-                                SetConfigs();
-                                clearSelected();
-                            } else{ alert("You must select a time.");}
-                        } else{ alert("You must select an ending mood.");}    
-                    } else{ alert("You must select a starting Mood.");}
-                }}
-            >Create</button>
-            <Footer navigation={navigation}></Footer>
+                                    })
+                                    navigation.navigate({
+                                        name: "PlaylistScreen",
+                                        params: {
+                                            fromMood: startMood,
+                                            toMood: endMood,
+                                            duration: timeLength
+                                        },
+                                        merge: true
+                                    });
+                                    SetConfigs();
+                                    clearSelected();
+                                } else{ alert("You must select a time.");}
+                            } else{ alert("You must select an ending mood.");}    
+                        } else{ alert("You must select a starting Mood.");}
+                    }}
+                    >Create</button>
+                </Grid>
+            </Grid>
+        </Box>
+        <Footer navigation={navigation}></Footer>
         </div>
     );
 }
