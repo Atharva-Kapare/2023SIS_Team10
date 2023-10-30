@@ -1,8 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import PreviousButton from "./playbar-buttons/previous";
-import PlayButton from "./playbar-buttons/play-pause";
-import NextButton from "./playbar-buttons/next";
-import ProgressBar from "./playbar-buttons/progress-bar";
 import SongDetails from "./playbar-buttons/song-details";
 import "./song-player.css";
 import SpotifyPlayer from "react-spotify-web-playback";
@@ -10,8 +6,8 @@ import Footer from "../footer"
 import authentication from "../../authentication";
 
 function SongPlayerScreen({ navigation, route }) {
-  const  playlistData = JSON.parse(localStorage.getItem("MoodPlaylist"));
-  let {mood} = route?.params || "NOMOOD";
+  // const  playlistData = JSON.parse(localStorage.getItem("MoodPlaylist"));
+  let {playlistData} = route?.params ?? {undefined};
   let [uris, setUris] = useState([""]);
   let [track, setTrack] = useState(undefined);
   const likedSongs = authentication.getLikedSongs();
@@ -33,14 +29,14 @@ function SongPlayerScreen({ navigation, route }) {
 
   useEffect(() => {
     
-    console.log('LEEN MOOD', mood);
-    if(mood && mood !=="NOMOOD" && Object.keys(playlistData).length > 0){
-        if(playlistData?.[mood]?.[0]) {
-        console.log("LEEN moodplaylistsongs", playlistData[mood]);
+    console.log('LEEN MOOD', playlistData);
+    if(playlistData && Object.keys(playlistData)?.length > 0){
+        if(playlistData?.["songs"]?.[0]) {
+        console.log("LEEN moodplaylistsongs", playlistData["songs"]);
         songs = [];
         const uriList = [];
         
-        playlistData[mood].forEach((song, index) => {
+        playlistData["songs"].forEach((song, index) => {
           if (index === 0) {
             setTrack({
               name: song.title,
