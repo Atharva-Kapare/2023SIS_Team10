@@ -57,7 +57,7 @@ def createNewNetwork(likedSongs):
 
     for song in likedSongs:
         # print(song["id"])
-        G.add_node(song["id"], name=song["name"], tags=[], skipped=[], artist=song["artist"], cover=song["image"]["url"], uri=song["uri"])
+        G.add_node(song["id"], name=song["name"], tags=[], skipped=[], artist=song["artist"], cover=song["image"]["url"], uri=song["uri"], songID=song["id"])
 
 
     # G.add_nodes_from(songs)
@@ -84,18 +84,24 @@ def mood2mood(graph, fromMood, toMood, duration):
                 toNodes.append(G.nodes[key])
         # print(key, value)
     
-    print(fromMood, fromNodes)
-    print(toMood, toNodes)
+    # print(fromMood, fromNodes)
+    # print(toMood, toNodes)
 
     # We now have both start and end nodes, need to select a start song from the start nodes list
     startSong = random.choice(fromNodes)
 
     numberOfSongs = (int(duration) // averageSongLength) - 2
-    generatedQueue = nodeCrawl(G, startSong, numberOfSongs)
+    generatedQueue = nodeCrawl(G, startSong, numberOfSongs, toNodes)
+    generatedQueue += toNodes
+    addNewEdgeBetween(G, generatedQueue[-1]["songID"], toNodes[0]["songID"])
+    print("from:", generatedQueue[-1]["songID"], "to:", toNodes[0]["songID"])
+    saveGraphImage(G)
+    print(generatedQueue)
+    print(len(generatedQueue))
 
     return generatedQueue
 
-def nodeCrawl(G, currentNode, times, queue=None):
+def nodeCrawl(G, currentNode, times, toNodes, queue=None):
 
     if queue is None:
         queue = []
@@ -109,43 +115,43 @@ def nodeCrawl(G, currentNode, times, queue=None):
 
         if len(neighbours) > 0:
             randNum = random.random()
-            print(randNum)
+            # print(randNum)
             if randNum < 0.9:
                 # We want to go explore one of the connected neighbours in this case, so grab a random one
                 # Get the list of all ids already existing in queue
                 queueIDs = [x["songID"] for x in queue]
-                print("current ids: ", currentNode["songID"], end='\n')
-                print("queue ids: ", queueIDs, end='\n')
-                print("neighbour ids: ", neighbours, end='\n')
+                # print("current ids: ", currentNode["songID"], end='\n')
+                # print("queue ids: ", queueIDs, end='\n')
+                # print("neighbour ids: ", neighbours, end='\n')
                 
                 # Only have a look at the neighbours that don't appear in the queue
                 # unvisited = list(set(queueIDs).symmetric_difference(neighbours))
                 unvisited = list(set(neighbours).difference(queueIDs))
-                print("unvisited: ", unvisited, end='\n')
+                # print("unvisited: ", unvisited, end='\n')
 
                 if len(unvisited) == 0:
                     # Explore new node here
-                    nextNode = selectNewRandom(G, queue, currentNode)
-                    nodeCrawl(G, nextNode, times-1, queue)
+                    nextNode = selectNewRandom(G, queue, currentNode, toNodes)
+                    nodeCrawl(G, nextNode, times-1, toNodes, queue)
                     # return # This would have to get removed when we get the new random node.
                 else:
                     nextNodeID = random.choice(unvisited)
                     nextNode = G.nodes[nextNodeID]
                     # print(nextNode, end='\n')
                     # Now send this back to the recursive function
-                    nodeCrawl(G, nextNode, times-1, queue)
+                    nodeCrawl(G, nextNode, times-1, toNodes, queue)
             else:
                 # This is when you would try to form a new connection with a new node
-                nextNode = selectNewRandom(G, queue, currentNode)
-                nodeCrawl(G, nextNode, times-1, queue)
+                nextNode = selectNewRandom(G, queue, currentNode, toNodes)
+                nodeCrawl(G, nextNode, times-1, toNodes, queue)
         else:
             # We have no neighbours and must explore a completely new node
-            nextNode = selectNewRandom(G, queue, currentNode)
-            nodeCrawl(G, nextNode, times-1, queue)
+            nextNode = selectNewRandom(G, queue, currentNode, toNodes)
+            nodeCrawl(G, nextNode, times-1, toNodes, queue)
 
         # print(neighbours)
     
-    print("finished queue: ", queue)
+    # print("finished queue: ", queue)
 
     return queue
 
@@ -158,14 +164,21 @@ def selectNewRandom(G, queue, currentNode, toNodes):
     allNodes = list(G.nodes)
     queueIDs = [x["songID"] for x in queue]
     nonVisited = list(set(allNodes).difference(queueIDs))
-    print("all non-visited: ", nonVisited)
+    # print("all non-visited: ", nonVisited)
 
     randomNode = random.choice(nonVisited)
-    print(randomNode)
+    
+    addNewEdgeBetween(G, currentNode["songID"], randomNode)
+    saveGraphImage(G)
     return G.nodes[randomNode]
 
 def addNewEdgeBetween(G, fromNode, toNode):
-    return G.add_edge(fromNode, toNode, skipped=32, played=10, weight=float(10/32))
+    if not G.has_edge(fromNode, toNode):
+        G.add_edge(fromNode, toNode)
+        G[fromNode][toNode].update(skipped=32)
+        G[fromNode][toNode].update(played=10)
+        G[fromNode][toNode].update(weight=float(10/32))
+    return
 
 def tagSongs(graph, songs, tag):
     G = None
@@ -179,11 +192,11 @@ def tagSongs(graph, songs, tag):
         nodes.append(song["id"])
 
         if currentTags[song["id"]] is None:
-            G.add_node(song["id"], name=song["title"], tags=tag, skipped=[], artist=song["artist"], cover=song["cover"], uri=song["uri"])
+            G.add_node(song["id"], name=song["title"], tags=tag, skipped=[], artist=song["artist"], cover=song["cover"], uri=song["uri"], songID=song["id"])
         else:
             newTags = currentTags[song["id"]]
             newTags.append(tag)
-            G.add_node(song["id"], name=song["title"], tags=newTags, skipped=[], artist=song["artist"], cover=song["cover"], uri=song["uri"])
+            G.add_node(song["id"], name=song["title"], tags=newTags, skipped=[], artist=song["artist"], cover=song["cover"], uri=song["uri"], songID=song["id"])
             
     connected = nx.complete_graph(nodes, nx.DiGraph())
     connected.edges(data = True)
@@ -206,11 +219,10 @@ def saveGraphImage(G):
 
     options = {"node_size": 150}
 
-    
-    plt.figure(figsize=(10,10), dpi=200)
+    plt.figure(figsize=(10,10), dpi=100)
     plt.axis("off")
-    pos = nx.spring_layout(G, k=0.5)
-    nx.draw(G,with_labels = True, labels=labels, pos=pos, font_weight='normal',node_size=60,font_size=8)
+    pos = nx.spring_layout(G, k=0.2)
+    nx.draw(G,with_labels = True, labels=labels, pos=pos, font_weight='normal',node_size=60,font_size=5)
     # plt.show(block=False)
     # plt.tight_layout()
     plt.savefig("Graph.png", format="PNG")
