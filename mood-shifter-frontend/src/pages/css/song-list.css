@@ -1,17 +1,18 @@
-
-
 .song-list-body {    
+    background-color: #121212;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    height: 100%;
+    align-items: left;
+    justify-content: top;
+    font-size: calc(10px + 2vmin);
+    color: white;
+    padding: 30px 10px;
 }
 
 .back-icon-div {
     display: flex;
     justify-content: flex-start;
-    padding: 40px 40px 0 40px;
     width: 100%;
 }
 
@@ -20,12 +21,14 @@
     max-height: 50px;
     border: none;
     background-color: transparent;
+    padding-top: 15px;
+    padding-left: 25px;
 }
 
 .title-style {
     color: #ffffff;
     font-size: 30px;
-
+    padding-left: 25px;
 }
 
 .header-style {
@@ -51,7 +54,7 @@
 .icon-style-large {
     max-height: 150px;
     max-width: 150px;
-    height: 100px;
+    height: 90px;
     width: 80px;
     cursor:pointer;
 }
@@ -61,13 +64,12 @@
     max-width: 30px;
     height: 50px;
     width: 40px;
-    margin: 0 20px 0 0;
+    margin-top: 25px;
 }
 
 .song-list-display {
     width: 50%;
-    min-width: 400px;
-    overflow: scroll;
+    overflow-y: scroll;
 }
 
 .title-div {

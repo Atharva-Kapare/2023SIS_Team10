@@ -32,82 +32,50 @@ const GreenSwitch = styled(Switch)(({ theme }) => ({
     '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
       backgroundColor: green[600],
     },
-  }));
+}));
   
   const userName = localStorage.getItem('UID');
   console.log(userName);
+
 function SettingsScreen({navigation}) {
   return (
-    <div className="login">
-        <Box sx={{ width: '100%', bgcolor: 'black' }}>
+    <div className="settings-div">
+      <Box>
         <nav aria-label="main mailbox folders">
-            <List>
+          <List>
             <ListItem >
-            <Typography variant="h4" color="common.white">
-            Settings
-            </Typography>
+              <Typography variant="h4" color="common.white">Settings</Typography>
             </ListItem>
             <ListItem disablePadding>
                 <ListItemButton>
-                <ListItemIcon >
-                    <PersonIcon sx={{ color: 'white' }}  />
-                </ListItemIcon>
-                <ListItemText sx={{ color: 'white' }} primary={`Logged in as:  ${userName}`}  />
+                  <ListItemIcon >
+                      <PersonIcon sx={{ color: 'white' }}  />
+                  </ListItemIcon>
+                  <ListItemText sx={{ color: 'white' }} primary={`Logged In:  ${userName}`}  />
                 </ListItemButton>
             </ListItem>
             <ListItem disablePadding>
                 <ListItemButton>
-                <ListItemIcon sx={{ color: 'white' }}>
-                    <DraftsIcon />
-                </ListItemIcon>
-                <ListItemText  sx={{ color: 'white' }}  primary="Recieve Email Updates" />
-                <FormControlLabel control={<GreenSwitch   defaultChecked />}  />
+                  <ListItemIcon sx={{ color: 'white' }}>
+                      <DraftsIcon />
+                  </ListItemIcon>
+                  <ListItemText  sx={{ color: 'white' }}  primary="Email Updates" />
+                  <FormControlLabel control={<GreenSwitch   defaultChecked />}  />
                 </ListItemButton>
             </ListItem>
-            </List>
+          </List>
         </nav>
-        <Divider />
+        <Divider/>
         <nav aria-label="secondary mailbox folders">
-            <List>
-            {/* <ListItem disablePadding>
-                <ListItemButton>
-                <ListItemText primary="Trash" />
-                </ListItemButton>
-            </ListItem> */}
+          <List>
             <ListItem sx={{justifyContent:'center'}}>
-                     <Button sx={{justifyContent:'center', color: 'red'  }} variant="text">Logout</Button>
-{/*                 <ListItemButton sx={{align:'center', color: 'red'  }} component="a" href="#simple-list">
-                <ListItemText   sx={{align:'center', color: 'red'  }}  primary="Logout" />
-                </ListItemButton> */}
+              <Button sx={{justifyContent:'center', color: 'red'}} variant="text">Logout</Button>
             </ListItem>
-            </List>
+          </List>
         </nav>
-        </Box>
-        <Footer navigation={navigation}></Footer>
+      </Box>
+      <Footer navigation={navigation}></Footer>
     </div>
-    
   );
-
 }
   export default SettingsScreen;
-
-/* function SettingsScreen({navigation}) {
-    let username = '';
-    
-    return (
-        <div class="settings-div">
-            <h1>Settings</h1>
-            <h2>Logged in: {username}</h2>
-            <div class="updated-div">
-                <h2>Recieve email updates: </h2>
-                <label class="switch" for="checkbox">
-                    <input type="checkbox" id="checkbox" />
-                    <div class="slider round"></div>
-                </label>
-            </div>
-            <Footer navigation={navigation}></Footer>
-        </div>
-    )
-}
-
-export default SettingsScreen; */
