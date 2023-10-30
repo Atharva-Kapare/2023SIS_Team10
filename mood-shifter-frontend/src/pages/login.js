@@ -8,7 +8,7 @@ import { Button } from 'react-native';
 
 function Login({ navigation }) {
     return (
-        <div className="login">
+        <div className="App-header">
             <div className="background-tile">
                 <div className="background-tile-row">
                     <img src={logoTile} alt=""></img>

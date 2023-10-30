@@ -67,6 +67,12 @@
     margin-top: 25px;
 }
 
+.search-style-small{
+    height: 30px;
+    width: 30px;
+    margin-top: 30px;
+}
+
 .song-list-display {
     width: 50%;
     overflow-y: scroll;

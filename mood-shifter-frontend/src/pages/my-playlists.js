@@ -112,7 +112,7 @@ function MyPlaylist({ navigation, route }){
                     {/* Mood Playlists */}
                     {formattedPlaylist.map(playlist => (
                         <Grid item xs={1} sm={2} md={3}>
-                            <button style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
+                            <button className='playlist-cover-btn' style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
                                 playlistData: playlist,
                                 color: playlist.color
                             })}>
@@ -127,7 +127,7 @@ function MyPlaylist({ navigation, route }){
                     {/* Mood Shift Playlists */}
                     {formattedMoodPlaylist.map(playlist => (
                         <Grid item xs={1} sm={2} md={3}>
-                            <button style={{border: "none"}} onClick={() => navigation.navigate('MoodShiftListScreen', {
+                            <button className='playlist-cover-btn' style={{border: "none"}} onClick={() => navigation.navigate('MoodShiftListScreen', {
                                 playlistData: playlist,
                                 color: playlist.color
                             })}>

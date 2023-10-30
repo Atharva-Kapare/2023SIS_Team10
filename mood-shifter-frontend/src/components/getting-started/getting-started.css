@@ -54,15 +54,17 @@
 
 .heading {
     color: #ffffff;
-    font-size: 25px;
+    font-size: 23px;
     margin: 0px;
     padding: 0 0 20px 0;
     font-family: Arial;
+    text-align: center;
+    font-weight: bold;
 }
 
 .call-to-action-text {
     color: #ffffff;
-    font-size: 15px;
+    font-size: 18px;
     margin: 0px;
     padding: 0 10px 20px 10px;
     font-family: Arial;
@@ -76,6 +78,7 @@
     border-radius: 40px;
     font-size: 20px;
     font-weight: bold;
+    margin-top: 20px;
 }
 
 .spotify-logo-style {
@@ -86,8 +89,6 @@
 .text-style {
     color: #ffffff;
     text-align: Left;
-    padding: 10px;
-    width: 100%;
 }
 
 .mood-div {
@@ -169,26 +170,20 @@
 .step-text {
     font-size: 18px;
     opacity: 60%;
-    margin: 40px 0 0 0;
-}
-
-.sub-text {
-    font-size: 16px;
-    padding: 0 0 20px 10px;
 }
 
 .section-header {
     color: #ffffff;
-    font-size: 20px;
+    font-size: 16px;
     text-align: left;
     opacity: 60%;
     padding: 0;
-    margin: 5px 0px;
 }
 
 .new-mood-button-style {
     width: 50px;
-    margin: 0 0 70px 20px;
+    margin: 0px;
+    margin-bottom: 30px;
 }
 
 .new-mood-item{
@@ -200,12 +195,11 @@
 .search-bar-style {
     width: 100%;
     max-width: 400px;
-    height: 60px;
+    height: 40px;
     color: #ffffff;
     border: solid #ffffff;
-    border-radius: 20px;
-    padding: 10px;
-    margin: 0 0 20px 0;
+    border-radius: 25px;
+    padding: 5px;
     background-color: transparent;
 }
 
@@ -317,17 +311,15 @@
 }
 
 .mood-text-style {
-    text-align: center;
+    text-align: left;
     font-size: 25px;
-    background-color: #59a560;
-    width: 200px;
+    color: #59a560;
     border-radius: 5px;
 }
 
 .iconic-banner {
     display: flex;
-    justify-content: center;
-    padding: 10px 0 20px 0;
+    justify-content: left;
 }
 
 .song-button {
