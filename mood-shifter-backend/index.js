@@ -37,6 +37,17 @@ async function fetchWebApi(token, endpoint, method, body) {
 
 app.use(cors());
 
+app.post('/skippedSong', async (req, res) => {
+  // Params: UID, current, before
+  console.log("SKIPPED SONG: ",req.body);
+  res.send(req.body);
+})
+
+app.post('/playedSong', async (req, res) => {
+  // Params: UID, current, before
+  console.log("PLAYED SONG: ",req.body);
+  res.send(req.body);
+})
 
 app.post('/getConfigPlaylist', async (req, res) => {
   // Params: uid, config
@@ -164,7 +175,7 @@ app.post('/taggedSongs', async (req, res) => {
         [mood]: req.body.songs
       }
     }, { merge: true })
-      .then(res.send({ "Success": "The lists have been stored into firebase" }))
+    .then(res.send({ "Success": "The lists have been stored into firebase" }))
   }
   // SEND DATA TO THE BACKEND HERE:
   // Pass the model, songs (array of objects), mood name (string) back to the model

@@ -29,7 +29,6 @@ function MyPlaylist({ navigation, route }){
 
     useEffect(() => {
         if(route.params) {
-            console.log("hit: ", route.params)
             const params = route.params
             setFormattedMoodShiftPlaylist([
                 ...formattedMoodPlaylist,
@@ -74,15 +73,21 @@ function MyPlaylist({ navigation, route }){
                     }
                 )
             });
-            setFormattedPlaylist(keyStuff);            
+            setFormattedPlaylist(keyStuff);   
         })
     }, []);
   
   //current moods
     let moodOutput = [];
-        formattedPlaylist.forEach((entry) => {
-        moodOutput.push(entry.mood)
+    formattedPlaylist.forEach((entry) => {
+        moodOutput.push(
+            {
+                "mood": entry.mood,
+                "songs": []
+            }
+        )
     })
+    console.log(moodOutput)
 
     return ( 
         <div className="App-header">
@@ -93,7 +98,15 @@ function MyPlaylist({ navigation, route }){
                         <PlaylistPageTitle/>
                     </Grid>
                     <Grid item xs={.5} sm={1} md={2}>
-                        <Button onClick={() => navigation.navigate("NewPlaylistScreen", {moods:moodOutput})}><AddPlaylistButton/></Button>
+                        <Button onClick={() => navigation.navigate(
+                            {
+                                name:"NewPlaylistScreen", 
+                                params: {
+                                    moods:moodOutput
+                                },
+                                merge: true
+                            })}
+                        ><AddPlaylistButton/></Button>
                     </Grid>
 
                     {/* Mood Playlists */}

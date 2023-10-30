@@ -3,15 +3,16 @@ import './css/new-mood.css';
 import SearchIcon from '../assets/icons/search-icon.png';
 import BackIcon from '../assets/icons/backIcon.png';
 import authentication from '../authentication';
-import Song from "../components/getting-started/song";
+import SongMinus from "../components/getting-started/song-minus";
+import SongPlus from "../components/getting-started/song-plus";
 import NewPlaylist from "./new-playlist";
 import { Box, Grid } from "@mui/material";
 import Footer from "../components/footer";
 
+var songsAdded = 0;
 
 function NewMoodScreen({navigation}) {
 
-    let songsAdded = 0;
     const [ searchResults, setSearchResults ] = useState([]);
     const [ searchTerm, setSearch ] = useState("");
     const [ addedSongs, setAddedSongs ] = useState([]);
@@ -35,8 +36,9 @@ function NewMoodScreen({navigation}) {
                     artist: song.artist 
                 }
             ])
+            console.log(addedSongs)
             ++songsAdded;
-        }    
+        }
     }
 
     function removeSong(song) {
@@ -47,6 +49,7 @@ function NewMoodScreen({navigation}) {
                 tempList.push(item);
             }
         })
+        console.log(songsAdded)
         --songsAdded;
         setAddedSongs(tempList);
     }
@@ -107,7 +110,7 @@ function NewMoodScreen({navigation}) {
                     {/* mood input */}
                     <Grid item xs={2} sm={5} md={11}>
                         <p className="section-header">Mood Name</p>
-                        <input className="mood-input" type="text" placeholder="Type your custom mood..."></input>
+                        <input id="new-mood-field" className="mood-input" type="text" placeholder="Type your custom mood..."></input>
                     </Grid>
 
                     {/* search bar */}
@@ -124,17 +127,29 @@ function NewMoodScreen({navigation}) {
                     <p className="sub-text">Added</p>
                     </Grid>
                     <Grid item xs={.4} sm={2} md={2}>
-                    <p className="sub-text">0/3</p>
+                    <p className="sub-text">{songsAdded}/3</p>
+                    </Grid>
+                    
+                    {/* Songs Added */}
+                    <Grid item xs={2} sm={5} md={10}>
+                        {addedSongs.map((song) => (
+                            <div  style={{ cursor: "pointer" }} onClick={() => removeSong(song)}>
+                                <SongMinus 
+                                    track={song}
+                                    key={song.uri}
+                                />
+                            </div>
+                        ))}
                     </Grid>
 
                     {/* Song search list */}
                     <Grid item xs={2} sm={6} md={12}>
                         <p className="sub-text">Suggested</p>
                     </Grid>
-                    <Grid item xs={2} sm={5} md={11}>
+                    <Grid item xs={2} sm={5} md={10}>
                         {searchResults.map((song) => (
                             <div  style={{ cursor: "pointer" }} onClick={() => addSong(song)}>
-                                <Song 
+                                <SongPlus 
                                     track={song}
                                     key={song.uri}
                                 />
@@ -144,7 +159,21 @@ function NewMoodScreen({navigation}) {
 
                     {/* Create Button */}
                     <Grid item xs={2} sm={5} md={10}>
-                        <button className="create-button-style" onClick={createNewMood()}>Create</button>
+                        <button className="create-button-style" onClick={() => {
+                            if(songsAdded < 3) {
+                                alert("You need to select at least 3 songs!");
+                            } else {
+                                navigation.navigate({
+                                    name: "NewPlaylistScreen",
+                                    params: {
+                                        mood: document.getElementById("new-mood-field").value,
+                                        songs: addedSongs
+                                    },
+                                    merge: true
+                                });
+                                createNewMood(addedSongs, songsAdded)
+                            }}
+                        }>Create</button>
                     </Grid>
                 </Grid>
             </Box>
@@ -153,9 +182,25 @@ function NewMoodScreen({navigation}) {
     );
 }
 
-function createNewMood() {
-
+async function createNewMood(addedSongs) {
+    
+    const profile = localStorage.getItem("UID");
+    const newMood = document.getElementById("new-mood-field").value;
+    await fetch('http://localhost:8000/taggedSongs', 
+    {   method: 'POST',
+        mode: 'cors',
+        headers: { 
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ 
+            "UID": profile,
+            "mood": newMood,
+            "songs": addedSongs
+        }) 
+    })
+    .then(response => response.json())
+    .then(data => {console.log("response: ", data)})
+    .catch(error => console.error(error));
 }
-
 
 export default NewMoodScreen;
