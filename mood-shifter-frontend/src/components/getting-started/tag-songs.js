@@ -30,7 +30,8 @@ function TagSongsScreen( { route, navigation } ) {
                     cover: song.cover, 
                     title: song.title, 
                     uri: song.uri, 
-                    artist: song.artist 
+                    artist: song.artist,
+                    id: song.id
                 }
             ])
             ++songsAdded;
@@ -64,7 +65,8 @@ function TagSongsScreen( { route, navigation } ) {
                 cover: song.image.url,
                 title: song.name,
                 uri: song.uri,
-                artist: song.artist
+                artist: song.artist,
+                id: song.id                
             }
         }));
     }, [searchTerm])
@@ -166,7 +168,7 @@ async function sendUserSongDataToBackend(selectedMood, addedSongs) {
             "UID": profile,
             "mood": selectedMood,
             "songs": addedSongs
-        }) 
+        })
     })
     .then(response => response.json())
     .then(data => {console.log(data)})

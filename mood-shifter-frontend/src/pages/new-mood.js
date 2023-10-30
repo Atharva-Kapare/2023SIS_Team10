@@ -93,7 +93,7 @@ function NewMoodScreen({navigation}) {
                     {/* Back Button */}
                     <Grid item xs={.5} sm={1} md={2}>
                         <button className="back-icon-style" onClick={() => {
-                            navigation.navigate('NewPlaylistScreen');
+                            navigation.navigate('PlaylistScreen');
                         }}>
                             <img src={BackIcon} alt="back"></img>
                         </button>
