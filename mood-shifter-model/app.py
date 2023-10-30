@@ -30,4 +30,4 @@ def mood_2_mood():
     # print(data)
     # print(data["likedSongs"])
 
-    return mood2mood(data["model"], data["fromSong"], data["toSong"], data["duration"])
+    return mood2mood(data["model"], data["fromMood"], data["toMood"], data["duration"])

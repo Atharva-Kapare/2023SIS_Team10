@@ -37,6 +37,47 @@ app.use(express.json());
 
 app.use(cors());
 
+
+app.post('/getConfigPlaylist', async (req, res) => {
+  // Params: uid, config
+  // config contains: fromMood (string), toMood (string), duration (in minutes)
+
+  // We need to pass this into the model now and it should send back the songs in an array
+  // We will then need to take that array and add all of the necessary data for the frontend
+
+  // Params: UID
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  console.log("Tagged songs are getting got.")
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    // The user exists, we can now take the model and send it to the backend, along with all of the configs passed through
+
+    // console.log("Model sanity check:", docSnapshot.data().model);
+
+    let modelResp = await fetch(modelURLBase + "/mood2mood", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "model": docSnapshot.data().model,
+        "fromMood": req.body.config.fromMood,
+        "toMood": req.body.config.toMood,
+        "duration": req.body.config.duration
+      }),
+      method: "POST"
+    })
+    let response = await modelResp.json();
+    console.log("MODEL RESP, MOOD2MOOD: ", response)
+
+  }
+
+  res.send({ "You've": "Hit the backend, there's no songs here yet ya dog." })
+})
+
 app.post('/login', async function (req, res) {
 
   // We get sent the access token and the userID from the frontend
@@ -84,8 +125,8 @@ app.post('/login', async function (req, res) {
 
     // //UNCOMMENT BELOW
     const modelResp = await fetch(modelURLBase + "/new_user", {
-      method: "POST", 
-      body: JSON.stringify({"likedSongs": likedSongs}),
+      method: "POST",
+      body: JSON.stringify({ "likedSongs": likedSongs }),
       headers: {
         "Content-Type": "application/json"
       }
@@ -141,15 +182,15 @@ app.post('/taggedSongs', async (req, res) => {
     method: "POST"
   })
   let response = await modelResp.json();
-  console.log("MODEL RESP: " ,response)
+  console.log("MODEL RESP: ", response)
 
   // Now we have to set the model in firebase
   await setDoc(docRef, {
     "model": response
-  }, {merge: true})
-  .then(() => {
-    console.log("The model should now be set with the latest tags.")
-  })
+  }, { merge: true })
+    .then(() => {
+      console.log("The model should now be set with the latest tags.")
+    })
 
   // const res = await fetch("https://api.spotify.com/v1/me/tracks?", {
   //   headers: {
@@ -191,14 +232,6 @@ app.post('/getConfig', async (req, res) => {
   } else {
     res.send(docSnapshot.data().configs);
   }
-})
-
-app.post('/getConfigPlaylist', async (req, res) => {
-  // Params: config
-  // We need to pass this into the model now and it should send back the songs in an array
-  // We will then need to take that array and add all of the necessary data for the frontend
-
-  res.send({ "You've": "Hit the backend, there's no songs here yet ya dog." })
 })
 
 app.post('/taggedSongsGet', async (req, res) => {
