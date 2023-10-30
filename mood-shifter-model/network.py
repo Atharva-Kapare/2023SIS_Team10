@@ -92,12 +92,12 @@ def mood2mood(graph, fromMood, toMood, duration):
 
     numberOfSongs = (int(duration) // averageSongLength) - 2
     generatedQueue = nodeCrawl(G, startSong, numberOfSongs, toNodes)
-    generatedQueue += toNodes
     addNewEdgeBetween(G, generatedQueue[-1]["songID"], toNodes[0]["songID"])
     print("from:", generatedQueue[-1]["songID"], "to:", toNodes[0]["songID"])
+    generatedQueue += toNodes
     saveGraphImage(G)
-    print(generatedQueue)
-    print(len(generatedQueue))
+    # print(generatedQueue)
+    # print(len(generatedQueue))
 
     return generatedQueue
 
@@ -160,10 +160,20 @@ def selectNewRandom(G, queue, currentNode, toNodes):
 
     # Create a blacklist so it doesn't pull any songs from there, the blacklist should contain:
     # the current queue, the toNodes array, as well as the nodes from the currentNodes skipped list
+    blacklist = []
 
     allNodes = list(G.nodes)
     queueIDs = [x["songID"] for x in queue]
-    nonVisited = list(set(allNodes).difference(queueIDs))
+    toIDs = [x["songID"] for x in toNodes]
+
+    blacklist += queueIDs
+    blacklist += toIDs
+    blacklist += currentNode["skipped"] # could potentially only set these from a percent chance? 
+
+    print(blacklist, end='\n')
+    print(len(blacklist), end='\n')
+
+    nonVisited = list(set(allNodes).difference(blacklist))
     # print("all non-visited: ", nonVisited)
 
     randomNode = random.choice(nonVisited)
