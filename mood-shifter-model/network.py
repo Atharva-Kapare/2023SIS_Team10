@@ -66,7 +66,6 @@ def createNewNetwork(likedSongs):
 
     return storeGraphJSON(G)
 
-
 def mood2mood(graph, fromMood, toMood, duration):
     G = None
     G = getGraphJSON(graph)
@@ -100,7 +99,7 @@ def mood2mood(graph, fromMood, toMood, duration):
     # print(generatedQueue)
     # print(len(generatedQueue))
 
-    return generatedQueue
+    return {"queue": generatedQueue, "model": storeGraphJSON(G)}
 
 def nodeCrawl(G, currentNode, times, toNodes, queue=None):
 

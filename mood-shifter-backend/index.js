@@ -71,11 +71,10 @@ app.post('/getConfigPlaylist', async (req, res) => {
       method: "POST"
     })
     let response = await modelResp.json();
-    console.log("MODEL RESP, MOOD2MOOD: ", response)
+    console.log("MODEL RESP, MOOD2MOOD: ", response.queue)
+    console.log("MODEL RESP, model: ", response.model)
     res.send(response)
-
   }
-
 })
 
 app.post('/login', async function (req, res) {
