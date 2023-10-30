@@ -1,6 +1,7 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import networkx as nx
+from networkx.drawing.nx_agraph import graphviz_layout, to_agraph
 
 import random
 
@@ -179,7 +180,7 @@ def selectNewRandom(G, queue, currentNode, toNodes):
     randomNode = random.choice(nonVisited)
     
     addNewEdgeBetween(G, currentNode["songID"], randomNode)
-    saveGraphImage(G)
+    # saveGraphImage(G)
     return G.nodes[randomNode]
 
 def addNewEdgeBetween(G, fromNode, toNode):
@@ -231,7 +232,7 @@ def saveGraphImage(G):
 
     plt.figure(figsize=(10,10), dpi=100)
     plt.axis("off")
-    pos = nx.spring_layout(G, k=0.2)
+    pos = nx.kamada_kawai_layout(G, )
     nx.draw(G,with_labels = True, labels=labels, pos=pos, font_weight='normal',node_size=60,font_size=5)
     # plt.show(block=False)
     # plt.tight_layout()
