@@ -197,6 +197,15 @@ function SongPlayerScreen({ navigation, route }) {
           }
         }}
         play={playThisPlease}
+        styles={{
+          activeColor: "#fff",
+          bgColor: "#232426",
+          color: "#fff",
+          loaderColor: "#fff",
+          sliderColor: "#1cb954",
+          trackArtistColor: "#ccc",
+          trackNameColor: "#fff",
+        }}
       ></SpotifyPlayer>
        {/* <i class="fa-solid fa-bars" onClick={() => navigation.navigate('')}></i> */}
       <Footer navigation={navigation}></Footer>
