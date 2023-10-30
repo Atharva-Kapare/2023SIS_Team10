@@ -1,7 +1,6 @@
 import React from 'react';
-import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
 
-function Song( { track } ) {
+function SongMinus( { track } ) {
 
     return (
         <div className='song-item'>
@@ -13,10 +12,10 @@ function Song( { track } ) {
                 </div>
             </div>
             <div className='song-wrapper'>
-                <p className='song-add-button'>+</p>
+                <p className='song-add-button'>-</p>
             </div>
         </div>
     );
 }
 
-export default Song;
+export default SongMinus;

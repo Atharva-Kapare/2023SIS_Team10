@@ -10,7 +10,7 @@ function SongPlayerScreen({ navigation, route }) {
   let {playlistData} = route?.params ?? {undefined};
   let [uris, setUris] = useState([""]);
   let [track, setTrack] = useState(undefined);
-  const likedSongs = authentication.getLikedSongs();
+  const likedSongs = localStorage.getItem("playlistData");
   const accessToken = localStorage.getItem("accessToken");
   let [currentIndex, setCurrentIndex] = useState(0);
   let [previousState, setPreviousState] = useState(undefined);
@@ -113,7 +113,7 @@ function SongPlayerScreen({ navigation, route }) {
         const playedSongs = fullyPlayedSongs;
         playedSongs.push(previousState.track.id);
         setFullyPlayedSongs(playedSongs);
-        if (fullyPlayedSongs.length === 2) {
+        if (fullyPlayedSongs.length >= 2) {
           const indexOfFullyPlayedSongs = fullyPlayedSongs.length - 1;
           const objectForBackEnd = {
             current: fullyPlayedSongs[indexOfFullyPlayedSongs],
@@ -136,16 +136,19 @@ function SongPlayerScreen({ navigation, route }) {
     }
   }
   // document.getElementById("Wrapper").style.color = "#2c2c2c";
-
   async function sendSkippedObject(skippedObject) {
     //TODO add /navigation to url
-    await fetch("http://localhost:8000", {
+    await fetch("http://localhost:8000/skippedSong", {
       method: "POST",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ skippedObject }),
+      body: JSON.stringify(
+        { 
+          ...skippedObject,
+          "UID": localStorage.getItem("accessToken") 
+        }),
     })
       .then((res) => {
         console.log("skipped object sent", res);
@@ -154,14 +157,19 @@ function SongPlayerScreen({ navigation, route }) {
   }
 
   async function sendSongPlayedObject(songPlayedObject) {
+    console.log("Sent")
     //TODO add /navigation to url
-    await fetch("http://localhost:8000", {
+    await fetch("http://localhost:8000/playedSong", {
       method: "POST",
       mode: "cors",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ songPlayedObject }),
+      body: JSON.stringify(
+        { 
+          ...songPlayedObject,
+          "UID": localStorage.getItem("accessToken") 
+        }),
     })
       .then((res) => {
         console.log("skipped object sent", res);
