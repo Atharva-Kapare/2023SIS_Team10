@@ -52,6 +52,12 @@
     
 }
 
+.search-get-started-style {
+    width: 45px;
+    height: 35px;
+    margin: 5px;
+}
+
 .search-style {
     width: 45px;
     height: 35px;
@@ -67,4 +73,8 @@
 .sub-text {
     font-size: 20px;
     padding: 20px 0 10px 10px;
+}
+
+.subject-text {
+    font-size: 20px;
 }
