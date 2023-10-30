@@ -90,7 +90,7 @@ def mood2mood(graph, fromMood, toMood, duration):
     # We now have both start and end nodes, need to select a start song from the start nodes list
     startSong = random.choice(fromNodes)
 
-    numberOfSongs = (duration // averageSongLength) - 2
+    numberOfSongs = (int(duration) // averageSongLength) - 2
     generatedQueue = nodeCrawl(G, startSong, numberOfSongs)
 
     return generatedQueue
