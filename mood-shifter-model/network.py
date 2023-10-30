@@ -99,16 +99,70 @@ def nodeCrawl(G, currentNode, times, queue=None):
 
     if queue is None:
         queue = []
-        queue.append(currentNode)
-    
     if times == 0:
-        return queue
+        queue.append(currentNode)
     else:
+        queue.append(currentNode)
         # This is where the node crawling logic should go
-        print("Just putting something here")
-        
+        # print("Just putting something here")
+        neighbours = list(G.neighbors(currentNode["songID"]))
+
+        if len(neighbours) > 0:
+            randNum = random.random()
+            print(randNum)
+            if randNum < 0.9:
+                # We want to go explore one of the connected neighbours in this case, so grab a random one
+                # Get the list of all ids already existing in queue
+                queueIDs = [x["songID"] for x in queue]
+                print("current ids: ", currentNode["songID"], end='\n')
+                print("queue ids: ", queueIDs, end='\n')
+                print("neighbour ids: ", neighbours, end='\n')
+                
+                # Only have a look at the neighbours that don't appear in the queue
+                # unvisited = list(set(queueIDs).symmetric_difference(neighbours))
+                unvisited = list(set(neighbours).difference(queueIDs))
+                print("unvisited: ", unvisited, end='\n')
+
+                if len(unvisited) == 0:
+                    # Explore new node here
+                    nextNode = selectNewRandom(G, queue, currentNode)
+                    nodeCrawl(G, nextNode, times-1, queue)
+                    # return # This would have to get removed when we get the new random node.
+                else:
+                    nextNodeID = random.choice(unvisited)
+                    nextNode = G.nodes[nextNodeID]
+                    # print(nextNode, end='\n')
+                    # Now send this back to the recursive function
+                    nodeCrawl(G, nextNode, times-1, queue)
+            else:
+                # This is when you would try to form a new connection with a new node
+                nextNode = selectNewRandom(G, queue, currentNode)
+                nodeCrawl(G, nextNode, times-1, queue)
+        else:
+            # We have no neighbours and must explore a completely new node
+            nextNode = selectNewRandom(G, queue, currentNode)
+            nodeCrawl(G, nextNode, times-1, queue)
+
+        # print(neighbours)
+    
+    print("finished queue: ", queue)
 
     return queue
+
+def selectNewRandom(G, queue, currentNode, toNodes):
+    # We need to take the graph, and return a node that isn't already in the queue. Then create an edge between the current node and the new one.
+
+    # Create a blacklist so it doesn't pull any songs from there, the blacklist should contain:
+    # the current queue, the toNodes array, as well as the nodes from the currentNodes skipped list
+
+    allNodes = list(G.nodes)
+    queueIDs = [x["songID"] for x in queue]
+    nonVisited = list(set(allNodes).difference(queueIDs))
+    print("all non-visited: ", nonVisited)
+
+    randomNode = random.choice(nonVisited)
+    print(randomNode)
+    return G.nodes[randomNode]
 
 def addNewEdgeBetween(G, fromNode, toNode):
     return G.add_edge(fromNode, toNode, skipped=32, played=10, weight=float(10/32))

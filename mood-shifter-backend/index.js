@@ -1,6 +1,6 @@
 // const express = require('express')
 // const app = express
-import express from 'express';
+import express, { response } from 'express';
 import cors from 'cors';
 const port = 8000
 // const auth = require('./auth')
@@ -72,10 +72,10 @@ app.post('/getConfigPlaylist', async (req, res) => {
     })
     let response = await modelResp.json();
     console.log("MODEL RESP, MOOD2MOOD: ", response)
+    res.send(response)
 
   }
 
-  res.send({ "You've": "Hit the backend, there's no songs here yet ya dog." })
 })
 
 app.post('/login', async function (req, res) {
