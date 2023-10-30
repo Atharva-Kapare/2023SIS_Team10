@@ -9,6 +9,7 @@ let songsAdded = 0;
 
 function TagSongsScreen( { route, navigation } ) {
     const playlistData = JSON.parse(localStorage.getItem("playlistData"));
+    console.log("Playlist Data: ", playlistData)
     const [ searchResults, setSearchResults ] = useState([]);
     let { selectedMood } = route.params;
     const [ searchTerm, setSearch ] = useState("");
@@ -66,7 +67,7 @@ function TagSongsScreen( { route, navigation } ) {
                 title: song.name,
                 uri: song.uri,
                 artist: song.artist,
-                id: song.id                
+                id: song.id
             }
         }));
     }, [searchTerm])
@@ -157,7 +158,7 @@ function TagSongsScreen( { route, navigation } ) {
 
 async function sendUserSongDataToBackend(selectedMood, addedSongs) {
     const profile = localStorage.getItem("UID");
-    console.log(addedSongs)
+    console.log("addedsongs: ",addedSongs)
     await fetch('http://localhost:8000/taggedSongs', 
     {   method: 'POST',
         mode: 'cors',
@@ -167,11 +168,11 @@ async function sendUserSongDataToBackend(selectedMood, addedSongs) {
         body: JSON.stringify({ 
             "UID": profile,
             "mood": selectedMood,
-            "songs": addedSongs
-        })
+            "songs": addedSongs,
+        }) 
     })
     .then(response => response.json())
-    .then(data => {console.log(data)})
+    .then(data => {console.log("respons: ", data)})
     .catch(error => console.error(error));
 }
 

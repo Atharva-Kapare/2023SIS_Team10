@@ -9,17 +9,19 @@ services:
       dockerfile: ./Dockerfile
     environment:
       NODE_ENV: production
-
-  frontend:
-    image: frontend
-    container_name: frontend
-    build:
-      context: mood-shifter-frontend
-      dockerfile: ./Dockerfile
-    environment:
-      NODE_ENV: production
     ports:
-      - 3000:3000
+      - 8000:8000
+
+  # frontend:
+  #   image: frontend
+  #   container_name: frontend
+  #   build:
+  #     context: mood-shifter-frontend
+  #     dockerfile: ./Dockerfile
+  #   environment:
+  #     NODE_ENV: production
+  #   ports:
+  #     - 3000:3000
 
   model:
     image: model
@@ -27,3 +29,5 @@ services:
     build: 
       context: mood-shifter-model
       dockerfile: ./Dockerfile
+    ports:
+      - 5000:5000
