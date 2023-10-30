@@ -1,8 +1,13 @@
 from flask import Flask
+# from flask_cors import CORS, cross_origin
 from flask import request
 from network import *
 
 app = Flask(__name__)
+# CORS(app) 
+
+# if __name__ == '__main__':
+#     app.run(host='127.0.0.1')
 
 @app.route("/")
 def hello_world():
@@ -30,4 +35,4 @@ def mood_2_mood():
     # print(data)
     # print(data["likedSongs"])
 
-    return mood2mood(data["model"], data["fromSong"], data["toSong"], data["duration"])
+    return mood2mood(data["model"], data["fromMood"], data["toMood"], data["duration"])

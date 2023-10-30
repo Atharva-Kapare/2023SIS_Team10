@@ -9,7 +9,7 @@ const port = 8000
 import { firebase_app } from './firebase_init.js';
 import { database } from './firebase_init.js';
 
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { doc, getDoc, memoryLruGarbageCollector, setDoc, updateDoc } from "firebase/firestore";
 import axios from 'axios';
 import { getLikedSongs } from './spotify.js';
 
@@ -36,6 +36,47 @@ async function fetchWebApi(token, endpoint, method, body) {
 }
 
 app.use(cors());
+
+
+app.post('/getConfigPlaylist', async (req, res) => {
+  // Params: uid, config
+  // config contains: fromMood (string), toMood (string), duration (in minutes)
+
+  // We need to pass this into the model now and it should send back the songs in an array
+  // We will then need to take that array and add all of the necessary data for the frontend
+
+  // Params: UID
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  console.log("Tagged songs are getting got.")
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+    // The user exists, we can now take the model and send it to the backend, along with all of the configs passed through
+
+    // console.log("Model sanity check:", docSnapshot.data().model);
+
+    // let modelResp = await fetch(modelURLBase + "/mood2mood", {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify({
+    //     "model": docSnapshot.data().model,
+    //     "fromMood": req.body.config.fromMood,
+    //     "toMood": req.body.config.toMood,
+    //     "duration": req.body.config.duration
+    //   }),
+    //   method: "POST"
+    // })
+    // let response = await modelResp.json();
+    // console.log("MODEL RESP, MOOD2MOOD: ", response)
+
+  }
+
+  res.send({ "You've": "Hit the backend, there's no songs here yet ya dog." })
+})
 
 app.post('/login', async function (req, res) {
 
@@ -72,6 +113,7 @@ app.post('/login', async function (req, res) {
   if (docSnapshot.exists()) {
     var document = docSnapshot.data();
     resp.gettingStarted = document.gettingStarted;
+
   } else {
     resp.gettingStarted = true;
 
@@ -83,8 +125,8 @@ app.post('/login', async function (req, res) {
 
     // //UNCOMMENT BELOW
     // const modelResp = await fetch(modelURLBase + "/new_user", {
-    //   method: "POST", 
-    //   body: JSON.stringify({"likedSongs": likedSongs}),
+    //   method: "POST",
+    //   body: JSON.stringify({ "likedSongs": likedSongs }),
     //   headers: {
     //     "Content-Type": "application/json"
     //   }
@@ -126,24 +168,29 @@ app.post('/taggedSongs', async (req, res) => {
   }
   // SEND DATA TO THE BACKEND HERE:
   // Pass the model, songs (array of objects), mood name (string) back to the model
-  let modelResp = await fetch(modelURLBase + "/tagSongs", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      "model": docSnapshot.data().model,
-      "songs": req.body.songs,
-      "tag": req.body.mood
-    }),
-    method: "POST"
-  })
-  let response = await modelResp.json();
-  console.log(response)
+  // console.log("Model: ", docSnapshot.data().model)
 
-  // Now we have to set the model in firebase
+  // let modelResp = await fetch(modelURLBase + "/tagSongs", {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //     "model": docSnapshot.data().model,
+  //     "songs": req.body.songs,
+  //     "tag": req.body.mood
+  //   }),
+  //   method: "POST"
+  // })
+  // let response = await modelResp.json();
+  // console.log("MODEL RESP: ", response)
+
+  // // Now we have to set the model in firebase
   // await setDoc(docRef, {
   //   "model": response
-  // })
+  // }, { merge: true })
+  //   .then(() => {
+  //     console.log("The model should now be set with the latest tags.")
+  //   })
 
   // const res = await fetch("https://api.spotify.com/v1/me/tracks?", {
   //   headers: {
@@ -152,7 +199,7 @@ app.post('/taggedSongs', async (req, res) => {
   //   method: "GET"
   // });
   // let response = await res.json();
-  return true;
+  // return true;
 })
 
 app.post('/setConfig', async (req, res) => {
@@ -185,14 +232,6 @@ app.post('/getConfig', async (req, res) => {
   } else {
     res.send(docSnapshot.data().configs);
   }
-})
-
-app.post('/getConfigPlaylist', async (req, res) => {
-  // Params: config
-  // We need to pass this into the model now and it should send back the songs in an array
-  // We will then need to take that array and add all of the necessary data for the frontend
-
-  res.send({ "You've": "Hit the backend, there's no songs here yet ya dog." })
 })
 
 app.post('/taggedSongsGet', async (req, res) => {
