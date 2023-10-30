@@ -11,7 +11,6 @@ function Login({ navigation }) {
     const [opacityLogin, setOpacityLogin] = useState("100%");
     const [opacityLoading, setOpacityLoading] = useState("0%");
     return (
-        <div className="loading">
             <div className="login">
                     <div className="background-tile" style={{opacity: opacityLogin}}>
                         <div className="background-tile-row">
@@ -51,7 +50,6 @@ function Login({ navigation }) {
                     </div>
                     <img src={spotifyLogo} alt="Spotify Logo" className="spotify-logo-style" style={{opacity: opacityLogin}}></img>
                 </div>
-        </div>
     );
 }
 
