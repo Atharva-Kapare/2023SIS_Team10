@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './getting-started.css';
 import SearchIcon from '../../assets/icons/search-icon.png'
 import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
-import Song from './song'
+import Song from './song-minus'
 import { Box, Grid } from '@mui/material';
 
 let tagCount = localStorage.getItem('tagCount') || 0;

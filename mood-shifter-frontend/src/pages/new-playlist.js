@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Footer from '../components/footer';
 import '../components/getting-started/getting-started.css';
 import '../App.css';
@@ -16,8 +16,26 @@ let selected = {};
 
 function NewPlaylist( { route, navigation } ) {
 
-   //connected to moodsOuput on playlist page
-  const { moods } = route.params;
+    // connected to moodsOuput on playlist page
+    const [ moods, setMoods ] = useState([]);
+
+    useEffect(() => {
+        if(route.params?.moods) {
+            const params = route.params;
+            let result = [];
+            params.moods.forEach((mood) => {
+                result.push({
+                    "mood": mood.mood,
+                    "songs": mood.songs
+                })
+            })
+    
+            setMoods([
+                ...result
+            ])
+        }
+    }, [route.params?.moods])
+
 
     return (
         <div className="App-header">
@@ -34,9 +52,9 @@ function NewPlaylist( { route, navigation } ) {
                     </Grid>
                     <Grid>
                         <div className='mood-row'>
-                            <button id='newStart' className='mood-buttons' onClick={() => {navigation.navigate("NewMoodScreen")}}>+</button>
+                            <button id='newStart' className='mood-buttons' onClick={() => {navigation.navigate("NewMoodScreen");}}>+</button>
                             {moods.map((mood) => (
-                                <button id={mood} className='mood-buttons' onClick={() => changeSelectedStartMood(mood)}>{mood}</button>
+                                <button id={mood.mood} className='mood-buttons' onClick={() => changeSelectedStartMood(mood.mood)}>{mood.mood}</button>
                             ))}
                         </div>
                     </Grid>
@@ -51,7 +69,7 @@ function NewPlaylist( { route, navigation } ) {
                         <div className='mood-row'>
                             <button id='newEnd' className='mood-buttons' onClick={() => {navigation.navigate("NewMoodScreen")}}>+</button>
                             {moods.map((mood) => (
-                                <button id={`End${mood}`} className='mood-buttons' onClick={() =>  changeSelectedEndMood(`End${mood}`, mood)}>{mood} </button>
+                                <button id={`End${mood.mood}`} className='mood-buttons' onClick={() =>  changeSelectedEndMood(`End${mood.mood}`, mood.mood)}>{mood.mood} </button>
                             ))}
                         </div>
                     </Grid>
@@ -79,11 +97,6 @@ function NewPlaylist( { route, navigation } ) {
                         if(startMood !== 'none') {
                             if(endMood !== 'none'){
                                 if(timeLength !== 'none'){
-                                    console.log({
-                                        fromMood: startMood,
-                                        toMood: endMood,
-                                        duration: timeLength
-                                    })
                                     navigation.navigate({
                                         name: "PlaylistScreen",
                                         params: {
