@@ -327,7 +327,7 @@ def saveGraphImage(G):
     nx.draw(G,with_labels = True, labels=labels, pos=pos, font_weight='normal',node_size=60,font_size=5)
     # plt.show(block=False)
     # plt.tight_layout()
-    # plt.savefig("Graph.png", format="PNG")
+    plt.savefig("Graph.png", format="PNG")
     my_stringIObytes = io.BytesIO()
     plt.savefig(my_stringIObytes, format='jpg')
     my_stringIObytes.seek(0)
