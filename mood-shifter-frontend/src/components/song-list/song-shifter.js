@@ -5,7 +5,7 @@ import MoreIcon from '../../assets/icons/moreIcon.png';
 import './song-list.css'
 import { Box, Grid } from '@mui/material';
 
-function Song( { track } ) {
+function SongShifter( { track } ) {
 
     return (
         <div>
@@ -18,7 +18,7 @@ function Song( { track } ) {
 
                     {/* track and artist */}
                     <Grid item xs={.7} sm={2.5} md={8}>
-                        <h2 className='text-style song-text-title'>{track.title}</h2>
+                        <h2 className='text-style song-text-title'>{track.name}</h2>
                         <h3 className='text-style song-text-subtitle'>{track.artist}</h3>                     
                     </Grid>
 
@@ -43,4 +43,4 @@ function Song( { track } ) {
     );
 }
 
-export default Song;
+export default SongShifter;

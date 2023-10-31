@@ -127,12 +127,9 @@ function MyPlaylist({ navigation, route }){
                     {/* Mood Shift Playlists */}
                     {formattedMoodPlaylist.map(playlist => (
                         <Grid item xs={1} sm={2} md={3}>
-                            <button className='playlist-cover-btn' style={{border: "none"}} onClick={() => navigation.navigate('MoodShiftListScreen', {
-                                playlistData: playlist,
-                                color: playlist.color
-                            })}>
+                            <button className='playlist-cover-btn' style={{border: "none"}} onClick={() => GetConfigPlaylist(playlist, navigation)}>
                                 <Playlist 
-                                    key={playlist.mood}
+                                    key={playlist.name}
                                     playlist={playlist}
                                 />
                             </button>
@@ -209,6 +206,35 @@ async function GetMoodShiftPlaylist() {
     })
     .catch(error => console.error(error));
     return result;
+}
+
+async function GetConfigPlaylist(config, navigation) {
+    console.log("config: ", config)
+    const profile = localStorage.getItem("UID");
+    const result = await fetch('http://localhost:8000/getConfigPlaylist', 
+    {   
+      method: 'POST',
+      mode: 'cors',
+      headers: { 
+          'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ 
+        "UID": profile,
+        "config": config
+      })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("CONFIG OUT: ", data);
+        navigation.navigate('MoodShiftListScreen', {
+            playlistData: data,
+            color: generate(),
+            name: config.name
+        })
+    })
+    .catch(error => console.error(error));
+    return result;
+
 }
 
 export default MyPlaylist;
