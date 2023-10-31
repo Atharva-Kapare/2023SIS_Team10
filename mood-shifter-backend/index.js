@@ -71,9 +71,19 @@ app.post('/getConfigPlaylist', async (req, res) => {
       method: "POST"
     })
     let response = await modelResp.json();
-    console.log("MODEL RESP, MOOD2MOOD: ", response.queue)
-    console.log("MODEL RESP, model: ", response.model)
-    res.send(response)
+    // console.log("MODEL RESP, MOOD2MOOD: ", response.queue)
+    // console.log("MODEL RESP, model: ", response.model)
+
+    // Set the model and the image to firebase now
+    await setDoc(docRef, {
+      "model": response.model,
+      "graphImage": response.graphImage
+    }, { merge: true })
+    .then(() => {
+      console.log("Firebase now has the latest model as well as the graph image.")
+    })
+    
+    res.send(response.queue)
   }
 })
 

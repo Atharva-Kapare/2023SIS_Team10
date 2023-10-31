@@ -4,6 +4,8 @@ import networkx as nx
 from networkx.drawing.nx_agraph import graphviz_layout, to_agraph
 
 import random
+import io
+import base64
 
 mpl.use('agg')
 
@@ -95,11 +97,11 @@ def mood2mood(graph, fromMood, toMood, duration):
     addNewEdgeBetween(G, generatedQueue[-1]["songID"], toNodes[0]["songID"])
     print("from:", generatedQueue[-1]["songID"], "to:", toNodes[0]["songID"])
     generatedQueue += toNodes
-    saveGraphImage(G)
+    imageB64 = saveGraphImage(G)
     # print(generatedQueue)
     # print(len(generatedQueue))
 
-    return {"queue": generatedQueue, "model": storeGraphJSON(G)}
+    return {"queue": generatedQueue, "model": storeGraphJSON(G), "graphImage": imageB64}
 
 def nodeCrawl(G, currentNode, times, toNodes, queue=None):
 
@@ -235,7 +237,12 @@ def saveGraphImage(G):
     nx.draw(G,with_labels = True, labels=labels, pos=pos, font_weight='normal',node_size=60,font_size=5)
     # plt.show(block=False)
     # plt.tight_layout()
-    plt.savefig("Graph.png", format="PNG")
+    # plt.savefig("Graph.png", format="PNG")
+    my_stringIObytes = io.BytesIO()
+    plt.savefig(my_stringIObytes, format='jpg')
+    my_stringIObytes.seek(0)
+    my_base64_jpgData = base64.b64encode(my_stringIObytes.read()).decode()
+    return my_base64_jpgData
 
 def storeGraphJSON(graph):
     return nx.node_link_data(graph)
