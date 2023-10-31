@@ -34,13 +34,42 @@ function Song( { track } ) {
 
                     {/* more */}
                     <Grid item xs={.2} sm={.5} md={1}>
-                        <button className="icon-button-style"><img alt="more" className='icon-style' src={MoreIcon}></img></button>
+                        <button className="icon-button-style" onClick={() => {MorePopupHandler()}}><img alt="more" className='icon-style' src={MoreIcon}></img></button>
+                        <div class="dropdown">
+                            <button onclick={MorePopupHandler()} class="dropbtn">Dropdown</button>
+                            <div id="myDropdown" class="dropdown-content">
+                                <a href="#">Link 1</a>
+                                <a href="#">Link 2</a>
+                                <a href="#">Link 3</a>
+                            </div>
+                        </div>
                     </Grid>
                 </Grid>
             </Box>
         </div>
         
     );
+}
+
+function MorePopupHandler() {
+    /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    document.getElementById("myDropdown").classList.toggle("show");
+    
+}
+
+// Close the dropdown menu if the user clicks outside of it
+window.onclick = function(event) {
+    if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+        var openDropdown = dropdowns[i];
+        if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+        }
+    }
+    }
 }
 
 export default Song;
