@@ -1,6 +1,6 @@
 // const express = require('express')
 // const app = express
-import express from 'express';
+import express, { response } from 'express';
 import cors from 'cors';
 const port = 8000
 // const auth = require('./auth')
@@ -68,25 +68,33 @@ app.post('/getConfigPlaylist', async (req, res) => {
     // The user exists, we can now take the model and send it to the backend, along with all of the configs passed through
 
     // console.log("Model sanity check:", docSnapshot.data().model);
+    let modelResp = await fetch(modelURLBase + "/mood2mood", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "model": docSnapshot.data().model,
+        "fromMood": req.body.config.fromMood,
+        "toMood": req.body.config.toMood,
+        "duration": req.body.config.duration
+      }),
+      method: "POST"
+    })
+    let response = await modelResp.json();
+    // console.log("MODEL RESP, MOOD2MOOD: ", response.queue)
+    // console.log("MODEL RESP, model: ", response.model)
 
-    // let modelResp = await fetch(modelURLBase + "/mood2mood", {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({
-    //     "model": docSnapshot.data().model,
-    //     "fromMood": req.body.config.fromMood,
-    //     "toMood": req.body.config.toMood,
-    //     "duration": req.body.config.duration
-    //   }),
-    //   method: "POST"
-    // })
-    // let response = await modelResp.json();
-    // console.log("MODEL RESP, MOOD2MOOD: ", response)
-
+    // Set the model and the image to firebase now
+    await setDoc(docRef, {
+      "model": response.model,
+      "graphImage": response.graphImage
+    }, { merge: true })
+    .then(() => {
+      console.log("Firebase now has the latest model as well as the graph image.")
+    })
+    
+    res.send(response.queue)
   }
-
-  res.send({ "You've": "Hit the backend, there's no songs here yet ya dog." })
 })
 
 app.post('/login', async function (req, res) {

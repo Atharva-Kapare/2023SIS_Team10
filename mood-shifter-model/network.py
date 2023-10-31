@@ -1,8 +1,11 @@
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import networkx as nx
+from networkx.drawing.nx_agraph import graphviz_layout, to_agraph
 
 import random
+import io
+import base64
 
 mpl.use('agg')
 
@@ -65,7 +68,6 @@ def createNewNetwork(likedSongs):
 
     return storeGraphJSON(G)
 
-
 def mood2mood(graph, fromMood, toMood, duration):
     G = None
     G = getGraphJSON(graph)
@@ -84,34 +86,111 @@ def mood2mood(graph, fromMood, toMood, duration):
                 toNodes.append(G.nodes[key])
         # print(key, value)
     
-    print(fromMood, fromNodes)
-    print(toMood, toNodes)
+    # print(fromMood, fromNodes)
+    # print(toMood, toNodes)
 
     # We now have both start and end nodes, need to select a start song from the start nodes list
     startSong = random.choice(fromNodes)
 
     numberOfSongs = (int(duration) // averageSongLength) - 2
-    generatedQueue = nodeCrawl(G, startSong, numberOfSongs)
+    generatedQueue = nodeCrawl(G, startSong, numberOfSongs, toNodes)
+    addNewEdgeBetween(G, generatedQueue[-1]["songID"], toNodes[0]["songID"])
+    print("from:", generatedQueue[-1]["songID"], "to:", toNodes[0]["songID"])
+    generatedQueue += toNodes
+    imageB64 = saveGraphImage(G)
+    # print(generatedQueue)
+    # print(len(generatedQueue))
 
-    return generatedQueue
+    return {"queue": generatedQueue, "model": storeGraphJSON(G), "graphImage": imageB64}
 
-def nodeCrawl(G, currentNode, times, queue=None):
+def nodeCrawl(G, currentNode, times, toNodes, queue=None):
 
     if queue is None:
         queue = []
-        queue.append(currentNode)
-    
     if times == 0:
-        return queue
+        queue.append(currentNode)
     else:
+        queue.append(currentNode)
         # This is where the node crawling logic should go
-        print("Just putting something here")
-        
+        # print("Just putting something here")
+        neighbours = list(G.neighbors(currentNode["songID"]))
+
+        if len(neighbours) > 0:
+            randNum = random.random()
+            # print(randNum)
+            if randNum < 0.9:
+                # We want to go explore one of the connected neighbours in this case, so grab a random one
+                # Get the list of all ids already existing in queue
+                queueIDs = [x["songID"] for x in queue]
+                # print("current ids: ", currentNode["songID"], end='\n')
+                # print("queue ids: ", queueIDs, end='\n')
+                # print("neighbour ids: ", neighbours, end='\n')
+                
+                # Only have a look at the neighbours that don't appear in the queue
+                # unvisited = list(set(queueIDs).symmetric_difference(neighbours))
+                unvisited = list(set(neighbours).difference(queueIDs))
+                # print("unvisited: ", unvisited, end='\n')
+
+                if len(unvisited) == 0:
+                    # Explore new node here
+                    nextNode = selectNewRandom(G, queue, currentNode, toNodes)
+                    nodeCrawl(G, nextNode, times-1, toNodes, queue)
+                    # return # This would have to get removed when we get the new random node.
+                else:
+                    nextNodeID = random.choice(unvisited)
+                    nextNode = G.nodes[nextNodeID]
+                    # print(nextNode, end='\n')
+                    # Now send this back to the recursive function
+                    nodeCrawl(G, nextNode, times-1, toNodes, queue)
+            else:
+                # This is when you would try to form a new connection with a new node
+                nextNode = selectNewRandom(G, queue, currentNode, toNodes)
+                nodeCrawl(G, nextNode, times-1, toNodes, queue)
+        else:
+            # We have no neighbours and must explore a completely new node
+            nextNode = selectNewRandom(G, queue, currentNode, toNodes)
+            nodeCrawl(G, nextNode, times-1, toNodes, queue)
+
+        # print(neighbours)
+    
+    # print("finished queue: ", queue)
 
     return queue
 
+def selectNewRandom(G, queue, currentNode, toNodes):
+    # We need to take the graph, and return a node that isn't already in the queue. Then create an edge between the current node and the new one.
+
+    # Create a blacklist so it doesn't pull any songs from there, the blacklist should contain:
+    # the current queue, the toNodes array, as well as the nodes from the currentNodes skipped list
+    blacklist = []
+
+    allNodes = list(G.nodes)
+    queueIDs = [x["songID"] for x in queue]
+    toIDs = [x["songID"] for x in toNodes]
+
+    blacklist += queueIDs
+    blacklist += toIDs
+    blacklist += currentNode["skipped"] # could potentially only set these from a percent chance? 
+
+    print(blacklist, end='\n')
+    print(len(blacklist), end='\n')
+
+    nonVisited = list(set(allNodes).difference(blacklist))
+    # print("all non-visited: ", nonVisited)
+
+    randomNode = random.choice(nonVisited)
+    
+    addNewEdgeBetween(G, currentNode["songID"], randomNode)
+    # saveGraphImage(G)
+    return G.nodes[randomNode]
+
 def addNewEdgeBetween(G, fromNode, toNode):
-    return G.add_edge(fromNode, toNode, skipped=32, played=10, weight=float(10/32))
+    if not G.has_edge(fromNode, toNode):
+        G.add_edge(fromNode, toNode)
+        G[fromNode][toNode].update(skipped=32)
+        G[fromNode][toNode].update(played=10)
+        G[fromNode][toNode].update(weight=float(10/32))
+    return
 
 def tagSongs(graph, songs, tag):
     G = None
@@ -152,14 +231,18 @@ def saveGraphImage(G):
 
     options = {"node_size": 150}
 
-    
-    plt.figure(figsize=(10,10), dpi=200)
+    plt.figure(figsize=(10,10), dpi=100)
     plt.axis("off")
-    pos = nx.spring_layout(G, k=0.5)
-    nx.draw(G,with_labels = True, labels=labels, pos=pos, font_weight='normal',node_size=60,font_size=8)
+    pos = nx.kamada_kawai_layout(G, )
+    nx.draw(G,with_labels = True, labels=labels, pos=pos, font_weight='normal',node_size=60,font_size=5)
     # plt.show(block=False)
     # plt.tight_layout()
-    plt.savefig("Graph.png", format="PNG")
+    # plt.savefig("Graph.png", format="PNG")
+    my_stringIObytes = io.BytesIO()
+    plt.savefig(my_stringIObytes, format='jpg')
+    my_stringIObytes.seek(0)
+    my_base64_jpgData = base64.b64encode(my_stringIObytes.read()).decode()
+    return my_base64_jpgData
 
 def storeGraphJSON(graph):
     return nx.node_link_data(graph)
