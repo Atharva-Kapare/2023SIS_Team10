@@ -43,3 +43,11 @@ def skipped_song():
     # print(data["likedSongs"])
 
     return skippedSong(data["model"], data["before"], data["current"])
+
+@app.route("/playedSong", methods=["POST"])
+def played_song():
+    data = request.get_json()
+    # print(data)
+    # print(data["likedSongs"])
+
+    return playedSong(data["model"], data["before"], data["current"])

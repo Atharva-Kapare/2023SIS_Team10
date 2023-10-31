@@ -23,6 +23,7 @@ app.use(express.json());
 
 // import cors from 'cors';
 // app.use(cors());
+app.use(cors());
 
 async function fetchWebApi(token, endpoint, method, body) {
   const res = await fetch(`https://api.spotify.com/${endpoint}`, {
@@ -34,8 +35,6 @@ async function fetchWebApi(token, endpoint, method, body) {
   });
   return await res.json();
 }
-
-app.use(cors());
 
 app.post('/skippedSong', async (req, res) => {
   // Params: UID, current, before
@@ -74,8 +73,36 @@ app.post('/skippedSong', async (req, res) => {
 
 app.post('/playedSong', async (req, res) => {
   // Params: UID, current, before
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+
+    let modelResp = await fetch(modelURLBase + "/playedSong", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "model": docSnapshot.data().model,
+        "before": req.body.before,
+        "current": req.body.current
+      }),
+      method: "POST"
+    })
+    let response = await modelResp.json();
+    res.send(response)
+
+    await setDoc(docRef, {
+      "model": response.model,
+      "graphImage": response.graphImage
+    }, { merge: true })
+      .then(() => {
+        console.log("The skipped song is now reflected in the model.")
+      })
+  }
   console.log("PLAYED SONG: ", req.body);
-  res.send(req.body);
 })
 
 app.post('/getConfigPlaylist', async (req, res) => {
@@ -172,21 +199,22 @@ app.post('/login', async function (req, res) {
     // Now we need to take the liked songs and send it to the model so it can give us back the model to store in firebase
 
     // //UNCOMMENT BELOW
-    // const modelResp = await fetch(modelURLBase + "/new_user", {
-    //   method: "POST",
-    //   body: JSON.stringify({ "likedSongs": likedSongs }),
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   }
-    // });
+    const modelResp = await fetch(modelURLBase + "/new_user", {
+      method: "POST",
+      body: JSON.stringify({ "likedSongs": likedSongs }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
 
-    // console.log("ModelResp: ", modelResp);
-    // let response = await modelResp.json();
-    // console.log("Res: ", response)
+    console.log("ModelResp: ", modelResp);
+    let response = await modelResp.json();
+    console.log("Res: ", response)
 
     setDoc(doc(database, 'users', req.body.UID), {
       "moods": {},
-      // "model": response,
+      "model": response.model,
+      "graphImage": response.graphImage,
       "configs": {},
       "gettingStarted": docSnapshot.exists() ? document.gettingStarted : true
     }, { merge: true }).then(console.log("Document for: ", req.body.UID, "was set"));
@@ -206,11 +234,27 @@ app.post('/taggedSongs', async (req, res) => {
   if (!docSnapshot.exists()) {
     res.send("The user does not exist.");
   } else {
+
+    let modelResp = await fetch(modelURLBase + "/tagSongs", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "model": docSnapshot.data().model,
+        "songs": req.body.songs,
+        "tag": req.body.mood
+      }),
+      method: "POST"
+    })
+    let response = await modelResp.json();
+    // console.log("MODEL RESP: ", response)
+
     let mood = req.body.mood
     await setDoc(docRef, {
       "moods": {
         [mood]: req.body.songs
-      }
+      }, 
+      "model": response
     }, { merge: true })
       .then(res.send({ "Success": "The lists have been stored into firebase" }))
   }
