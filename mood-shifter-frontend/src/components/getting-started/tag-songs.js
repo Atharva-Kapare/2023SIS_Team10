@@ -150,6 +150,7 @@ function TagSongsScreen( { route, navigation } ) {
                                     sendUserSongDataToBackend(selectedMood, addedSongs);
                                     setAddedSongs([]);
                                     selectedMood = null;
+                                    songsAdded = 0;
 
                                     if(selectFinish) {
                                         navigation.navigate('CongratulationsScreen')
