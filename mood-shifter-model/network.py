@@ -10,6 +10,7 @@ import base64
 mpl.use('agg')
 
 averageSongLength = 3 # in mins
+CRITICAL_WEIGHT = 0.3
 
 # seed = 13648  # Seed random number generators for reproducibility
 # G = nx.random_k_out_graph(10, 3, 0.5, seed=seed)
@@ -72,10 +73,42 @@ def skippedSong(graph, fromMood, toMood):
     G = None
     G = getGraphJSON(graph)
 
-    
+    fromNode = G.nodes[fromMood["id"]]
+    toNode = G.nodes[toMood["id"]]
+
+    # Need to check if the edge between the two nodes exists:
+    if G.has_edge(fromMood["id"], toMood["id"]):
+        updateEdgeAttributes(G, fromNode, toNode, True)
+    else:
+        # There is no edge in between the two nodes, we need to have a look at the skipped list to see if fromNode is allowed to connect to the toNode
+        print("edge data:", G[fromNode["songID"]][toNode["songID"]])
+
 
     imageB64 = saveGraphImage(G)
     return {"model": storeGraphJSON(G), "graphImage": imageB64}
+
+def updateEdgeAttributes(G, fromNode, toNode, isSkip):
+    # Will update the edge attributes depending on if a skip event happened and will evaluate the edge health
+    # We are assuming that there is an edge between the two nodes
+    if isSkip:
+        print("edge data:", G[fromNode["songID"]][toNode["songID"]])
+        edgeData = G[fromNode["songID"]][toNode["songID"]]
+        # Update the data now:
+        newWeight = float(edgeData["played"] / (edgeData["skipped"]+1))
+        if newWeight < CRITICAL_WEIGHT:
+            # Delete the edge
+            print("edge will have to get deleted")
+            G.remove_edge(fromNode["songID"], toNode["songID"])
+            # Add the toNode to the skipped list on the fromNode
+            
+            return
+        else:
+            G[fromNode["songID"]][toNode["songID"]].update(skipped=edgeData["skipped"]+1)
+            G[fromNode["songID"]][toNode["songID"]].update(weight=newWeight)
+    else:
+        # This is when a song has been played through completely
+        return
+    return
 
 def mood2mood(graph, fromMood, toMood, duration):
     G = None
