@@ -150,7 +150,7 @@ async function onTrackChange(state) {
       body: JSON.stringify(
         { 
           ...skippedObject,
-          "UID": localStorage.getItem("accessToken") 
+          "UID": localStorage.getItem("UID") 
         }),
     })
       .then((res) => {
@@ -171,7 +171,7 @@ async function onTrackChange(state) {
       body: JSON.stringify(
         { 
           ...songPlayedObject,
-          "UID": localStorage.getItem("accessToken") 
+          "UID": localStorage.getItem("UID") 
         }),
     })
       .then((res) => {
