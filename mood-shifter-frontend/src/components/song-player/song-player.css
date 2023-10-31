@@ -1,8 +1,8 @@
 .playbar {
   display: flex;
   justify-content: space-between;
-  flex-direction: column;
   align-items: center;
+  text-align: center;
   padding: 10px;
   background-color: #121212;
   color: #fff;
@@ -13,11 +13,12 @@
 .playbar-info {
   display: flex;
   align-items: center;
+  justify-content: center;
+  padding: 5%;
 }
 
 .playbar-song-info{
   display: flex;
-    flex-direction: column;
     align-items: center;
 }
 
@@ -104,3 +105,8 @@ width: 100%
   justify-content: space-evenly;
   height: 100vh;
 } */
+
+.songDetails{
+  margin: auto;
+  width: 50%;
+}

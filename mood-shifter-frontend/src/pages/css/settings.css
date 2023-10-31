@@ -10,7 +10,7 @@
 }
   
 .slider {
-    background-color: #ccc;
+    background-color: 121212;
     bottom: 0;
     cursor: pointer;
     left: 0;
@@ -21,7 +21,7 @@
 }
   
 .slider:before {
-    background-color: #fff;
+    background-color: #121212;
     bottom: 4px;
     content: "";
     height: 26px;
@@ -31,6 +31,15 @@
     width: 26px;
 }
   
+._SliderRSWP{
+    justify-content: center;
+    margin-top: 10px;
+}
+
+._ControlsButtonsRSWP{
+    padding: 5px;
+}
+
 input:checked + .slider {
     background-color: #66bb6a;
 }
