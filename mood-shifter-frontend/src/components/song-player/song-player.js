@@ -1,102 +1,181 @@
 import React, { useState, useRef, useEffect } from "react";
-import PreviousButton from "./playbar-buttons/previous";
-import PlayButton from "./playbar-buttons/play-pause";
-import NextButton from "./playbar-buttons/next";
-import ProgressBar from "./playbar-buttons/progress-bar";
 import SongDetails from "./playbar-buttons/song-details";
 import "./song-player.css";
 import SpotifyPlayer from "react-spotify-web-playback";
 import Footer from "../footer"
 import authentication from "../../authentication";
 
-function SongPlayerScreen({ navigation }) {
-
+function SongPlayerScreen({ navigation, route }) {
+  // const  playlistData = JSON.parse(localStorage.getItem("MoodPlaylist"));
+  let {playlistData} = route?.params ?? {undefined};
   let [uris, setUris] = useState([""]);
   let [track, setTrack] = useState(undefined);
-  const likedSongs = authentication.getLikedSongs();
+  const likedSongs = localStorage.getItem("playlistData");
   const accessToken = localStorage.getItem("accessToken");
   let [currentIndex, setCurrentIndex] = useState(0);
-  let [previousState, setPreviousState] = useState(undefined)
+  let [previousState, setPreviousState] = useState(undefined);
   let [fullyPlayedSongs, setFullyPlayedSongs] = useState([]);
+
+  let [playThisPlease, setPlay] = useState(false);
+
   let [songs, setSongs] = useState([
     {
       title: "Bloop",
       artists: "Bleep",
       albumCover: "https://via.placeholder.com/60x60",
-      duration: 60,
       uri: "",
     },
   ]);
 
   useEffect(() => {
-    likedSongs.then((res) => {
-    // console.log(
-    //   "Component initialized",
-    //   res,
-    //   res[0].track.duration_ms / 1000,
-    //   accessToken
-    // );
-      if (res[0]) {
+    
+    console.log('LEEN MOOD', playlistData);
+    if(playlistData && Object.keys(playlistData)?.length > 0){
+        if(playlistData?.["songs"]?.[0]) {
+        console.log("LEEN moodplaylistsongs", playlistData["songs"]);
         songs = [];
         const uriList = [];
-        res.forEach((song,index) =>
-        {
-          if(index === 0){
+        
+        playlistData["songs"].forEach((song, index) => {
+          if (index === 0) {
             setTrack({
-              name: song.track.name,
-              image: song.track.album.images[0],
-              artists: song.track.artists,
-              id: song.track.id
+              name: song.title,
+              image: song.cover,
+              artists: song.artist,
+              id: song.uri,
             });
           }
+          
           songs.push({
-            title: song.track.name,
-            artist: song.track.artists[0].name,
-            albumCover: song.track.album.images[0].url,
-            duration: song.track.duration_ms / 1000,
-            uri: song.track.uri,
+            title: song.title,
+            artist: song.artist,
+            albumCover: song.cover,
+            uri: song.uri,
           });
         });
-
+        
         songs.map((song) => uriList.push(song.uri));
         setUris(uriList);
-        setSongs(songs);
+        setSongs(songs, ()=> {
+
+          setPlay(true);
+          console.log('LEEN PLAYYDKSJHSE/', playThisPlease);
+        });
       }
-    });
+      
+      }
+    else {
+      likedSongs.then((res) => {
+        if (res[0]) {
+          songs = [];
+          const uriList = [];
+          res.forEach((song, index) => {
+            if (index === 0) {
+              setTrack({
+                name: song.track.name,
+                image: song.track.album.images[0],
+                artists: song.track.artists,
+                id: song.track.id,
+              });
+            }
+            songs.push({
+              title: song.track.name,
+              artist: song.track.artists[0].name,
+              albumCover: song.track.album.images[0].url,
+              uri: song.track.uri,
+            });
+          });
+          songs.map((song) => uriList.push(song.uri));
+          setUris(uriList);
+          setSongs(songs);
+        }
+        setPlay(true);
+      console.log('LEEN KJFDSHJL/', playThisPlease);
+
+      });
+    }
   }, []);
 
   function onTrackChange(state) {
-    console.log('LEEN changed track', state);
-    if(currentIndex<state.previousTracks.length || previousState.nextTracks.length === 0){
-      
-      const percentagePlayed =  (previousState.progressMs/previousState.track.durationMs)*100;
-      console.log('LEEN next song, amount played:', percentagePlayed, fullyPlayedSongs);
-      if(percentagePlayed >= 80){
-        
+    console.log("LEEN changed track", state);
+    if (
+      currentIndex < state.previousTracks.length ||
+      previousState.nextTracks.length === 0
+    ) {
+      const percentagePlayed =
+        (previousState.progressMs / previousState.track.durationMs) * 100;
+      console.log(
+        "LEEN next song, amount played:",
+        percentagePlayed,
+        fullyPlayedSongs
+      );
+      if (percentagePlayed >= 80) {
         const playedSongs = fullyPlayedSongs;
         playedSongs.push(previousState.track.id);
         setFullyPlayedSongs(playedSongs);
-        if(fullyPlayedSongs.length === 2){
-          
-          const indexOfFullyPlayedSongs = fullyPlayedSongs.length -1;
+        if (fullyPlayedSongs.length >= 2) {
+          const indexOfFullyPlayedSongs = fullyPlayedSongs.length - 1;
           const objectForBackEnd = {
             current: fullyPlayedSongs[indexOfFullyPlayedSongs],
-            previous: fullyPlayedSongs[indexOfFullyPlayedSongs-1]
-
-          }
-          console.log('LEEN songs fully played', objectForBackEnd);
+            previous: fullyPlayedSongs[indexOfFullyPlayedSongs - 1],
+          };
+          console.log("LEEN songs fully played", objectForBackEnd);
+          sendSongPlayedObject(objectForBackEnd);
         }
-      }
-      else if(fullyPlayedSongs.length > 0){
+      } else if (fullyPlayedSongs.length > 0) {
         const objectForBackEnd = {
           current: previousState.track.id,
-          previous: fullyPlayedSongs[fullyPlayedSongs.length-1]
-        }
-        console.log('LEEN song skipped and last song fully played', objectForBackEnd);
+          previous: fullyPlayedSongs[fullyPlayedSongs.length - 1],
+        };
+        console.log(
+          "LEEN song skipped and last song fully played",
+          objectForBackEnd
+        );
+        sendSkippedObject(objectForBackEnd);
       }
     }
   }
   // document.getElementById("Wrapper").style.color = "#2c2c2c";
+  async function sendSkippedObject(skippedObject) {
+    //TODO add /navigation to url
+    await fetch("http://localhost:8000/skippedSong", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(
+        { 
+          ...skippedObject,
+          "UID": localStorage.getItem("accessToken") 
+        }),
+    })
+      .then((res) => {
+        console.log("skipped object sent", res);
+      })
+      .catch((error) => console.error(error));
+  }
+
+  async function sendSongPlayedObject(songPlayedObject) {
+    console.log("Sent")
+    //TODO add /navigation to url
+    await fetch("http://localhost:8000/playedSong", {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(
+        { 
+          ...songPlayedObject,
+          "UID": localStorage.getItem("accessToken") 
+        }),
+    })
+      .then((res) => {
+        console.log("skipped object sent", res);
+      })
+      .catch((error) => console.error(error));
+  }
 
   return (
     <div className="playbar">
@@ -109,18 +188,31 @@ function SongPlayerScreen({ navigation }) {
         token={accessToken}
         uris={uris}
         callback={(state) => {
-            if(!previousState){
-              setPreviousState(state);
+          if (state.isPlaying === false) {
+            setPlay(false);
+            console.log('LEEN SET FALSE');
           }
-          else{
-          if (state.track.id !== previousState.track.id) {
-            const indexOfTrack = state.previousTracks.length;            
-            setTrack(state.track);
-            onTrackChange(state);
-            setCurrentIndex(indexOfTrack);
+          if (!previousState) {
+            setPreviousState(state);
+          } else {
+            if (state.track.id !== previousState.track.id) {
+              const indexOfTrack = state.previousTracks.length;
+              setTrack(state.track);
+              onTrackChange(state);
+              setCurrentIndex(indexOfTrack);
+            }
+            setPreviousState(state);
           }
-          setPreviousState(state);
-        }
+        }}
+        play={playThisPlease}
+        styles={{
+          activeColor: "#fff",
+          bgColor: "#232426",
+          color: "#fff",
+          loaderColor: "#fff",
+          sliderColor: "#1cb954",
+          trackArtistColor: "#ccc",
+          trackNameColor: "#fff",
         }}
       ></SpotifyPlayer>
        {/* <i class="fa-solid fa-bars" onClick={() => navigation.navigate('')}></i> */}

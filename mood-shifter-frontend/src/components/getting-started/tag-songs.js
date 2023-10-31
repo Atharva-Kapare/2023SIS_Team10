@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import './getting-started.css';
-import SearchIcon from '../../assets/icons/search-icon.png'
-import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png'
-import Song from './song'
+import SearchIcon from '../../assets/icons/search-icon.png';
+import SongCoverIcon from '../../assets/icons/placeholder-song-cover.png';
+import SongMinus from './song-minus';
+import SongPlus from './song-plus';
+import { Box, Grid } from '@mui/material';
 
 let tagCount = localStorage.getItem('tagCount') || 0;
 let songsAdded = 0;
@@ -73,84 +75,93 @@ function TagSongsScreen( { route, navigation } ) {
     }, [searchTerm])
 
     return (
-        <div className="login">
-            <div className="header-div">
-                <h4 className="text-style step-text">Step 2</h4>
-                <h1 className="text-style">Tag 3 Songs</h1>
-                <div className="iconic-banner">
-                    <h1 className="text-style mood-text-style">{selectedMood}</h1>
-                </div>
-                <h3 className="text-style sub-text">Search for 3 or more songs that align with the mood '{selectedMood}'. The more songs you tag the better the results!</h3>
-            </div>
+        <div className='App-header'>
+            <Box>
+                <Grid container rowSpacing={{ xs: 2, sm: 3, md: 4 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
+                    
+                    {/* Step and Title and Subtitle */}
+                    <Grid item xs={2} sm={6} md={12}>
+                        <h4 className="text-style step-text">Step 2</h4>
+                    </Grid>
+                    <Grid item xs={2} sm={6} md={12}>
+                        <h1 className="text-style">Tag 3 Songs</h1>
+                    </Grid>
+                    <Grid item xs={2} sm={6} md={12}>
+                        <h3 className="text-style section-header">Search for 3 or more songs that align with the mood '{selectedMood}'. The more songs you tag the better the results!</h3>
+                    </Grid>
 
-            {/* Search Bar */}
-            <div className='search-bar-div'>
-                <img className="search-icon-style" src={SearchIcon} alt=""></img>
-                <input className="search-bar-style" name="searchbar" id="searchbar" placeholder="search..." onKeyUp={(e) => setSearch(e.target.value)}></input>
-            </div>
-            {/* Search Bar */}
-            
-            {/* Song List */}
-            <div className='song-div'>
-                <div className="section-div">
-                    <h3 className="section-header">Added</h3>
-                    <h3 className="section-header">Selected: {songsAdded}</h3>
-                </div>
-            </div>
+                    {/* search bar */}
+                    <Grid item xs={2} sm={5} md={11}>
+                        <div className="search-div">
+                            <img className="search-get-started-style" alt="search icon" src={SearchIcon}></img>
+                            <input className="search-bar-style" name="searchbar" id="searchbar" placeholder="Enter a song name..." onKeyUp={(e) => setSearch(e.target.value)}></input>
+                        </div>
+                    </Grid>
+                  
+                    {/* Mood playlist title */}
 
-            {/* Added Song List */}
-            <div className='song-div' style={{ overflowY: "scroll", minHeight: "200px"}}>
-                <li>
+                    {/* Added songs header */}
+                    <Grid item xs={1.6} sm={5} md={10}>
+                        <p className="subject-text mood-text-style">{selectedMood} Playlist</p>
+                    </Grid>
+                    <Grid item xs={.4} sm={1} md={2}>
+                        <p className="subject-text">{songsAdded}/3</p>
+                    </Grid>
+
+                    {/* Adding Song List */}
+                    <Grid item xs={2} sm={6} md={12}>
                     {addedSongs.map(song => (
                         <div  style={{ cursor: "pointer"}} onClick={() => removeSong(song)}>
-                            <Song 
+                            <SongMinus 
                                 track={song}
                                 key={song.uri}
                             />
                         </div>
                     ))}
-                </li>
-            </div>
-            {/* Added Song List */}
+                    </Grid>
 
-            <div className="song-div">
-                <h3 className="section-header">Suggested</h3>
-            </div>
-            
-            <div className='song-div' style={{ overflowY: "scroll"}}>
-                <li>
-                    {searchResults.map(song => (
-                        <div  style={{ cursor: "pointer" }} onClick={() => addSong(song)}>
-                            <Song 
-                                track={song}
-                                key={song.uri}
-                            />
+                    <Grid item xs={2} sm={6} md={12}>
+                        <h3 className="section-header">Suggested</h3>
+                    </Grid>
+
+                    {/* Suggested Song List */}
+                    <Grid item xs={2} sm={6} md={12}>
+                    <div style={{ overflowY: "scroll", maxHeight: "300px"}}>
+                        {searchResults.map(song => (
+                            <div  style={{ cursor: "pointer" }} onClick={() => addSong(song)}>
+                                <SongPlus 
+                                    track={song}
+                                    key={song.uri}
+                                />
+                            </div>
+                        )).slice(0,10)}
                         </div>
-                    ))}
-                </li>
-            </div>
-            {/* Song List */}
+                    </Grid>
 
-            <button className="sign-in-button-style" 
-                onClick={() => {
-                    if(songsAdded < 3) {
-                        alert("Make sure you select at least 3 songs before continuing!");
-                        return false;
-                    }  else {
-                        const selectFinish = checkTagged();
-                        
-                        sendUserSongDataToBackend(selectedMood, addedSongs);
-                        setAddedSongs([]);
-                        selectedMood = null;
+                    <Grid item xs={2} sm={6} md={12}>
+                        <button className="sign-in-button-style" 
+                            onClick={() => {
+                                if(songsAdded < 3) {
+                                    alert("Make sure you select at least 3 songs before continuing!");
+                                    return false;
+                                }  else {
+                                    const selectFinish = checkTagged();
+                                    
+                                    sendUserSongDataToBackend(selectedMood, addedSongs);
+                                    setAddedSongs([]);
+                                    selectedMood = null;
 
-                        if(selectFinish) {
-                            navigation.navigate('CongratulationsScreen')
-                        } else {
-                            navigation.navigate('SelectMoodScreen')
-                        }
-                    }
-                }}
-            >Continue</button>
+                                    if(selectFinish) {
+                                        navigation.navigate('CongratulationsScreen')
+                                    } else {
+                                        navigation.navigate('SelectMoodScreen')
+                                    }
+                                }
+                            }}
+                        >Continue</button>
+                    </Grid>
+                </Grid>
+            </Box>
 
         </div>
     );

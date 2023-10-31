@@ -16,8 +16,10 @@
     /* background-image: linear-gradient(to bottom right, var(--green), var(--light-green)); */
     width: var(--playlist-width);
     height: var(--playlist-height);
-    border: none;
-    /* box-shadow: 5px 5px #474747 ; */
+}
+
+.playlist-cover-btn{
+    background-color:  #121212;
 }
 
 .playlist-logo {

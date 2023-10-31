@@ -24,19 +24,30 @@ app.use(express.json());
 // import cors from 'cors';
 // app.use(cors());
 
-// async function fetchWebApi(token, endpoint, method, body) {
-//   const res = await fetch(`https://api.spotify.com/${endpoint}`, {
-//   headers: {
-//       Authorization: `Bearer ${token}`,
-//   },
-//   method,
-//   body:JSON.stringify(body)
-//   });
-//   return await res.json();
-// }
+async function fetchWebApi(token, endpoint, method, body) {
+  const res = await fetch(`https://api.spotify.com/${endpoint}`, {
+  headers: {
+      Authorization: `Bearer ${token}`,
+  },
+  method,
+  body:JSON.stringify(body)
+  });
+  return await res.json();
+}
 
 app.use(cors());
 
+app.post('/skippedSong', async (req, res) => {
+  // Params: UID, current, before
+  console.log("SKIPPED SONG: ",req.body);
+  res.send(req.body);
+})
+
+app.post('/playedSong', async (req, res) => {
+  // Params: UID, current, before
+  console.log("PLAYED SONG: ",req.body);
+  res.send(req.body);
+})
 
 app.post('/getConfigPlaylist', async (req, res) => {
   // Params: uid, config
@@ -57,7 +68,6 @@ app.post('/getConfigPlaylist', async (req, res) => {
     // The user exists, we can now take the model and send it to the backend, along with all of the configs passed through
 
     // console.log("Model sanity check:", docSnapshot.data().model);
-
     let modelResp = await fetch(modelURLBase + "/mood2mood", {
       headers: {
         "Content-Type": "application/json",
@@ -133,21 +143,21 @@ app.post('/login', async function (req, res) {
     // Now we need to take the liked songs and send it to the model so it can give us back the model to store in firebase
 
     // //UNCOMMENT BELOW
-    const modelResp = await fetch(modelURLBase + "/new_user", {
-      method: "POST",
-      body: JSON.stringify({ "likedSongs": likedSongs }),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
+    // const modelResp = await fetch(modelURLBase + "/new_user", {
+    //   method: "POST",
+    //   body: JSON.stringify({ "likedSongs": likedSongs }),
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   }
+    // });
 
-    console.log("ModelResp: ", modelResp);
-    let response = await modelResp.json();
-    console.log("Res: ", response)
+    // console.log("ModelResp: ", modelResp);
+    // let response = await modelResp.json();
+    // console.log("Res: ", response)
 
     setDoc(doc(database, 'users', req.body.UID), {
       "moods": {},
-      "model": response,
+      // "model": response,
       "configs": {},
       "gettingStarted": docSnapshot.exists() ? document.gettingStarted : true
     }, { merge: true }).then(console.log("Document for: ", req.body.UID, "was set"));
@@ -173,33 +183,33 @@ app.post('/taggedSongs', async (req, res) => {
         [mood]: req.body.songs
       }
     }, { merge: true })
-      .then(res.send({ "Success": "The lists have been stored into firebase" }))
+    .then(res.send({ "Success": "The lists have been stored into firebase" }))
   }
   // SEND DATA TO THE BACKEND HERE:
   // Pass the model, songs (array of objects), mood name (string) back to the model
   // console.log("Model: ", docSnapshot.data().model)
 
-  let modelResp = await fetch(modelURLBase + "/tagSongs", {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      "model": docSnapshot.data().model,
-      "songs": req.body.songs,
-      "tag": req.body.mood
-    }),
-    method: "POST"
-  })
-  let response = await modelResp.json();
-  console.log("MODEL RESP: ", response)
+  // let modelResp = await fetch(modelURLBase + "/tagSongs", {
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify({
+  //     "model": docSnapshot.data().model,
+  //     "songs": req.body.songs,
+  //     "tag": req.body.mood
+  //   }),
+  //   method: "POST"
+  // })
+  // let response = await modelResp.json();
+  // console.log("MODEL RESP: ", response)
 
-  // Now we have to set the model in firebase
-  await setDoc(docRef, {
-    "model": response
-  }, { merge: true })
-    .then(() => {
-      console.log("The model should now be set with the latest tags.")
-    })
+  // // Now we have to set the model in firebase
+  // await setDoc(docRef, {
+  //   "model": response
+  // }, { merge: true })
+  //   .then(() => {
+  //     console.log("The model should now be set with the latest tags.")
+  //   })
 
   // const res = await fetch("https://api.spotify.com/v1/me/tracks?", {
   //   headers: {

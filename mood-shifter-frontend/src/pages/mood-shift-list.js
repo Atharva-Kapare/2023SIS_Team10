@@ -6,6 +6,7 @@ import SearchIcon from "../assets/icons/search-icon.png";
 import ExportIcon from '../assets/icons/exportIcon.png';
 import PlayIcon from '../assets/icons/playIcon.png';
 import Song from "../components/song-list/song";
+import { Box, Grid } from "@mui/material";
 
 function SongListScreen({ route, navigation }) {
     const { playlistData, color } = route.params;
@@ -13,51 +14,70 @@ function SongListScreen({ route, navigation }) {
     const newColor = color.replace(/^(.*#)/, "linear-gradient(0deg, #000000, #");
 
     const songListBody = (color) => ({ 
-        minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        height: "100%",
         background: `${newColor}`,
-        width: "100vw",
-        overflowX: "clip",
     })
 
     return (
-        <div className="song-list-body" style={songListBody(color)}>    
-            <div className="back-icon-div">
-                <button className="back-icon-style" onClick={() => {
-                    navigation.navigate('PlaylistScreen');
-                }}>
-                    <img src={BackIcon} alt="back"></img>
-                </button>
-            </div>
-            <div className="header-style">
-                <div className="title-div">
-                    <h1 alt="Playlist" className="title-style">{playlistData.fromMood} to {playlistData.toMood} Playlist</h1>
-                    <h3 alt="Playlist" className="title-style">{playlistData.duration}m</h3>
-                </div>
-                <img alt="Search Song" src={SearchIcon}></img>
-            </div>
-            <div className="sub-header-style">
-                <img className="icon-style-large" alt="Play Song" src={PlayIcon}></img>
-                <img className="icon-style-small" alt="Export Playlist" src={ExportIcon}></img>
-            </div>
+        <div className="song-list-body" style={songListBody(color)}> 
+            <Box>
+                <Grid container rowSpacing={{ xs: 3, sm: 4, md: 6 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
+                    {/* back button */}
+                    <Grid item xs={1.8} sm={5} md={11}>
+                        <div className="back-icon-div song-list-space">
+                            <button className="back-icon-style" onClick={() => {navigation.navigate('PlaylistScreen', {playlistData: playlistData})}}>
+                                <img src={BackIcon} alt="back"></img>
+                            </button>
+                        </div>
+                    </Grid>
 
-            {/* Song List */}
-            <div className="song-list-display">
-                {/* {playlistData.songs.map(song => (
-                    <div>
-                        <Song
-                            key={song}
-                            track={song}
-                        ></Song>
-                    </div>
-                ))} */}
-            </div>
-            {/* Song List */}
+                    {/* spacer */}
+                    <Grid item xs={2} sm={6} md={12}></Grid> 
+                    
+                    {/* title */}
+                    <Grid item xs={2} sm={6} md={8}>
+                        <h1 alt="Playlist" className="title-style">{playlistData.fromMood} to {playlistData.toMood} Playlist</h1>
+                    </Grid>
 
-        </div>        
+                    {/* spacer */}
+                    <Grid item xs={1.1} sm={4} md={1}></Grid> 
+
+                    {/* search */}
+                    {/* <Grid item xs={.3} sm={2} md={1}>
+                        <img className="search-style-small" alt="Search Song" src={SearchIcon}></img>
+                    </Grid> */}
+
+                    {/* export and play */}
+                    <Grid item xs={.3} sm={.5} md={1}> 
+                        <img className="icon-style-small" style={{cursor: "pointer"}} alt="Export Playlist" src={ExportIcon} onClick={() => { 
+                              const options = {
+                                  method: "POST",
+                                  headers: {
+                                      Accept: "application/json",
+                                      "Content-Type": "application/json;charset=UTF-8",
+                                  },
+                                  body: JSON.stringify({
+                                      accessToken: localStorage.getItem("accessToken"),
+                                      name: playlistData.mood + " Playlist",
+                                      description: "A playlist curated by MoodShifter",
+                                      trackURIs: playlistData.songs.map(song => (song.uri))
+                                  }),
+                              };
+                              fetch("http://localhost:8000/api/exportPlaylist", options);
+                              alert("Your playlist has been exported to Spotify!");
+                          }}>
+                        </img>
+                    </Grid>
+                    <Grid item xs={.5} sm={.5} md={1}>
+                        <img className="icon-style-large" alt="Play Song" src={PlayIcon} onClick={ () => {navigation.navigate('SongPlayerScreen', {playlistData: playlistData})}}></img>
+                    </Grid>
+                    
+                    {/* Song List */}
+                    <Grid item xs={2} sm={6} md={11}>
+                        {/* add the the loop for mood shift playlist songs lists  */}
+                    </Grid>
+                </Grid>
+            </Box>  
+        </div>       
     )
 }
 
