@@ -201,7 +201,7 @@ async function GetMoodShiftPlaylist() {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("API OUT: ", data);
+        // console.log("API OUT: ", data);
         return data;
     })
     .catch(error => console.error(error));
@@ -225,9 +225,21 @@ async function GetConfigPlaylist(config, navigation) {
     })
     .then(response => response.json())
     .then(data => {
-        console.log("CONFIG OUT: ", data);
+        console.log("CONFIG OUT: ", typeof data, data.length);
+        
+        let result = [] 
+        data.forEach(song => {
+            result.push({
+                title: song.name,
+                artist: song.artist,
+                cover: song.cover,
+                uri: song.uri,
+                tags: song.tags
+            })
+        })
+        console.log("result: ", data)
         navigation.navigate('MoodShiftListScreen', {
-            playlistData: data,
+            playlistData: {songs: result},
             color: generate(),
             name: config.name
         })

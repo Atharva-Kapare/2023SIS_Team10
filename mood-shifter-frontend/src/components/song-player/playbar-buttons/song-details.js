@@ -8,7 +8,7 @@ const SongDetails = ({ track }) => {
         <div className="playbar-info">
             <div className="playbar-song-info">
                 <p className="playbar-song-title">{track?.name ?? ''}</p>
-                <p className="playbar-song-artist">{track?.artists[0]?.name ?? ''}</p>
+                <p className="playbar-song-artist">{track?.artist ?? ''}</p>
             </div>
         </div></>
     );

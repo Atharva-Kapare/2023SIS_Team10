@@ -11,7 +11,6 @@ import { Box, Grid } from "@mui/material";
 
 function SongListScreen({ route, navigation }) {
     const { playlistData, color, name } = route.params;
-    console.log(playlistData)
     const newColor = color.replace(/^(.*#)/, "linear-gradient(0deg, #000000, #");
 
     const songListBody = (color) => ({
@@ -75,7 +74,7 @@ function SongListScreen({ route, navigation }) {
                     {/* Song List */}
                     <Grid item xs={2} sm={6} md={11}>
                         <div style={{ overflowY: "scroll", maxHeight: "60vh"}}>
-                            {playlistData.map(song => (
+                            {playlistData["songs"].map(song => (
                                 <div>
                                     <SongShifter
                                         key={song}

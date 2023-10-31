@@ -58,6 +58,7 @@ app.post('/skippedSong', async (req, res) => {
     })
     let response = await modelResp.json();
     res.send(response)
+    console.log("response: ", response)
 
     await setDoc(docRef, {
       "model": response.model,
