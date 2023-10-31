@@ -11,6 +11,7 @@ mpl.use('agg')
 
 averageSongLength = 3 # in mins
 CRITICAL_WEIGHT = 0.3
+SPLITTING_VAL = 0.95
 
 # seed = 13648  # Seed random number generators for reproducibility
 # G = nx.random_k_out_graph(10, 3, 0.5, seed=seed)
@@ -208,7 +209,7 @@ def nodeCrawl(G, currentNode, times, toNodes, queue=None):
         if len(neighbours) > 0:
             randNum = random.random()
             # print(randNum)
-            if randNum < 0.9:
+            if randNum < SPLITTING_VAL:
                 # We want to go explore one of the connected neighbours in this case, so grab a random one
                 # Get the list of all ids already existing in queue
                 queueIDs = [x["songID"] for x in queue]
