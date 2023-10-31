@@ -26,11 +26,11 @@ app.use(express.json());
 
 async function fetchWebApi(token, endpoint, method, body) {
   const res = await fetch(`https://api.spotify.com/${endpoint}`, {
-  headers: {
+    headers: {
       Authorization: `Bearer ${token}`,
-  },
-  method,
-  body:JSON.stringify(body)
+    },
+    method,
+    body: JSON.stringify(body)
   });
   return await res.json();
 }
@@ -39,13 +39,41 @@ app.use(cors());
 
 app.post('/skippedSong', async (req, res) => {
   // Params: UID, current, before
-  console.log("SKIPPED SONG: ",req.body);
-  res.send(req.body);
+  const docRef = doc(database, "users", req.body.UID);
+  const docSnapshot = await getDoc(docRef);
+
+  if (!docSnapshot.exists()) {
+    res.send("The user does not exist.");
+  } else {
+
+    let modelResp = await fetch(modelURLBase + "/skippedSong", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "model": docSnapshot.data().model,
+        "before": req.body.before,
+        "current": req.body.current
+      }),
+      method: "POST"
+    })
+    let response = await modelResp.json();
+    res.send(response)
+
+    // await setDoc(docRef, {
+    //   "configs": {
+    //     [name]: req.body
+    //   }
+    // }, { merge: true })
+    //   .then(res.send({ "Success": "The configs have been stored into firebase" }))
+  }
+  console.log("SKIPPED SONG: ", req.body);
+  // res.send(req.body);
 })
 
 app.post('/playedSong', async (req, res) => {
   // Params: UID, current, before
-  console.log("PLAYED SONG: ",req.body);
+  console.log("PLAYED SONG: ", req.body);
   res.send(req.body);
 })
 
@@ -89,10 +117,10 @@ app.post('/getConfigPlaylist', async (req, res) => {
       "model": response.model,
       "graphImage": response.graphImage
     }, { merge: true })
-    .then(() => {
-      console.log("Firebase now has the latest model as well as the graph image.")
-    })
-    
+      .then(() => {
+        console.log("Firebase now has the latest model as well as the graph image.")
+      })
+
     res.send(response.queue)
   }
 })
@@ -183,7 +211,7 @@ app.post('/taggedSongs', async (req, res) => {
         [mood]: req.body.songs
       }
     }, { merge: true })
-    .then(res.send({ "Success": "The lists have been stored into firebase" }))
+      .then(res.send({ "Success": "The lists have been stored into firebase" }))
   }
   // SEND DATA TO THE BACKEND HERE:
   // Pass the model, songs (array of objects), mood name (string) back to the model

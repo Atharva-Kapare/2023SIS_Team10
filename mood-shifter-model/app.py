@@ -35,3 +35,11 @@ def mood_2_mood():
     # print(data["likedSongs"])
 
     return mood2mood(data["model"], data["fromMood"], data["toMood"], data["duration"])
+
+@app.route("/skippedSong", methods=["POST"])
+def skipped_song():
+    data = request.get_json()
+    # print(data)
+    # print(data["likedSongs"])
+
+    return skippedSong(data["model"], data["before"], data["current"])

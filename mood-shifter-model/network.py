@@ -68,6 +68,15 @@ def createNewNetwork(likedSongs):
 
     return storeGraphJSON(G)
 
+def skippedSong(graph, fromMood, toMood):
+    G = None
+    G = getGraphJSON(graph)
+
+    
+
+    imageB64 = saveGraphImage(G)
+    return {"model": storeGraphJSON(G), "graphImage": imageB64}
+
 def mood2mood(graph, fromMood, toMood, duration):
     G = None
     G = getGraphJSON(graph)
