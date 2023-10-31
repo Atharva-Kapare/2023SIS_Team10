@@ -91,7 +91,7 @@ def updateEdgeAttributes(G, fromNode, toNode, isSkip):
     # Will update the edge attributes depending on if a skip event happened and will evaluate the edge health
     # We are assuming that there is an edge between the two nodes
     if isSkip:
-        print("edge data:", G[fromNode["songID"]][toNode["songID"]])
+        print("edge from skip with edge:", G[fromNode["songID"]][toNode["songID"]])
         edgeData = G[fromNode["songID"]][toNode["songID"]]
         # Update the data now:
         newWeight = float(edgeData["played"] / (edgeData["skipped"]+1))
@@ -100,13 +100,19 @@ def updateEdgeAttributes(G, fromNode, toNode, isSkip):
             print("edge will have to get deleted")
             G.remove_edge(fromNode["songID"], toNode["songID"])
             # Add the toNode to the skipped list on the fromNode
-            
+            G.nodes[fromNode["songID"]]["skipped"].append(toNode["songID"])
             return
         else:
             G[fromNode["songID"]][toNode["songID"]].update(skipped=edgeData["skipped"]+1)
             G[fromNode["songID"]][toNode["songID"]].update(weight=newWeight)
     else:
         # This is when a song has been played through completely
+        # We are also assuming that the edge exists here
+        edgeData = G[fromNode["songID"]][toNode["songID"]]
+        # Update the data now:
+        newWeight = float(edgeData["played"]+1 / (edgeData["skipped"]))
+        G[fromNode["songID"]][toNode["songID"]].update(played=edgeData["played"]+1)
+        G[fromNode["songID"]][toNode["songID"]].update(weight=newWeight)
         return
     return
 

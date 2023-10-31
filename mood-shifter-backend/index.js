@@ -60,12 +60,13 @@ app.post('/skippedSong', async (req, res) => {
     let response = await modelResp.json();
     res.send(response)
 
-    // await setDoc(docRef, {
-    //   "configs": {
-    //     [name]: req.body
-    //   }
-    // }, { merge: true })
-    //   .then(res.send({ "Success": "The configs have been stored into firebase" }))
+    await setDoc(docRef, {
+      "model": response.model,
+      "graphImage": response.graphImage
+    }, { merge: true })
+      .then(() => {
+        console.log("The skipped song is now reflected in the model.")
+      })
   }
   console.log("SKIPPED SONG: ", req.body);
   // res.send(req.body);
