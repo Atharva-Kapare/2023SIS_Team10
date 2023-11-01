@@ -73,18 +73,18 @@ def skippedSong(graph, fromMood, toMood):
     G = None
     G = getGraphJSON(graph)
 
-    fromNode = G.nodes[fromMood["id"]]
-    toNode = G.nodes[toMood["id"]]
+    fromNode = G.nodes[fromMood]
+    toNode = G.nodes[toMood]
 
     # Need to check if the edge between the two nodes exists:
-    if G.has_edge(fromMood["id"], toMood["id"]):
+    if G.has_edge(fromMood, toMood):
         updateEdgeAttributes(G, fromNode, toNode, True)
     else:
         # There is no edge in between the two nodes, we need to have a look at the skipped list to see if fromNode is allowed to connect to the toNode
         # print("edge data:", G[fromNode["songID"]][toNode["songID"]])
 
         # Get that skipped list first
-        skippedList = G.nodes[fromMood["id"]]["skipped"] # is an array
+        skippedList = G.nodes[fromMood]["skipped"] # is an array
         # Check if the toMood id exists in that list
         if toNode["songID"] in skippedList:
             # In this scenario we don't care that the song was skipped since its on the skipped list.
@@ -104,10 +104,10 @@ def playedSong(graph, fromMood, toMood):
     G = None
     G = getGraphJSON(graph)
 
-    fromNode = G.nodes[fromMood["id"]]
-    toNode = G.nodes[toMood["id"]]
+    fromNode = G.nodes[fromMood]
+    toNode = G.nodes[toMood]
 
-    if G.has_edge(fromMood["id"], toMood["id"]):
+    if G.has_edge(fromMood, toMood):
         updateEdgeAttributes(G, fromNode, toNode, False)
     else:
         skippedList = G.nodes[fromNode["songID"]]["skipped"] # is an array

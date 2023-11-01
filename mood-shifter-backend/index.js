@@ -51,7 +51,7 @@ app.post('/skippedSong', async (req, res) => {
       },
       body: JSON.stringify({
         "model": docSnapshot.data().model,
-        "before": req.body.before,
+        "before": req.body.previous,
         "current": req.body.current
       }),
       method: "POST"
@@ -87,7 +87,7 @@ app.post('/playedSong', async (req, res) => {
       },
       body: JSON.stringify({
         "model": docSnapshot.data().model,
-        "before": req.body.before,
+        "before": req.body.previous,
         "current": req.body.current
       }),
       method: "POST"
