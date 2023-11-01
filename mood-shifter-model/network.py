@@ -73,6 +73,7 @@ def skippedSong(graph, fromMood, toMood):
     G = None
     G = getGraphJSON(graph)
 
+    print(fromMood, toMood)
     fromNode = G.nodes[fromMood]
     toNode = G.nodes[toMood]
 

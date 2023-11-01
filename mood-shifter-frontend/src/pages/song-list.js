@@ -10,8 +10,7 @@ import "../components/song-list/song-list.css";
 import { Box, Grid } from "@mui/material";
 
 function SongListScreen({ route, navigation }) {
-    const { playlistData, color } = route.params;
-    console.log(playlistData)
+    const { playlistData, color, moodList } = route.params;
     const newColor = color.replace(/^(.*#)/, "linear-gradient(0deg, #000000, #");
 
     const songListBody = (color) => ({ 
@@ -79,6 +78,8 @@ function SongListScreen({ route, navigation }) {
                                 <Song
                                     key={song}
                                     track={song}
+                                    navigation={navigation}
+                                    moodList={moodList}
                                 ></Song>
                             </div>
                         ))}

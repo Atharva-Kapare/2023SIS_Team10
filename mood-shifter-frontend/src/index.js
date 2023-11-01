@@ -21,6 +21,8 @@ import NewPlaylist from './pages/new-playlist';
 import SongListScreen from './pages/song-list';
 import NewMoodScreen from './pages/new-mood';
 import MoodShiftListScreen from './pages/mood-shift-list'
+import TagSongMoodScreen from './pages/tag-song-mood'
+import TagSongMoodShifterScreen from './pages/tag-song-mood-shifter'
 
 const clientId = "8165af06e3a44a32ac86aa3d998761cd";
 const params = new URLSearchParams(window.location.search);
@@ -67,6 +69,12 @@ root.render(
 
         {/* Create custom mood screen */}
         <Stack.Screen name="NewMoodScreen" component={NewMoodScreen} />
+
+        {/* Tag Songs Screens */}
+        <Stack.Screen name="TagSongMoodScreen" component={TagSongMoodScreen} />
+        <Stack.Screen name="TagSongMoodShifterScreen" component={TagSongMoodShifterScreen} />
+
+
 
       </Stack.Navigator>
     </NavigationContainer>

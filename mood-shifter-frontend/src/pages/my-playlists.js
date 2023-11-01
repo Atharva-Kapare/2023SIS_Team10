@@ -11,8 +11,8 @@ import '../App.css';
 import '../components/playlists/playlist.css';
 
 function MyPlaylist({ navigation, route }){
-    const moodPlaylists = GetMoodPlaylists();
-    const moodShiftPlaylists = GetMoodShiftPlaylist();
+    let moodPlaylists = GetMoodPlaylists();
+    let moodShiftPlaylists = GetMoodShiftPlaylist();
 
     let [ formattedPlaylist, setFormattedPlaylist ] = useState([{
         "mood": "Error Loading Playlists!",
@@ -43,6 +43,22 @@ function MyPlaylist({ navigation, route }){
             ])
         }
     }, [route.params?.toMood])
+
+    useEffect(() => {
+        if(route.params?.songs) {
+            const params = route.params
+            setFormattedMoodShiftPlaylist([
+                ...formattedMoodPlaylist,
+                {
+                    mood: params.mood,
+                    songs: params.songs,
+                    color: generate()
+                }
+
+            ])
+
+        }
+    }, [route.params])
 
     useEffect(() => {
         moodShiftPlaylists.then((res) => {
@@ -83,11 +99,10 @@ function MyPlaylist({ navigation, route }){
         moodOutput.push(
             {
                 "mood": entry.mood,
-                "songs": []
+                "songs": entry.songs
             }
         )
     })
-    console.log(moodOutput)
 
     return ( 
         <div className="App-header">
@@ -112,10 +127,13 @@ function MyPlaylist({ navigation, route }){
                     {/* Mood Playlists */}
                     {formattedPlaylist.map(playlist => (
                         <Grid item xs={1} sm={2} md={3}>
-                            <button className='playlist-cover-btn' style={{border: "none"}} onClick={() => navigation.navigate('SongListScreen', {
-                                playlistData: playlist,
-                                color: playlist.color
-                            })}>
+                            <button className='playlist-cover-btn' style={{border: "none"}} onClick={() => {
+                                navigation.navigate('SongListScreen', {
+                                    playlistData: playlist,
+                                    color: playlist.color,
+                                    moodList: moodOutput
+                                })
+                            }}>
                                 <Playlist 
                                     key={playlist.mood}
                                     playlist={playlist}
