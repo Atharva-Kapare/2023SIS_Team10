@@ -10,6 +10,8 @@ import base64
 mpl.use('agg')
 
 averageSongLength = 3 # in mins
+CRITICAL_WEIGHT = 0.3
+SPLITTING_VAL = 0.95
 
 # seed = 13648  # Seed random number generators for reproducibility
 # G = nx.random_k_out_graph(10, 3, 0.5, seed=seed)
@@ -64,9 +66,98 @@ def createNewNetwork(likedSongs):
 
 
     # G.add_nodes_from(songs)
-    saveGraphImage(G)
+    imageB64 = saveGraphImage(G)
+    return {"model": storeGraphJSON(G), "graphImage": imageB64}
 
-    return storeGraphJSON(G)
+def skippedSong(graph, fromMood, toMood):
+    G = None
+    G = getGraphJSON(graph)
+
+    fromNode = G.nodes[fromMood]
+    toNode = G.nodes[toMood]
+
+    # Need to check if the edge between the two nodes exists:
+    if G.has_edge(fromMood, toMood):
+        updateEdgeAttributes(G, fromNode, toNode, True)
+    else:
+        # There is no edge in between the two nodes, we need to have a look at the skipped list to see if fromNode is allowed to connect to the toNode
+        # print("edge data:", G[fromNode["songID"]][toNode["songID"]])
+
+        # Get that skipped list first
+        skippedList = G.nodes[fromMood]["skipped"] # is an array
+        # Check if the toMood id exists in that list
+        if toNode["songID"] in skippedList:
+            # In this scenario we don't care that the song was skipped since its on the skipped list.
+            # We could potentially, in the future, make a chance so that the edge comes back. Would be cool to see
+            print("Song is in the skipped list, will ignore")
+            imageB64 = saveGraphImage(G)
+            return {"model": storeGraphJSON(G), "graphImage": imageB64}
+        else:
+            print("We can make a connection between the two")
+            addNewEdgeBetween(G, fromNode["songID"], toNode["songID"])
+            updateEdgeAttributes(G, fromNode, toNode, True)
+
+    imageB64 = saveGraphImage(G)
+    return {"model": storeGraphJSON(G), "graphImage": imageB64}
+
+def playedSong(graph, fromMood, toMood):
+    G = None
+    G = getGraphJSON(graph)
+
+    fromNode = G.nodes[fromMood]
+    toNode = G.nodes[toMood]
+
+    if G.has_edge(fromMood, toMood):
+        updateEdgeAttributes(G, fromNode, toNode, False)
+    else:
+        skippedList = G.nodes[fromNode["songID"]]["skipped"] # is an array
+        if toNode["songID"] in skippedList:
+            # Removed the song from the skipped list
+            G.nodes[fromNode["songID"]]["skipped"].remove(toNode["songID"])
+            # Create the edge and update attribute
+            addNewEdgeBetween(G, fromNode["songID"], toNode["songID"])
+            updateEdgeAttributes(G, fromNode, toNode, False)
+
+            imageB64 = saveGraphImage(G)
+            return {"model": storeGraphJSON(G), "graphImage": imageB64}
+        else:
+            addNewEdgeBetween(G, fromNode["songID"], toNode["songID"])
+            updateEdgeAttributes(G, fromNode, toNode, False)
+
+            imageB64 = saveGraphImage(G)
+            return {"model": storeGraphJSON(G), "graphImage": imageB64}
+        
+    imageB64 = saveGraphImage(G)
+    return {"model": storeGraphJSON(G), "graphImage": imageB64}
+
+def updateEdgeAttributes(G, fromNode, toNode, isSkip):
+    # Will update the edge attributes depending on if a skip event happened and will evaluate the edge health
+    # We are assuming that there is an edge between the two nodes
+    if isSkip:
+        print("edge from skip with edge:", G[fromNode["songID"]][toNode["songID"]])
+        edgeData = G[fromNode["songID"]][toNode["songID"]]
+        # Update the data now:
+        newWeight = float(edgeData["played"] / (edgeData["skipped"]+1))
+        if newWeight < CRITICAL_WEIGHT:
+            # Delete the edge
+            print("edge will have to get deleted")
+            G.remove_edge(fromNode["songID"], toNode["songID"])
+            # Add the toNode to the skipped list on the fromNode
+            G.nodes[fromNode["songID"]]["skipped"].append(toNode["songID"])
+            return
+        else:
+            G[fromNode["songID"]][toNode["songID"]].update(skipped=edgeData["skipped"]+1)
+            G[fromNode["songID"]][toNode["songID"]].update(weight=newWeight)
+    else:
+        # This is when a song has been played through completely
+        # We are also assuming that the edge exists here
+        edgeData = G[fromNode["songID"]][toNode["songID"]]
+        # Update the data now:
+        newWeight = float((edgeData["played"]+1) / (edgeData["skipped"]))
+        G[fromNode["songID"]][toNode["songID"]].update(played=edgeData["played"]+1)
+        G[fromNode["songID"]][toNode["songID"]].update(weight=newWeight)
+        return
+    return
 
 def mood2mood(graph, fromMood, toMood, duration):
     G = None
@@ -118,7 +209,7 @@ def nodeCrawl(G, currentNode, times, toNodes, queue=None):
         if len(neighbours) > 0:
             randNum = random.random()
             # print(randNum)
-            if randNum < 0.9:
+            if randNum < SPLITTING_VAL:
                 # We want to go explore one of the connected neighbours in this case, so grab a random one
                 # Get the list of all ids already existing in queue
                 queueIDs = [x["songID"] for x in queue]
@@ -187,9 +278,9 @@ def selectNewRandom(G, queue, currentNode, toNodes):
 def addNewEdgeBetween(G, fromNode, toNode):
     if not G.has_edge(fromNode, toNode):
         G.add_edge(fromNode, toNode)
-        G[fromNode][toNode].update(skipped=32)
-        G[fromNode][toNode].update(played=10)
-        G[fromNode][toNode].update(weight=float(10/32))
+        G[fromNode][toNode].update(skipped=2)
+        G[fromNode][toNode].update(played=1)
+        G[fromNode][toNode].update(weight=float(1/2))
     return
 
 def tagSongs(graph, songs, tag):
@@ -212,9 +303,9 @@ def tagSongs(graph, songs, tag):
             
     connected = nx.complete_graph(nodes, nx.DiGraph())
     connected.edges(data = True)
-    nx.set_edge_attributes(connected, 32, "skipped")
-    nx.set_edge_attributes(connected, 10, "played")
-    nx.set_edge_attributes(connected, float(10/32), "weight")
+    nx.set_edge_attributes(connected, 2, "skipped")
+    nx.set_edge_attributes(connected, 1, "played")
+    nx.set_edge_attributes(connected, float(1/2), "weight")
 
     G.edges(data=True)
 
@@ -237,7 +328,7 @@ def saveGraphImage(G):
     nx.draw(G,with_labels = True, labels=labels, pos=pos, font_weight='normal',node_size=60,font_size=5)
     # plt.show(block=False)
     # plt.tight_layout()
-    # plt.savefig("Graph.png", format="PNG")
+    plt.savefig("Graph.png", format="PNG")
     my_stringIObytes = io.BytesIO()
     plt.savefig(my_stringIObytes, format='jpg')
     my_stringIObytes.seek(0)
