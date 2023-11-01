@@ -4,6 +4,7 @@ import "./song-player.css";
 import SpotifyPlayer from "react-spotify-web-playback";
 import Footer from "../footer"
 import authentication from "../../authentication";
+import { Grid, Box } from "@mui/material";
 
 function SongPlayerScreen({ navigation, route }) {
   // const  playlistData = JSON.parse(localStorage.getItem("MoodPlaylist"));
@@ -181,52 +182,58 @@ async function onTrackChange(state) {
   }
 
   return (
-    <div className="playbar">
+    <Box className="playbar">
       <link
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
       ></link>
-      <SongDetails track={track}></SongDetails>
-      <SpotifyPlayer
-        token={accessToken}
-        uris={uris}
-        callback={(state) => {
-          const index = uris.indexOf(state.track.uri);
-          setCurrentIndex(index);
-          songIndex = index;
-          console.log("index:",currentIndex, index, songIndex);
-          console.log( " ID:",state.track.uri);
-          if (state.isPlaying === false) {
-            playThisPlease = false;
-            // console.log('LEEN SET FALSE');
-          }
-          if (!previousState) {
-            setPreviousState(state);
-          } else {
-            if(state.track.id !== previousState.track.id){
-              setTrack(state.track);
-              onTrackChange(state);
-            }
-            setPreviousState(state);
-            
-          }
-          // console.log("JACOB: ",songIndex)
-        }}
-        
-        play={playThisPlease}
-        styles={{
-          activeColor: "#fff",
-          bgColor: "#232426",
-          color: "#fff",
-          loaderColor: "#fff",
-          sliderColor: "#1cb954",
-          trackArtistColor: "#ccc",
-          trackNameColor: "#fff",
-        }}
-      ></SpotifyPlayer>
-       {/* <i class="fa-solid fa-bars" onClick={() => navigation.navigate('')}></i> */}
+      <Grid  container rowSpacing={{ xs: 3, sm: 4, md: 6 }} columnSpacing={{ xs: 2, sm: 3, md: 4 }} columns={{ xs: 2, sm: 6, md: 12 }}>
+        <Grid className="songDetails" item xs={2} sm={6} md={12}>
+          <SongDetails track={track}></SongDetails>
+        </Grid>
+        <Grid item xs={2} sm={6} md={12}>
+              <SpotifyPlayer
+            token={accessToken}
+            uris={uris}
+            callback={(state) => {
+              const index = uris.indexOf(state.track.uri);
+              setCurrentIndex(index);
+              songIndex = index;
+              console.log("index:",currentIndex, index, songIndex);
+              console.log( " ID:",state.track.uri);
+              if (state.isPlaying === false) {
+                playThisPlease = false;
+                // console.log('LEEN SET FALSE');
+              }
+              if (!previousState) {
+                setPreviousState(state);
+              } else {
+                if(state.track.id !== previousState.track.id){
+                  setTrack(state.track);
+                  onTrackChange(state);
+                }
+                setPreviousState(state);
+
+              }
+              // console.log("JACOB: ",songIndex)
+            }}
+
+            play={playThisPlease}
+            styles={{
+              activeColor: "#fff",
+              bgColor: "#232426",
+              color: "#fff",
+              loaderColor: "#fff",
+              sliderColor: "#1cb954",
+              trackArtistColor: "#ccc",
+              trackNameColor: "#fff",
+            }}
+          ></SpotifyPlayer>
+        </Grid>
+      </Grid>
+      {/* <i class="fa-solid fa-bars" onClick={() => navigation.navigate('')}></i> */}
       <Footer navigation={navigation}></Footer>
-    </div>
+    </Box>
   );
 }
 
